@@ -1,8 +1,12 @@
 import './globals.css'
+import './styles.css'
 import type { Metadata } from 'next'
 import Providers from './Providers';
+import ReduxProviders from '@/redux/providers';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -19,19 +23,21 @@ export default function RootLayout({
         <head>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.0/flowbite.min.css" rel="stylesheet" />
         </head>
-        <body suppressHydrationWarning={true} >
+        <body  >
         <Providers>
-            <Navbar/>
-            <Sidebar/>
-            <div className="p-4 sm:ml-64">
-                <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-                    <div className="grid grid-cols-1 gap-4 ">
-                        <div className="flex items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-                            {children}
-                        </div>
+          <ReduxProviders>
+            
+                <Navbar/>
+                <Sidebar/>
+                <div className="p-4 sm:ml-64">
+                    <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+                        
+                                {children}
+                          
                     </div>
                 </div>
-            </div>
+                <ToastContainer />
+          </ReduxProviders>
         </Providers>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.0/flowbite.min.js"></script>
         </body>

@@ -22,7 +22,7 @@ const handler = NextAuth({
                 if(!passwordMatch) throw new Error("Invalid credentials");
                 return userFound*/
 
-                const apiTokenResponse = await fetch("https://www.deldia.nom.pe/hrm/auth/login/", {
+                const apiTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/hrm/auth/login/`, {
                     method: 'POST',
                     body: JSON.stringify(credentials),
                     headers: { "Content-Type": "application/json" }
@@ -31,7 +31,7 @@ const handler = NextAuth({
                 
                 const tokenObtained = await apiTokenResponse.json()
                 
-                const apiUserResponse = await fetch("https://www.deldia.nom.pe/hrm/api/get_user/", {
+                const apiUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/hrm/api/get_user/`, {
                     method: 'GET',
                     headers: {  Authorization: `Bearer ${tokenObtained?.access}`, "Content-Type": "application/json" }
                 });
