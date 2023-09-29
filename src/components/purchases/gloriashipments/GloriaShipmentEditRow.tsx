@@ -5,6 +5,8 @@ import { IPerson} from '@/app/types';
 const initialStateSelectedSupplier = {
     id: 0,
     names: "",
+    priceGloriaTomorrow: 0,
+    priceGloriaAfternoon: 0,
     priceTomorrow: 0,
     priceAfternoon: 0,
     returnTomorrow: 0,
@@ -40,6 +42,8 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
                     collectDate:"${filterObj.collectDate}", collectType:"${filterObj.collectType}", fortnightValue:${fort},
                     priceTomorrow:${Number(selectedSupplier.priceMilkTomorrowByFortnight)!==0?selectedSupplier.priceMilkTomorrowByFortnight:0}
                     priceAfternoon:${Number(selectedSupplier.priceMilkAfternoonByFortnight)!==0?selectedSupplier.priceMilkAfternoonByFortnight:0}, 
+                    priceGloriaTomorrow:${Number(selectedSupplier.priceGloriaTomorrow)!==0?selectedSupplier.priceGloriaTomorrow:0}, 
+                    priceGloriaAfternoon:${Number(selectedSupplier.priceGloriaAfternoon)!==0?selectedSupplier.priceGloriaAfternoon:0}, 
                     quantityTomorrow:${Number(selectedSupplier.quantityTomorrow)}, 
                     quantityAfternoon:${Number(selectedSupplier.quantityAfternoon)},
                     quantityToReturnTomorrow:${Number(selectedSupplier.returnTomorrow)},
@@ -81,6 +85,8 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
                 supplierTariffIdByFortnight:item.supplierTariffId!==null?item.supplierTariffId:0, 
                 priceMilkTomorrowByFortnight:item.supplierTariffPriceTomorrow!==null?item.supplierTariffPriceTomorrow:0, 
                 priceMilkAfternoonByFortnight:item.supplierTariffPriceAfternoon!==null?item.supplierTariffPriceAfternoon:0,
+                priceGloriaTomorrow:item.priceGloriaTomorrow!==null?item.priceGloriaTomorrow:0,
+                priceGloriaAfternoon:item.priceGloriaAfternoon!==null?item.priceGloriaAfternoon:0,
                 quantityTomorrow:item.quantityTomorrow!==null?item.quantityTomorrow:0, 
                 quantityAfternoon:item.quantityAfternoon!==null?item.quantityAfternoon:0,
                 returnTomorrow:item.quantityToReturnTomorrow!==null?item.quantityToReturnTomorrow:0,
@@ -106,9 +112,9 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
 
             <td className="px-1 py-1 border border-gray-400 align-middle text-center">
                 <input type='number' 
-                    name='priceMilkTomorrowByFortnight' 
+                    name='priceGloriaTomorrow' 
                     onWheel={(e)=> e.currentTarget.blur()} 
-                    value={selectedSupplier.priceMilkTomorrowByFortnight} 
+                    value={selectedSupplier.priceGloriaTomorrow} 
                     onChange={e=>handleInputChangeSelectedSupplier(e)} 
                     onFocus={(e) => e.target.select()} 
                     className='px-1 py-3 w-24 border border-gray-300 rounded-md text-center' />
@@ -126,9 +132,9 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
 
             <td className="px-1 py-1 border border-gray-400 align-middle text-center">
                 <input type='number' 
-                    name='priceMilkAfternoonByFortnight' 
+                    name='priceGloriaAfternoon' 
                     onWheel={(e)=> e.currentTarget.blur()}
-                    value={selectedSupplier.priceMilkAfternoonByFortnight} 
+                    value={selectedSupplier.priceGloriaAfternoon} 
                     onChange={e=>handleInputChangeSelectedSupplier(e)} 
                     onFocus={(e) => e.target.select()} 
                     className='px-1 py-3 w-24 border border-gray-300 rounded-md text-center' />

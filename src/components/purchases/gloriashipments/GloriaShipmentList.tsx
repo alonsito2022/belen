@@ -16,6 +16,8 @@ const initialStateSelectedSupplier = {
     supplierTariffId: 0,
     supplierTariffPriceTomorrow: 0,
     supplierTariffPriceAfternoon: 0,
+    priceGloriaTomorrow: 0,
+    priceGloriaAfternoon: 0,
     priceGloria: 0
 }
 
@@ -60,11 +62,11 @@ function GloriaShipmentList({suppliers, suppliersWithGloriaShipments, filterObj,
                     <tr key={item.id} className="border-b dark:bg-gray-800 dark:border-gray-700">
                         <th className="px-3 py-3 border border-gray-400 bg-green-50 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.names}</th>
                         <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-800">{item.quantityTomorrow}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-500">{item.priceTomorrow}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-500">{Number(item.quantityTomorrow! * item.priceTomorrow!).toFixed(2)}</td>
+                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-500">{item.priceGloriaTomorrow}</td>
+                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-500">{Number(item.quantityTomorrow! * item.priceGloriaTomorrow!).toFixed(2)}</td>
                         <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-800">{item.quantityAfternoon}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-500">{item.priceAfternoon}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-500">{Number(item.quantityAfternoon! * item.priceAfternoon!).toFixed(2)}</td>
+                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-500">{item.priceGloriaAfternoon}</td>
+                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-500">{Number(item.quantityAfternoon! * item.priceGloriaAfternoon!).toFixed(2)}</td>
                         <td className="px-3 py-0 border border-gray-400 bg-green-50 text-center text-green-800">
                             <button type="button" onClick={ async ()=>{
                                 setUpdateState(item.id)
@@ -81,10 +83,10 @@ function GloriaShipmentList({suppliers, suppliersWithGloriaShipments, filterObj,
                     <td className="px-3 py-3 border border-gray-400 bg-green-50 text-base " colSpan={1}>TOTAL</td>
                     <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow!), 0))}</td>
                     <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center" colSpan={1}></td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow! * currentValue.priceTomorrow!), 0)).toFixed(2)}</td>
+                    <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow! * currentValue.priceGloriaTomorrow!), 0)).toFixed(2)}</td>
                     <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon!), 0))}</td>
                     <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center" colSpan={1}></td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon! * currentValue.priceAfternoon!), 0)).toFixed(2)}</td>
+                    <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon! * currentValue.priceGloriaAfternoon!), 0)).toFixed(2)}</td>
                     <td className="px-3 py-3 border border-gray-400 bg-green-50 text-center" colSpan={1}></td>
                 </tr>
                 </tfoot>

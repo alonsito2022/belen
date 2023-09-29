@@ -39,8 +39,14 @@ export interface IPerson {
     priceGloriaAfternoon?: number
     quantityDeliveredTomorrow?: number
     quantityDeliveredAfternoon?: number
+
     totalQuantityTomorrowByFortnight?: number
     totalQuantityAfternoonByFortnight?: number
+    costTotalGloriaTomorrowByFortnight?: number
+    costTotalGloriaAfternoonByFortnight?: number
+    priceGloriaAveragePerLiterTomorrow?: number
+    priceGloriaAveragePerLiterAfternoon?: number
+
     milkId?: number
 }
 

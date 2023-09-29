@@ -31,14 +31,16 @@ function FortnightGloryList({suppliers, summaryDailyEntries}: any) {
                             <td className="px-3 py-0 border text-base uppercase">{item.id}</td>
                             <td className="px-3 py-0 border text-base uppercase">{item.names}</td>
                             <td className="px-3 py-0 border bg-gray-50 text-lg uppercase text-right">{item.totalQuantityTomorrowByFortnight}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(item.priceMilkTomorrowByFortnight).toFixed(2)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.totalQuantityTomorrowByFortnight!*item.priceMilkTomorrowByFortnight!)* 100) / 100).toFixed(2)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(item.priceGloriaAveragePerLiterTomorrow).toFixed(4)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.costTotalGloriaTomorrowByFortnight)* 100) / 100).toFixed(2)}</td>
+                            
                             <td className="px-3 py-0 border bg-gray-50 text-lg uppercase text-right">{item.totalQuantityAfternoonByFortnight}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(item.priceMilkAfternoonByFortnight).toFixed(2)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.totalQuantityAfternoonByFortnight!*item.priceMilkAfternoonByFortnight!)* 100) / 100).toFixed(2)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(item.priceGloriaAveragePerLiterAfternoon).toFixed(4)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.costTotalGloriaAfternoonByFortnight)* 100) / 100).toFixed(2)}</td>
+
                             <td className="px-3 py-0 border bg-gray-50 text-lg uppercase text-right">{item.totalQuantityTomorrowByFortnight! + item.totalQuantityAfternoonByFortnight!}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.totalQuantityTomorrowByFortnight!*item.priceMilkTomorrowByFortnight! + item.totalQuantityAfternoonByFortnight!*item.priceMilkAfternoonByFortnight!)* 100) / 100).toFixed(2)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(summaryDailyEntries.paymentCostOfGloriaPerLiter).toFixed(2)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.totalQuantityTomorrowByFortnight!*item.priceGloriaAveragePerLiterTomorrow! + item.totalQuantityAfternoonByFortnight!*item.priceGloriaAveragePerLiterAfternoon!)* 100) / 100).toFixed(2)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(summaryDailyEntries.paymentCostOfGloriaPerLiter).toFixed(4)}</td>
                             <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(summaryDailyEntries.paymentCostOfGloriaPerLiter*(item.totalQuantityTomorrowByFortnight! + item.totalQuantityAfternoonByFortnight!)).toFixed(2)}</td>
                         </tr>
                     )}

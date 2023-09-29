@@ -179,6 +179,7 @@ function CollectionPage() {
         .then(res=>res.json())
         .then(data=>{
             setSuppliers(data.data.dailyEntries);
+            setSummaryDailyEntries(initialStateSummaryDailyEntries);
         }).then(()=>{
 
             getQuantitySendToGloria();

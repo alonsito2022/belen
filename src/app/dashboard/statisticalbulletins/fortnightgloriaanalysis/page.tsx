@@ -40,7 +40,7 @@ function FortnightGloriaAnalysisPage() {
     const [summaryDailyEntries, setSummaryDailyEntries] = useState(initialStateSummaryDailyEntries);
 
     async function getGloriaInvoiceByFortnight(){
-
+        
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -126,8 +126,10 @@ function FortnightGloriaAnalysisPage() {
                             names
                             totalQuantityTomorrowByFortnight
                             totalQuantityAfternoonByFortnight
-                            priceMilkTomorrowByFortnight
-                            priceMilkAfternoonByFortnight
+                            costTotalGloriaTomorrowByFortnight
+                            costTotalGloriaAfternoonByFortnight
+                            priceGloriaAveragePerLiterTomorrow
+                            priceGloriaAveragePerLiterAfternoon
                         }
                     }
                 `
@@ -155,7 +157,7 @@ function FortnightGloriaAnalysisPage() {
             let valueSumQuantityTotalTomorrow = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.totalQuantityTomorrowByFortnight!), 0);
             let valueSumQuantityTotalAfternoon = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.totalQuantityAfternoonByFortnight!), 0);
             let valSumQuantityTotalTomorrowAndAfternoon= suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.totalQuantityTomorrowByFortnight! + currentValue.totalQuantityAfternoonByFortnight!), 0);
-            let valSumCostTotalTomorrowAndAfternoon = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(Math.round(Number(currentValue.totalQuantityTomorrowByFortnight!*currentValue.priceMilkTomorrowByFortnight! + currentValue.totalQuantityAfternoonByFortnight!*currentValue.priceMilkAfternoonByFortnight!)* 100) / 100), 0);
+            let valSumCostTotalTomorrowAndAfternoon = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(Math.round(Number(currentValue.totalQuantityTomorrowByFortnight!*currentValue.priceGloriaAveragePerLiterTomorrow! + currentValue.totalQuantityAfternoonByFortnight!*currentValue.priceGloriaAveragePerLiterAfternoon!)* 100) / 100), 0);
             let valueSumCostTotalGloriaPerFortnitght = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(Math.round(Number(summaryDailyEntries.paymentCostOfGloriaPerLiter*(currentValue.totalQuantityTomorrowByFortnight! + currentValue.totalQuantityAfternoonByFortnight!))* 100) / 100), 0);
             
             setSummaryDailyEntries({...summaryDailyEntries, 
