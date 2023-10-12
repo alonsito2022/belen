@@ -1,19 +1,16 @@
 import { ChangeEvent ,useState, useEffect, KeyboardEvent, MouseEvent } from "react";
 import { toast } from "react-toastify";
 import { IPerson} from '@/app/types';
-
 const initialStateSelectedSupplier = {
     id: 0,
     names: "",
-    priceGloriaTomorrow: 0,
-    priceGloriaAfternoon: 0,
+    priceTomorrow: 0,
+    priceAfternoon: 0,
     quantityTomorrow: 0,
-    quantityAfternoon: 0,
-    supplierTariffId: 0,
+    quantityAfternoon: 0
 }
 
-function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloriaShipments}: any) {
-
+function CollectionListEditRow({item, setUpdateState, filterObj, fort, getSuppliersWithDailyEntries}: any) {
     const [selectedSupplier, setSelectedSupplier] = useState<any|IPerson>(initialStateSelectedSupplier);
 
     const handleInputChangeSelectedSupplier = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
@@ -25,12 +22,12 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
     async function save(){
         let queryFetch: String = `
             mutation{
-                saveCollectionOperation(
+                saveDailyEntryForProduction(
                     supplierId:${selectedSupplier.id},
-                    supplierTariffId:${selectedSupplier.supplierTariffId}, warehouseId: ${filterObj.warehouseId}, 
+                    warehouseId: ${filterObj.warehouseId}, 
                     collectDate:"${filterObj.collectDate}", collectType:"${filterObj.collectType}", fortnightValue:${fort},
-                    priceGloriaTomorrow:${Number(selectedSupplier.priceGloriaTomorrow)!==0?selectedSupplier.priceGloriaTomorrow:0}, 
-                    priceGloriaAfternoon:${Number(selectedSupplier.priceGloriaAfternoon)!==0?selectedSupplier.priceGloriaAfternoon:0}, 
+                    priceTomorrow:${Number(selectedSupplier.priceTomorrow)!==0?selectedSupplier.priceTomorrow:0}, 
+                    priceAfternoon:${Number(selectedSupplier.priceAfternoon)!==0?selectedSupplier.priceAfternoon:0}, 
                     quantityTomorrow:${Number(selectedSupplier.quantityTomorrow)}, 
                     quantityAfternoon:${Number(selectedSupplier.quantityAfternoon)}
                 ){
@@ -38,7 +35,6 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
                 }
             }
         `;
-        
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -46,9 +42,9 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
         })
         .then(res=>res.json())
         .then(data=>{
-            toast(data.data.saveCollectionOperation.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            toast(data.data.saveDailyEntryForProduction.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
             setSelectedSupplier(initialStateSelectedSupplier)
-            getGloriaShipments()
+            getSuppliersWithDailyEntries()
 
         }).catch(e=>console.log(e))
         
@@ -65,9 +61,8 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
             // console.log(item)
             setSelectedSupplier({...selectedSupplier, 
                 id: item.id, names: item.names, 
-                supplierTariffId:item.supplierTariffId!==null?item.supplierTariffId:0, 
-                priceGloriaTomorrow:item.priceGloriaTomorrow!==null?item.priceGloriaTomorrow:0,
-                priceGloriaAfternoon:item.priceGloriaAfternoon!==null?item.priceGloriaAfternoon:0,
+                priceTomorrow:item.priceTomorrow!==null?item.priceTomorrow:0,
+                priceAfternoon:item.priceAfternoon!==null?item.priceAfternoon:0,
                 quantityTomorrow:item.quantityTomorrow!==null?item.quantityTomorrow:0, 
                 quantityAfternoon:item.quantityAfternoon!==null?item.quantityAfternoon:0
             });
@@ -75,7 +70,11 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
     }, [item]);
     return (
         <tr key={selectedSupplier.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" className="px-3 py-1 border border-gray-200 align-middle font-medium text-gray-900 whitespace-nowrap dark:text-white">{selectedSupplier.names}</th>
+            <th scope="row" className="px-3 py-1 border border-gray-200 align-middle font-medium text-gray-900 whitespace-nowrap dark:text-white">{selectedSupplier.id}</th>
+            
+            <td className="px-1 py-1 border border-gray-200 align-middle text-center">{selectedSupplier.names}</td>
+
+            <td className="border-0"></td>
             
             <td className="px-1 py-1 border border-gray-200 align-middle text-center">
                 <input type='number' 
@@ -87,16 +86,18 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
                     className='py-1 w-24 border border-gray-300 rounded-md text-center text-lg' />
             </td>
 
+            
             <td className="px-1 py-1 border border-gray-200 align-middle text-center">
                 <input type='number' 
-                    name='priceGloriaTomorrow' 
+                    name='priceTomorrow' 
                     onWheel={(e)=> e.currentTarget.blur()} 
-                    value={selectedSupplier.priceGloriaTomorrow} 
+                    value={selectedSupplier.priceTomorrow} 
                     onChange={e=>handleInputChangeSelectedSupplier(e)} 
                     onFocus={(e) => e.target.select()} 
                     className='py-1 w-24 border border-gray-300 rounded-md text-center text-lg' />
             </td>
-            <td className="px-1 py-1 border border-gray-200 align-middle text-center text-lg">{Number(selectedSupplier.quantityTomorrow*selectedSupplier.priceGloriaTomorrow).toFixed(2)}</td>
+            <td className="px-1 py-1 border border-gray-200 align-middle text-center text-lg">{Number(selectedSupplier.quantityTomorrow*selectedSupplier.priceTomorrow).toFixed(2)}</td>
+            <td className="border-0"></td>
             <td className="px-1 py-1 border border-gray-200 align-middle text-center">
                 <input type='number' 
                     name='quantityAfternoon' 
@@ -109,25 +110,29 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
 
             <td className="px-1 py-1 border border-gray-200 align-middle text-center">
                 <input type='number' 
-                    name='priceGloriaAfternoon' 
+                    name='priceAfternoon' 
                     onWheel={(e)=> e.currentTarget.blur()}
-                    value={selectedSupplier.priceGloriaAfternoon} 
+                    value={selectedSupplier.priceAfternoon} 
                     onChange={e=>handleInputChangeSelectedSupplier(e)} 
                     onFocus={(e) => e.target.select()} 
                     className='py-1 w-24 border border-gray-300 rounded-md text-center text-lg' />
             </td>
-            <td className="px-1 py-1 border border-gray-200 align-middle text-center text-lg">{Number(selectedSupplier.quantityAfternoon*selectedSupplier.priceGloriaAfternoon).toFixed(2)}</td>
+            <td className="px-1 py-1 border border-gray-200 align-middle text-center text-lg">{Number(selectedSupplier.quantityAfternoon*selectedSupplier.priceAfternoon).toFixed(2)}</td>
 
             <td className="px-2 py-0 border border-gray-200">
                 <div className='grid grid-flow-col gap-2 justify-stretch'>
                 <button type="button" onClick={ handleClickButtonAdd} 
-                    className=" text-white bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        GUARDAR
+                    className="text-white font-medium rounded-lg text-sm py-2">
+                        <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                        </svg>
                     </button>
                     <button type="button" onClick={ async ()=>{
                         setUpdateState(-1);
-                        }} className=" text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm py-2  dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-                        CANCELAR
+                        }} className="text-white font-medium rounded-lg text-sm py-2">
+                        <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+                        </svg>
                     </button>
                 </div>
             
@@ -136,4 +141,4 @@ function GloriaShipmentEditRow({item, setUpdateState, filterObj, fort, getGloria
     )
 }
 
-export default GloriaShipmentEditRow
+export default CollectionListEditRow

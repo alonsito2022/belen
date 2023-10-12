@@ -6,42 +6,43 @@ function FortnightGloryList({suppliers, summaryDailyEntries}: any) {
         
             <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead className="text-xs text-black uppercase">
                         <tr>
                             <th scope="col" className="px-4 py-4 border">ID</th>
                             <th scope="col" className="px-4 py-4 border">PROVEEDOR</th>
 
-                            <th scope="col" className="px-4 py-4 border text-center bg-gray-50">TOTAL<br/>LITROS MAÑANA</th>
-                            <th scope="col" className="px-4 py-4 border text-center">VALOR LITRO</th>
-                            <th scope="col" className="px-4 py-4 border text-center">TOTAL</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-lime-200">TOTAL<br/>LITROS MAÑANA</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-lime-300">VALOR LITRO</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-lime-400">TOTAL</th>
 
-                            <th scope="col" className="px-4 py-4 border text-center bg-gray-50">TOTAL<br/>LITROS TARDE</th>
-                            <th scope="col" className="px-4 py-4 border text-center">VALOR LITRO</th>
-                            <th scope="col" className="px-4 py-4 border text-center">TOTAL</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-gray-400">TOTAL<br/>LITROS TARDE</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-gray-300">VALOR LITRO</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-gray-200">TOTAL</th>
 
-                            <th scope="col" className="px-4 py-4 border text-center bg-gray-50">TOTAL LITROS<br/>TARDE Y<br/>MAÑANA</th>
-                            <th scope="col" className="px-4 py-4 border text-center">MONTO TOTAL<br/>TARDE Y<br/>MAÑANA</th>
-                            <th scope="col" className="px-4 py-4 border text-center">VALOR GLORIA</th>
-                            <th scope="col" className="px-4 py-4 border text-center">TOTAL QUINCENA</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-yellow-100 ">TOTAL LITROS<br/>TARDE Y<br/>MAÑANA</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-yellow-200">MONTO TOTAL<br/>TARDE Y<br/>MAÑANA</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-yellow-300">VALOR GLORIA</th>
+                            <th scope="col" className="px-4 py-4 border text-center bg-yellow-400">TOTAL QUINCENA</th>
                         </tr>
                     </thead>
                     <tbody>
                     {suppliers.map((item: IPerson) => 
-                        <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <tr key={item.id} className="text-black border-b">
                             <td className="px-3 py-0 border text-base uppercase">{item.id}</td>
                             <td className="px-3 py-0 border text-base uppercase">{item.names}</td>
-                            <td className="px-3 py-0 border bg-gray-50 text-lg uppercase text-right">{item.totalQuantityTomorrowByFortnight}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(item.priceGloriaAveragePerLiterTomorrow).toFixed(4)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.costTotalGloriaTomorrowByFortnight)* 100) / 100).toFixed(2)}</td>
-                            
-                            <td className="px-3 py-0 border bg-gray-50 text-lg uppercase text-right">{item.totalQuantityAfternoonByFortnight}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(item.priceGloriaAveragePerLiterAfternoon).toFixed(4)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.costTotalGloriaAfternoonByFortnight)* 100) / 100).toFixed(2)}</td>
 
-                            <td className="px-3 py-0 border bg-gray-50 text-lg uppercase text-right">{item.totalQuantityTomorrowByFortnight! + item.totalQuantityAfternoonByFortnight!}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.totalQuantityTomorrowByFortnight!*item.priceGloriaAveragePerLiterTomorrow! + item.totalQuantityAfternoonByFortnight!*item.priceGloriaAveragePerLiterAfternoon!)* 100) / 100).toFixed(2)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(summaryDailyEntries.paymentCostOfGloriaPerLiter).toFixed(4)}</td>
-                            <td className="px-3 py-0 border text-lg uppercase text-right">S/ {Number(summaryDailyEntries.paymentCostOfGloriaPerLiter*(item.totalQuantityTomorrowByFortnight! + item.totalQuantityAfternoonByFortnight!)).toFixed(2)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right bg-lime-200">{item.quantityTomorrowBySupplier}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right bg-lime-300">S/ {Number(item.averagePriceGeneralTomorrowBySupplier).toFixed(4)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right bg-lime-400">S/ {Number(Math.round(Number(item.costGeneralTomorrowBySupplier)* 100) / 100).toFixed(2)}</td>
+                            
+                            <td className="px-3 py-0 border text-lg uppercase text-right bg-gray-400">{item.quantityAfternoonBySupplier}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right bg-gray-300">S/ {Number(item.averagePriceGeneralAfternoonBySupplier).toFixed(4)}</td>
+                            <td className="px-3 py-0 border text-lg uppercase text-right bg-gray-200">S/ {Number(Math.round(Number(item.costGeneralAfternoonBySupplier)* 100) / 100).toFixed(2)}</td>
+
+                            <td className="px-3 py-0 border bg-yellow-100  text-lg uppercase text-right">{item.quantityTomorrowBySupplier! + item.quantityAfternoonBySupplier!}</td>
+                            <td className="px-3 py-0 border bg-yellow-200 text-lg uppercase text-right">S/ {Number(Math.round(Number(item.quantityTomorrowBySupplier!*item.averagePriceGeneralTomorrowBySupplier! + item.quantityAfternoonBySupplier!*item.averagePriceGeneralAfternoonBySupplier!)* 100) / 100).toFixed(2)}</td>
+                            <td className="px-3 py-0 border bg-yellow-300 text-lg uppercase text-right">S/ {Number(item.averagePriceGloriaAfternoonBySupplier).toFixed(4)}</td>
+                            <td className="px-3 py-0 border bg-yellow-400 text-lg uppercase text-right">S/ {Number(item.averagePriceGloriaAfternoonBySupplier!*(item.quantityTomorrowBySupplier! + item.quantityAfternoonBySupplier!)).toFixed(4)}</td>
                         </tr>
                     )}
                     </tbody>

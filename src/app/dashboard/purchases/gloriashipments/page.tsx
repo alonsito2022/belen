@@ -57,19 +57,11 @@ function GloriaShipmentPage() {
                         gloriaShipments(warehouseId:${filterObj.warehouseId}, productTariffId:${filterObj.productTariffId}, collectDate:"${filterObj.collectDate}", fortnightValue:${fort}) {
                             id
                             names
+                            supplierTariffId
                             quantityTomorrow
                             quantityAfternoon
-                            priceTomorrow
-                            priceAfternoon
-                            supplierTariffId
-                            supplierTariffPriceTomorrow
-                            supplierTariffPriceAfternoon
                             priceGloriaTomorrow
                             priceGloriaAfternoon
-                            quantityToReturnAfternoon
-                            quantityToReturnTomorrow
-                            returnStatusTomorrow
-                            returnStatusAfternoon
                         }
                     }
                 `

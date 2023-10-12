@@ -47,6 +47,32 @@ export interface IPerson {
     priceGloriaAveragePerLiterTomorrow?: number
     priceGloriaAveragePerLiterAfternoon?: number
 
+    quantityTomorrowBySupplier?: number
+    quantityAfternoonBySupplier?: number
+    costGeneralTomorrowBySupplier?: number
+    costGeneralAfternoonBySupplier?: number
+    costGloriaTomorrowBySupplier?: number
+    costGloriaAfternoonBySupplier?: number
+    averagePriceGloriaTomorrowBySupplier?: number
+    averagePriceGeneralTomorrowBySupplier?: number
+    averagePriceGloriaAfternoonBySupplier?: number
+    averagePriceGeneralAfternoonBySupplier?: number
+
+    date?: string
+    productionQuantityTomorrow?: number
+    productionPriceTomorrow?: number
+    productionTotalTomorrow?: number
+    productionQuantityAfternoon?: number
+    productionPriceAfternoon?: number
+    productionTotalAfternoon?: number
+    gloriaShipmentQuantityTomorrow?: number
+    gloriaShipmentPriceTomorrow?: number
+    gloriaShipmentTotalTomorrow?: number
+    gloriaShipmentQuantityAfternoon?: number
+    gloriaShipmentPriceAfternoon?: number
+    gloriaShipmentTotalAfternoon?: number
+
+
     milkId?: number
 }
 

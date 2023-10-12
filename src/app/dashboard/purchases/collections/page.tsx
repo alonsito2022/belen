@@ -1,8 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { IPerson, IProductTariff, ISupplierTariff, IWarehouse } from '@/app/types';
-import { toast } from "react-toastify";
+
+import { useState, useEffect } from "react";
+import { IPerson, IProductTariff, IWarehouse } from '@/app/types';
 import CollectionList from "@/components/purchases/collections/CollectionList"
 import CollectionFilter from "@/components/purchases/collections/CollectionFilter"
 import CollectionSummary from "@/components/purchases/collections/CollectionSummary"
@@ -157,20 +156,13 @@ function CollectionPage() {
             body: JSON.stringify({
                 query: `
                     {
-                        dailyEntries(warehouseId:${filterObj.warehouseId}, productTariffId:${filterObj.productTariffId}, collectDate:"${filterObj.collectDate}", fortnightValue:${fort}) {
+                        dailyEntriesForProduction(warehouseId:${filterObj.warehouseId}, collectDate:"${filterObj.collectDate}", fortnightValue:${fort}) {
                             id
                             names
                             quantityTomorrow
                             quantityAfternoon
                             priceTomorrow
                             priceAfternoon
-                            supplierTariffId
-                            supplierTariffPriceTomorrow
-                            supplierTariffPriceAfternoon
-                            quantityToReturnAfternoon
-                            quantityToReturnTomorrow
-                            returnStatusTomorrow
-                            returnStatusAfternoon
                         }
                     }
                 `
@@ -178,7 +170,7 @@ function CollectionPage() {
         })
         .then(res=>res.json())
         .then(data=>{
-            setSuppliers(data.data.dailyEntries);
+            setSuppliers(data.data.dailyEntriesForProduction);
             setSummaryDailyEntries(initialStateSummaryDailyEntries);
         }).then(()=>{
 
@@ -208,14 +200,16 @@ function CollectionPage() {
         
         if(suppliers.length > 0){
             let valueQuantityTotalTomorrow = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow!), 0);
-            let valueCostTotalTomorrow = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow!*currentValue.supplierTariffPriceTomorrow!), 0);
+            let valueCostTotalTomorrow = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow!*currentValue.priceTomorrow!), 0);
             let valueQuantityTotalAfternoon = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon!), 0);
-            let valueCostTotalAfternoon = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon!*currentValue.supplierTariffPriceAfternoon!), 0);
+            let valueCostTotalAfternoon = suppliers.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon!*currentValue.priceAfternoon!), 0);
             setSummaryDailyEntries({...summaryDailyEntries, 
                 quantityTotalTomorrow: Math.round(valueQuantityTotalTomorrow * 100) / 100,
-                costTotalTomorrow: Math.round(valueCostTotalTomorrow * 100) / 100,
+                // costTotalTomorrow: valueCostTotalTomorrow,
+                costTotalTomorrow: Math.round((Math.round(valueCostTotalTomorrow * 1000) / 1000) * 100) / 100,
                 quantityTotalAfternoon: Math.round(valueQuantityTotalAfternoon * 100) / 100,
-                costTotalAfternoon: Math.round(valueCostTotalAfternoon * 100) / 100
+                // costTotalAfternoon: Math.round(valueCostTotalAfternoon * 100) / 100
+                costTotalAfternoon: Math.round((Math.round(valueCostTotalAfternoon * 1000) / 1000) * 100) / 100
             });
             
         }
@@ -295,7 +289,7 @@ function CollectionPage() {
         <>
             <h2 className="text-4xl font-bold dark:text-white pb-4">Produccion</h2>
             <CollectionFilter getSuppliersWithDailyEntries={getSuppliersWithDailyEntries} setFilterObj={setFilterObj} filterObj={filterObj} />
-            <CollectionList suppliers={suppliers} summaryDailyEntries={summaryDailyEntries} />
+            <CollectionList suppliers={suppliers} summaryDailyEntries={summaryDailyEntries}  fort={fort} filterObj={filterObj} getSuppliersWithDailyEntries={getSuppliersWithDailyEntries} />
             <CollectionSummary suppliers={suppliers} filterObj={filterObj}
                 setSummaryDailyEntries={setSummaryDailyEntries} summaryDailyEntries={summaryDailyEntries} fort={fort}
              />

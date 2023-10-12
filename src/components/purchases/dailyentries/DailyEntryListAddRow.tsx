@@ -117,9 +117,9 @@ function DailyEntryListAddRow({filterObj, fort, fetchDailyEntries, suppliers}:an
     }
     return (
 
-        <section className="dark:bg-gray-900 bg-gray-200 mb-4">
-            <div className="py-4 px-4 mx-auto max-w-5xl lg:py-16">
-                <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Añadir nuevo registro diario</h2>
+        <section className="dark:bg-gray-900 bg-sky-400 my-4 border border-gray-300">
+            <div className="py-4 px-4 ">
+            <h2 className="mb-3 text-xl font-medium text-white dark:text-white">Añadir nuevo registro diario</h2>
 
                 <div className='grid gap-4 sm:grid-cols-2 sm:gap-6'>
 

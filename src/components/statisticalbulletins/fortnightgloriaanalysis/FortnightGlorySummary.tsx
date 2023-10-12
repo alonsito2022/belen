@@ -50,6 +50,12 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                 paymentUncleMichael: Math.round(valuePaymentUncleMichael * 100) / 100,
                 totalNetIncome: Math.round(valueTotalNetIncome * 100) / 100,
             });
+        
+        }else if (name=="documentNumber"){
+
+            setSummaryDailyEntries({...summaryDailyEntries, 
+                documentNumber: value
+            });
         }
         
 
@@ -79,7 +85,9 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                     baseCost:${Number(summaryDailyEntries.baseCost)}, 
                     igvCost:${Number(summaryDailyEntries.igvCost)}, 
                     paymentUncleMichael:${Number(summaryDailyEntries.paymentUncleMichael)}, 
-                    fortnightValue:${fort}
+                    fortnightValue:${fort},
+                    documentNumber:"${summaryDailyEntries.documentNumber}"
+
                 ){
                     message
                 }
@@ -105,48 +113,75 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
             <div className="relative overflow-x-auto p-4 mx-auto max-w-5xl bg-white">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 
-                <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white">
                     CUADRO RESUMEN QUINCENA
                 </caption>
 
                     <tbody>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900" rowSpan={3}>FACTURA GLORIA</td>
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900 ">LITROS</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">
+                        <tr className="bg-blue-800 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium " rowSpan={5}>
+
+                                FACTURA GLORIA<br/><br/>
+                                <input type='text' name='documentNumber' 
+                                    onFocus={(e) => e.target.select()} 
+                                    onChange={e=>handleInputChange(e)} value={summaryDailyEntries.documentNumber} 
+                                    placeholder="FK01-00355105"
+                                    className=' w-60 px-1 py-1 text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
+
+                            </td>
+                            <td className="align-middle px-4 py-1 border-x font-medium">LITROS TOTALES</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">
                                 <input type='number' name='quantityLiter' 
                                     onFocus={(e) => e.target.select()} 
                                     onChange={e=>handleInputChange(e)} value={summaryDailyEntries.quantityLiter} 
-                                    className='w-36 p-2 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
+                                    className='w-36 px-1 py-1 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
                             </td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">MONTO POR LITRO</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.paymentCostOfGloriaPerLiter}</td>
+                        <tr className="bg-blue-800 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium">PRECIO POR LITRO</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">{summaryDailyEntries.paymentCostOfGloriaPerLiter}</td>
                         </tr>
                         
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">MONTO SIN IGV</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">
+                        <tr className="bg-blue-800 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium">MONTO SIN IGV</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">
                                 <input type='number' name='baseCost' 
                                     onFocus={(e) => e.target.select()} 
                                     onChange={e=>handleInputChange(e)} value={summaryDailyEntries.baseCost} 
-                                    className='w-36 p-2 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
+                                    className='w-36 px-1 py-1 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
                             </td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900" rowSpan={2}>DATOS BELEN</td>
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">LITROS</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.sumQuantityTotalTomorrowAndAfternoon}</td>
+                        
+                        <tr className="bg-blue-800 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium">IGV</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">
+                                <input type='number' name='igvCost' 
+                                    onFocus={(e) => e.target.select()} 
+                                    onChange={e=>handleInputChange(e)} value={summaryDailyEntries.igvCost} 
+                                    className='w-36 px-1 py-1 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
+                            </td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">PAGO PROVEEDORES</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.sumCostTotalTomorrowAndAfternoon}</td>
+                        <tr className="bg-blue-800 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium">IMPORTE TOTAL</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">
+                                {summaryDailyEntries.baseCost + summaryDailyEntries.igvCost} 
+                            </td>
+                        </tr>
+                        
+                        <tr className=" bg-gray-500 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium" rowSpan={2}>DATOS BELEN</td>
+                            <td className="align-middle px-4 py-1 border-x font-medium">LITROS TOTALES MAÑANA Y TARDE</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">{summaryDailyEntries.sumQuantityTotalTomorrowAndAfternoon}</td>
+                        </tr>
+                        
+                        <tr className=" bg-gray-500 text-white">
+                            <td className="align-middle px-4 py-1 border-x font-medium">PAGO PROVEEDORES</td>
+                            <td className="align-middle px-4 py-1 border-x text-lg text-right">{summaryDailyEntries.sumCostTotalTomorrowAndAfternoon}</td>
                         </tr>
 
                         
@@ -156,42 +191,39 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
 
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 
-                <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white">
                     CUADRO GANANCIA ACOPIO GLORIA
                 </caption>
 
                     <tbody>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">BRUTO</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.grossCost}</td>
+                        <tr className=" bg-gray-100 text-black">
+                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">BRUTO</td>
+                            <td className="align-middle px-4 py-1 border text-lg text-right">{summaryDailyEntries.grossCost}</td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">IGV</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">
-                                <input type='number' name='igvCost' 
-                                    onFocus={(e) => e.target.select()} 
-                                    onChange={e=>handleInputChange(e)} value={summaryDailyEntries.igvCost} 
-                                    className='w-36 p-2 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
+                        <tr className=" bg-gray-100 text-black">
+                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">IGV</td>
+                            <td className="align-middle px-4 py-1 border text-lg text-right">
+                                {summaryDailyEntries.igvCost} 
                             </td>
                         </tr>
                         
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">PAGO TIO MIGUEL</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">
+                        <tr className=" bg-gray-100 text-black">
+                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">PAGO TIO MIGUEL</td>
+                            <td className="align-middle px-4 py-1 border text-lg text-right">
                                 <input type='number' name='paymentUncleMichael' 
                                     onFocus={(e) => e.target.select()} 
                                     onChange={e=>handleInputChange(e)} value={summaryDailyEntries.paymentUncleMichael} 
-                                    className='w-36 p-2 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
+                                    className='w-36 px-1 py-1 text-right text-lg text-gray-900 border border-gray-800 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ' />
                             </td>
                         </tr>
                         
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">GANANCIA NETA</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{Number(summaryDailyEntries.totalNetIncome).toFixed(2)}</td>
+                        <tr className=" bg-gray-100 text-black">
+                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">GANANCIA NETA</td>
+                            <td className="align-middle px-4 py-1 border text-lg text-right">{Number(summaryDailyEntries.totalNetIncome).toFixed(2)}</td>
                         </tr>
 
                         
@@ -199,7 +231,7 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                 
                 </table>
 
-                <div className="relative overflow-hidden bg-white rounded-b-lg shadow-md dark:bg-gray-800">
+                <div className="relative overflow-hidden bg-white rounded-b-lg shadow-md">
                     <nav className="flex flex-row items-center justify-between p-4"
                         aria-label="Table navigation">
                         <button type="button" onClick={handleButtonOnClick}
@@ -207,12 +239,12 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                         Guardar cambios
                         </button>
                         <p className="text-sm">
-                        <span className="font-normal text-gray-500 dark:text-gray-400">ACIDEZ: </span>
-                        <span className="font-semibold text-gray-900 dark:text-white">35</span>
+                        <span className="font-normal text-gray-500 dark:text-gray-400"></span>
+                        <span className="font-semibold text-gray-900 dark:text-white"></span>
                         </p>
                         <p className="text-sm">
-                        <span className="font-normal text-gray-500 dark:text-gray-400">DENSIDAD: </span>
-                        <span className="font-semibold text-gray-900 dark:text-white">18</span>
+                        <span className="font-normal text-gray-500 dark:text-gray-400"></span>
+                        <span className="font-semibold text-gray-900 dark:text-white"></span>
                         </p>
                     </nav>
                 </div>

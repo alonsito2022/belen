@@ -4,9 +4,11 @@ import { IPerson, IProductTariff, ISupplierTariff, IWarehouse } from '@/app/type
 import { toast } from "react-toastify";
 import { useAppSelector } from "@/redux/hooks"
 import FortnightProductionSummary from "@/components/statisticalbulletins/fortnightproductionanalysis/FortnightProductionSummary"
+import FortnightProductionFilter from "@/components/statisticalbulletins/fortnightproductionanalysis/FortnightProductionFilter"
 
 const initialStateFilterObj = {
   collectDate: "",
+  collectCycle: "03",
   collectType: "06",
   productTariffId: 5,
   warehouseId: 6,
@@ -22,35 +24,22 @@ const initialStateSummaryDailyEntries = {
     paymentUncleMichael: -1,
     totalNetIncome: 0,
 
-    sumQuantityTotalTomorrow: 0,
-    sumQuantityTotalAfternoon: 0,
-    sumQuantityTotalTomorrowAndAfternoon: 0,
-    sumCostTotalTomorrowAndAfternoon: 0,
-    sumCostTotalGloriaPerFortnitght: 0,
-
-    totalMolds: -1,
-    totalQuantityTomorrow: -1,
-    totalQuantityAfternoon: -1,
-    totalQuantityFermented: -1,
-    totalQuantitySendFromBelenToGloria: -1,
-    costTotalTomorrow: -1,
-    costTotalAfternoon: -1,
-    costAveragePerLiterTomorrow: -1,
-    costAveragePerLiterAfternoon: -1,
-    totalQuantityInChiller: -1,
-    totalQuantityLitersUsed: -1,
-    totalPerformance: -1,
-    costPerformancePerLiter: -1,
-    costTotalInChiller: -1,
-    costTotalLitersUsed: -1,
+    sumQuantityMolds: -1,
+    sumQuantitySendToGloria: -1,
+    sumQuantityLitersUsed: -1,
+    sumTotalLitersUsed: -1,
+    costAveragePerformance: -1,
+    costAveragePerformancePerLiter: -1,
     costAveragePerLiterUsed: -1,
-    costAveragePerLiterGloria: -1,
+    costAveragePriceGloria: -1,
+    costAveragePriceAfternoon: -1,
+    averagePricePerLiterPaidByGloria: -1,
+    averagePricePerLiterPaidByBelen: -1,
+    paymentDifference: -1,
 
 }
 function FortnightProductionAnalysisPage() {
     const [suppliers, setSuppliers] = useState< IPerson[]>([]);
-    const [productTariffs, setProductTariffs] = useState< IProductTariff[]>([]);
-    const [warehouses, setWarehouses] = useState< IWarehouse[]>([]);
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
     const fort = useAppSelector(state=>state.fortnitghtReducer.fortnightValue);
     const [summaryDailyEntries, setSummaryDailyEntries] = useState(initialStateSummaryDailyEntries);
@@ -63,26 +52,21 @@ function FortnightProductionAnalysisPage() {
             body: JSON.stringify({
                 query: `
                     {
-                        fortnightProductionAnalysis(warehouseId:${filterObj.warehouseId}, productTariffId:${filterObj.productTariffId}, fortnightValue:${fort}) {
+                        fortnightProductionAnalysis(warehouseId:${filterObj.warehouseId}, productTariffId:${filterObj.productTariffId}, fortnightValue:${fort}, collectCycle:"${filterObj.collectCycle}") {
                             id
                             supplierName
-                            totalMolds
-                            totalQuantityTomorrow
-                            totalQuantityAfternoon
-                            totalQuantityFermented
-                            totalQuantitySendFromBelenToGloria
-                            costTotalTomorrow
-                            costTotalAfternoon
-                            costAveragePerLiterTomorrow
-                            costAveragePerLiterAfternoon
-                            totalQuantityInChiller
-                            totalQuantityLitersUsed
-                            totalPerformance
-                            costPerformancePerLiter
-                            costTotalInChiller
-                            costTotalLitersUsed
+                            sumQuantityMolds
+                            sumQuantitySendToGloria
+                            sumQuantityLitersUsed
+                            sumTotalLitersUsed
+                            costAveragePerformance
+                            costAveragePerformancePerLiter
                             costAveragePerLiterUsed
-                            costAveragePerLiterGloria
+                            costAveragePriceGloria
+                            costAveragePriceAfternoon
+                            averagePricePerLiterPaidByGloria
+                            averagePricePerLiterPaidByBelen
+                            paymentDifference
                         }
                     }
                 `
@@ -91,44 +75,36 @@ function FortnightProductionAnalysisPage() {
         .then(res=>res.json())
         .then(data=>{
             let obj = data.data.fortnightProductionAnalysis[0];
-            if (obj !== null)
+            console.log(obj)
+            if (obj !== null &&  obj != undefined)
                 setSummaryDailyEntries(prev => ({...prev, 
-                    totalMolds: obj.totalMolds,
-                    totalQuantityTomorrow: obj.totalQuantityTomorrow,
-                    totalQuantityAfternoon: obj.totalQuantityAfternoon,
-                    totalQuantityFermented: obj.totalQuantityFermented,
-                    totalQuantitySendFromBelenToGloria: obj.totalQuantitySendFromBelenToGloria,
-                    costTotalTomorrow: obj.costTotalTomorrow,
-                    costTotalAfternoon: obj.costTotalAfternoon,
-                    costAveragePerLiterTomorrow: obj.costAveragePerLiterTomorrow,
-                    costAveragePerLiterAfternoon: obj.costAveragePerLiterAfternoon,
-                    totalQuantityInChiller: obj.totalQuantityInChiller,
-                    totalQuantityLitersUsed: obj.totalQuantityLitersUsed,
-                    totalPerformance: obj.totalPerformance,
-                    costPerformancePerLiter: obj.costPerformancePerLiter,
-                    costTotalInChiller: obj.costTotalInChiller,
-                    costTotalLitersUsed: obj.costTotalLitersUsed,
+                    sumQuantityMolds: obj.sumQuantityMolds,
+                    sumQuantitySendToGloria: obj.sumQuantitySendToGloria,
+                    sumQuantityLitersUsed: obj.sumQuantityLitersUsed,
+                    sumTotalLitersUsed: obj.sumTotalLitersUsed,
+                    costAveragePerformance: obj.costAveragePerformance,
+                    costAveragePerformancePerLiter: obj.costAveragePerformancePerLiter,
                     costAveragePerLiterUsed: obj.costAveragePerLiterUsed,
-                    costAveragePerLiterGloria: obj.costAveragePerLiterGloria,
+                    costAveragePriceGloria: obj.costAveragePriceGloria,
+                    costAveragePriceAfternoon: obj.costAveragePriceAfternoon,
+                    averagePricePerLiterPaidByGloria: obj.averagePricePerLiterPaidByGloria,
+                    averagePricePerLiterPaidByBelen: obj.averagePricePerLiterPaidByBelen,
+                    paymentDifference: obj.paymentDifference,
                 }))
             else
                 setSummaryDailyEntries(prev => ({...prev, 
-                    totalMolds: 0,
-                    totalQuantityTomorrow: 0,
-                    totalQuantityAfternoon: 0,
-                    totalQuantityFermented: 0,
-                    totalQuantitySendFromBelenToGloria: 0,
-                    costTotalTomorrow: 0,
-                    costTotalAfternoon: 0,
-                    costAveragePerLiterTomorrow: 0,
-                    totalQuantityInChiller: 0,
-                    totalQuantityLitersUsed: 0,
-                    totalPerformance: 0,
-                    costPerformancePerLiter: 0,
-                    costTotalInChiller: 0,
-                    costTotalLitersUsed: 0,
+                    sumQuantityMolds: 0,
+                    sumQuantitySendToGloria: 0,
+                    sumQuantityLitersUsed: 0,
+                    sumTotalLitersUsed: 0,
+                    costAveragePerformance: 0,
+                    costAveragePerformancePerLiter: 0,
                     costAveragePerLiterUsed: 0,
-                    costAveragePerLiterGloria: 0,
+                    costAveragePriceGloria: 0,
+                    costAveragePriceAfternoon: 0,
+                    averagePricePerLiterPaidByGloria: 0,
+                    averagePricePerLiterPaidByBelen: 0,
+                    paymentDifference: 0,
                 }))
 
         }).then(()=>{
@@ -142,15 +118,26 @@ function FortnightProductionAnalysisPage() {
             
         }
 
-    }, [fort]);
+    }, [fort, filterObj.collectCycle]);
+
+    function obtenerNombreMes (numero : number) {
+        let miFecha = new Date();
+        if (0 < numero && numero <= 12) {
+          miFecha.setMonth(numero - 1);
+          return new Intl.DateTimeFormat('es-ES', { month: 'long'}).format(miFecha);
+        } else {
+          return null;
+        }
+    }
 
     return (
         <>
-            <div className="flex justify-between my-3">
+            <div className="flex  my-3">
 
-            <h2 className="text-4xl font-bold dark:text-white pb-2">Resumen de produccion {fort}</h2>
+                <h2 className="text-4xl font-bold dark:text-white pb-2">Resumen de produccion  {obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}</h2>
 
             </div>
+            <FortnightProductionFilter filterObj={filterObj} setFilterObj={setFilterObj} />
             <FortnightProductionSummary suppliers={suppliers} filterObj={filterObj}
                 setSummaryDailyEntries={setSummaryDailyEntries} summaryDailyEntries={summaryDailyEntries} fort={fort}/>
         

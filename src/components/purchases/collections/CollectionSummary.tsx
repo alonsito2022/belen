@@ -107,22 +107,7 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
         }).catch(e=>console.log(e))
         
     }
-    
-    /*useEffect(() => {
-        if(Number(summaryDailyEntries.quantitySendToGloria)>0 && fort>0 )
-        saveShipmentToGloria()
-    }, [summaryDailyEntries.quantitySendToGloria]);
 
-    useEffect(() => {
-        if(Number(summaryDailyEntries.quantityFermented)>0 && fort>0 )
-        saveShipmentToFermentation()
-    }, [summaryDailyEntries.quantityFermented]);
-
-    useEffect(() => {
-        if(Number(summaryDailyEntries.quantityMoldsProduced)>0 && fort>0 )
-        saveShipmentToMoldProduction()
-    }, [summaryDailyEntries.quantityMoldsProduced]);*/
-    
     return (
         <>
 
@@ -133,9 +118,9 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
                     CUADRO PRODUCCION Y RENDIMIENTO
                 </caption>
 
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" className="px-2 py-4 border "></th>
+                    <thead className="text-xs text-black uppercase">
+                        <tr className="bg-yellow-50">
+                            <th scope="col" className="px-2 py-4 border"></th>
                             <th scope="col" className=" w-48 px-2 py-4 border text-center">LITROS</th>
                             <th scope="col" className=" w-48 px-2 py-4 border text-center">COSTO<br/>REAL</th>
                             <th scope="col" className=" w-48 px-2 py-4 border text-center">PROMEDIO COSTO<br/>POR LITRO</th>
@@ -143,10 +128,10 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
                             <th scope="col" className="w-36 px-2 py-4 border rounded-tr-lg">DIFERENCIA<br/>REAL VS GLORIA</th>*/}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="text-black">
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-4 border font-medium text-gray-900 whitespace-nowrap dark:text-white">LECHE TARDE</th>
+                        <tr className="bg-yellow-100 ">
+                            <th className="align-middle px-4 py-4 border font-medium ">LECHE TARDE DIA ANTERIOR</th>
                             <td className="align-middle px-4 py-4 border text-lg text-right">{Number(summaryDailyEntries.quantityTotalAfternoon).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg text-right">S/ {Number(summaryDailyEntries.costTotalAfternoon).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg text-center">S/ {Number(summaryDailyEntries.averageCostPerLiterAfternoon).toFixed(4)}</td>
@@ -156,8 +141,8 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
 
                         
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-2 border font-medium text-gray-900 whitespace-nowrap dark:text-white">ENVÍO A GLORIA</th>
+                        <tr className="bg-yellow-200">
+                            <th className="align-middle px-4 py-2 border font-medium">ENVÍO A GLORIA</th>
                             <td className="align-middle px-2 py-2 border text-right">
                                 <input type='number' name='quantitySendToGloria' 
                                     onFocus={(e) => e.target.select()} 
@@ -170,16 +155,16 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
                             <td className="align-middle px-2 py-2 border text-lg text-center">{Number(summaryDailyEntries.realVsGloriaDifference).toFixed(2)}</td>*/}
                         </tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-4 border font-medium text-gray-900 whitespace-nowrap dark:text-white">ENFRIADORA TARDE</th>
+                        <tr className="bg-yellow-300">
+                            <th className="align-middle px-4 py-4 border font-medium">ENFRIADORA TARDE</th>
                             <td className="align-middle px-4 py-4 border text-lg  text-right">{Number(summaryDailyEntries.quantityInChiller).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg  text-right">S/ {Number(summaryDailyEntries.costRealInChiller).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg  text-center" colSpan={1}></td>
                             {/*<td className="align-middle px-2 py-4 border text-lg  text-center" colSpan={2}></td>*/}
                         </tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-4 border font-medium text-gray-900 whitespace-nowrap dark:text-white">LECHE MAÑANA</th>
+                        <tr className="bg-yellow-400">
+                            <th className="align-middle px-4 py-4 border font-medium ">LECHE MAÑANA</th>
                             <td className="align-middle px-4 py-4 border text-lg text-right">{Number(summaryDailyEntries.quantityTotalTomorrow).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg text-right">S/ {Number(summaryDailyEntries.costTotalTomorrow).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg text-center">S/ {Number(summaryDailyEntries.averageCostPerLiterTomorrow).toFixed(4)}</td>
@@ -189,16 +174,16 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
 
                         <tr className=""><td className="px-6 py-3 text-base " colSpan={6}></td></tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-4 border font-medium text-gray-900 whitespace-nowrap dark:text-white">LITROS USADOS</th>
+                        <tr className="bg-lime-500 text-white">
+                            <th className="align-middle px-4 py-4 border font-medium">LITROS USADOS</th>
                             <td className="align-middle px-4 py-4 border text-lg text-right">{Number(summaryDailyEntries.litersUsed).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg text-right">S/ {Number(summaryDailyEntries.costTotalLitersUsed).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-lg text-center">S/ {Number(summaryDailyEntries.averageCostPerLiterUsed).toFixed(4)}</td>
                             {/*<td className="align-middle px-2 py-4 border text-lg text-center" colSpan={2}></td>*/}
                         </tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-2 border font-medium text-gray-900 whitespace-nowrap dark:text-white">FERMENTO</th>
+                        <tr className="bg-lime-400">
+                            <th className="align-middle px-4 py-2 border font-medium">FERMENTO</th>
                             <td className="align-middle px-2 py-2 border text-right">
                                 <input type='number' name='quantityFermented' 
                                     onFocus={(e) => e.target.select()} 
@@ -211,16 +196,16 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
                             {/*<td className="align-middle px-2 py-2 border text-center" colSpan={2}></td>*/}
                         </tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-4 border font-medium text-gray-900 whitespace-nowrap dark:text-white">LITROS CORTADOS</th>
+                        <tr className="bg-lime-300">
+                            <th className="align-middle px-4 py-4 border font-medium">LITROS CORTADOS</th>
                             <td className="align-middle px-4 py-4 border text-lg text-right">{Number(summaryDailyEntries.litersCut).toFixed(2)}</td>
                             <td className="align-middle px-2 py-4 border text-center"></td>
                             <td className="align-middle px-2 py-4 border text-center"></td>
                             {/*<td className="align-middle px-2 py-4 border text-center" colSpan={2}></td>*/}
                         </tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-2 border font-medium text-gray-900 whitespace-nowrap dark:text-white">CANTIDAD DE MOLDES</th>
+                        <tr className="bg-lime-200">
+                            <th className="align-middle px-4 py-2 border font-medium">CANTIDAD DE MOLDES</th>
                             <td className="align-middle px-2 py-2 border text-right">
                                 <input type='number' 
                                 name='quantityMoldsProduced' 
@@ -234,8 +219,8 @@ function CollectionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntri
                             {/*<td className="align-middle px-2 py-2 border text-center" colSpan={2}></td>*/}
                         </tr>
 
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th className="align-middle px-4 py-4 border font-medium text-gray-900 whitespace-nowrap dark:text-white">RENDIMIENTO</th>
+                        <tr className="bg-lime-100">
+                            <th className="align-middle px-4 py-4 border font-medium">RENDIMIENTO</th>
                             <td className="align-middle px-4 py-4 border text-lg  text-right">{Number(summaryDailyEntries.performance).toFixed(9)}</td>
                             <td className="align-middle px-2 py-4 border text-lg  text-right">S/ {Number(summaryDailyEntries.costRealPerformancePerLiter)}</td>
                             <td className="align-middle px-2 py-4 border text-center" colSpan={1}></td>

@@ -36,22 +36,22 @@ function GloriaShipmentList({suppliers, suppliersWithGloriaShipments, filterObj,
 <div className="relative overflow-x-auto h-[100vh]">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 
-            <thead className="text-xs text-gray-700 uppercase  dark:bg-gray-700 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase">
                     <tr className='  '>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-50' rowSpan={2}></td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-200 text-black' colSpan={3}>MAÑANA</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-300 text-black' colSpan={3}>TARDE</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-50'></td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-lime-500' rowSpan={2}></td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-300 text-gray-500' colSpan={3}>MAÑANA</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-800 text-gray-200' colSpan={3}>TARDE</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-lime-500'></td>
                     </tr>
                     <tr className=' '>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-200 text-black'>CANT.<br/>ENTREGADA</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-200 text-black'>PRECIO<br/>LITRO</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-200 text-black'>COSTO<br/>TOTAL</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-300 text-gray-500'>CANT.<br/>ENTREGADA</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-300 text-gray-500'>PRECIO<br/>LITRO</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-300 text-gray-500'>COSTO<br/>TOTAL</td>
 
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-300 text-black'>CANT.<br/>ENTREGADA</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-300 text-black'>PRECIO<br/>LITRO</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-300 text-black'>COSTO<br/>TOTAL</td>
-                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-400 bg-green-50'></td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-800 text-gray-200'>CANT.<br/>ENTREGADA</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-800 text-gray-200'>PRECIO<br/>LITRO</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-gray-800 text-gray-200'>COSTO<br/>TOTAL</td>
+                        <td className='px-3 py-3 font-normal text-sm text-center border border-gray-200 bg-lime-500'></td>
                     </tr>
 
                 </thead>
@@ -60,19 +60,20 @@ function GloriaShipmentList({suppliers, suppliersWithGloriaShipments, filterObj,
                 {suppliersWithGloriaShipments.map((item: IPerson) => 
                     updateState === item.id ? <GloriaShipmentEditRow key={item.id} item={item} setUpdateState={setUpdateState} filterObj={filterObj} fort={fort} getGloriaShipments={getGloriaShipments} />:
                     <tr key={item.id} className="border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th className="px-3 py-3 border border-gray-400 bg-green-50 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.names}</th>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-800">{item.quantityTomorrow}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-500">{item.priceGloriaTomorrow}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center text-green-500">{Number(item.quantityTomorrow! * item.priceGloriaTomorrow!).toFixed(2)}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-800">{item.quantityAfternoon}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-500">{item.priceGloriaAfternoon}</td>
-                        <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center text-green-500">{Number(item.quantityAfternoon! * item.priceGloriaAfternoon!).toFixed(2)}</td>
-                        <td className="px-3 py-0 border border-gray-400 bg-green-50 text-center text-green-800">
+                        <th className="px-3 py-2 border border-gray-200 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.names}</th>
+                        <td className="px-3 py-2 border border-gray-200 text-lg text-center">{item.quantityTomorrow}</td>
+                        <td className="px-3 py-2 border border-gray-200 text-lg text-center">{item.priceGloriaTomorrow}</td>
+                        <td className="px-3 py-2 border border-gray-200 text-lg text-center">{Number(item.quantityTomorrow! * item.priceGloriaTomorrow!).toFixed(2)}</td>
+                        
+                        <td className="px-3 py-2 border border-gray-200 text-lg text-center">{item.quantityAfternoon}</td>
+                        <td className="px-3 py-2 border border-gray-200 text-lg text-center">{item.priceGloriaAfternoon}</td>
+                        <td className="px-3 py-2 border border-gray-200 text-lg text-center">{Number(item.quantityAfternoon! * item.priceGloriaAfternoon!).toFixed(2)}</td>
+                        <td className="px-2 py-0 border border-gray-200 text-center">
                             <button type="button" onClick={ async ()=>{
                                 setUpdateState(item.id)
                                 // await fetchSupplierByID(item.id);
-                                }} className="w-full inline-flex justify-center text-white bg-green-900 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                Editar
+                                }} className="w-full inline-flex justify-center text-white bg-gray-500 border border-gray-400 hover:bg-gray-800 focusblack-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm py-1.5 text-center dark:bg-gray-600 dark:hover:bg-yellow-400 dark:black:ring-gray-800">
+                                EDITAR
                             </button>
                         </td>
                     </tr>
@@ -80,14 +81,15 @@ function GloriaShipmentList({suppliers, suppliersWithGloriaShipments, filterObj,
                 </tbody>
                 <tfoot>
                 <tr className="font-semibold text-gray-900 dark:text-white">
-                    <td className="px-3 py-3 border border-gray-400 bg-green-50 text-base " colSpan={1}>TOTAL</td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow!), 0))}</td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center" colSpan={1}></td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow! * currentValue.priceGloriaTomorrow!), 0)).toFixed(2)}</td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon!), 0))}</td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center" colSpan={1}></td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-300 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon! * currentValue.priceGloriaAfternoon!), 0)).toFixed(2)}</td>
-                    <td className="px-3 py-3 border border-gray-400 bg-green-50 text-center" colSpan={1}></td>
+                    <td className="px-3 py-2 border border-gray-200 bg-lime-500 text-white text-base " colSpan={1}>TOTAL</td>
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-gray-300 text-gray-500 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow!), 0))}</td>
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-gray-300 text-gray-500 text-center" colSpan={1}></td>
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-gray-300 text-gray-500 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityTomorrow! * currentValue.priceGloriaTomorrow!), 0)).toFixed(2)}</td>
+                    
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-gray-800 text-gray-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon!), 0))}</td>
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-gray-800 text-gray-200 text-center" colSpan={1}></td>
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-gray-800 text-gray-200 text-center">{Number(suppliersWithGloriaShipments.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.quantityAfternoon! * currentValue.priceGloriaAfternoon!), 0)).toFixed(2)}</td>
+                    <td className="px-3 py-2 border border-gray-200 text-lg bg-lime-500 text-center" colSpan={1}></td>
                 </tr>
                 </tfoot>
             </table>

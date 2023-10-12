@@ -13,62 +13,62 @@ function FortnightProductionSummary({filterObj, setSummaryDailyEntries, summaryD
 
                     <tbody>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">NUMERO DE MOLDES</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalMolds}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right"></td>
+                        <tr className="bg-sky-50 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">NUMERO DE MOLDES</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.sumQuantityMolds}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right"></td>
+                        </tr>
+                        
+                        <tr className="bg-sky-100 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">COSTO PROMEDIO DE LECHE POR MOLDE</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.costAveragePerformancePerLiter}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-righ"></td>
+                        </tr>
+                        
+                        <tr className="bg-sky-200 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">PROMEDIO DE COSTO POR LITRO DE LECHE PARA QUESO</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.costAveragePerLiterUsed}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right"></td>
+                        </tr>
+                        
+                        <tr className="bg-sky-300 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">CANTIDAD LITROS POR MOLDE (PROMEDIO RENDIMIENTO MENSUAL)</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.costAveragePerformance}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right"></td>
                         </tr>
                         
                         <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">COSTO PROMEDIO DE LECHE POR MOLDE</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.costPerformancePerLiter}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right"></td>
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900" colSpan={3}></td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">PROMEDIO DE COSTO POR LITRO DE LECHE PARA QUESO</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.costAveragePerLiterUsed}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right"></td>
+                        <tr className="bg-gray-50 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">LITROS LECHE UTILIZADOS PARA PROCESO DE ELABORACION</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.sumQuantityLitersUsed}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.sumTotalLitersUsed}</td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">CANTIDAD LITROS POR MOLDE (PROMEDIO RENDIMIENTO MENSUAL)</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalPerformance}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right"></td>
+                        <tr className="bg-gray-100 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">LITROS DE LECHE ENVIADOS A GLORIA</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.sumQuantitySendToGloria}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right"></td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900" colSpan={3}></td>
+                        <tr className="bg-gray-200 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">PROMEDIO DE COSTOS POR LITRO DE LECHE A GLORIA PAGADO POR GLORIA</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.costAveragePriceGloria}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.averagePricePerLiterPaidByGloria}</td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">LITROS LECHE UTILIZADOS PARA PROCESO DE ELABORACION</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalQuantityLitersUsed}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.costTotalLitersUsed}</td>
+                        <tr className="bg-gray-300 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-gray-900">PROMEDIO DE COSTOS POR LITRO DE LECHE A GLORIA PAGADO POR BELEN</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.costAveragePriceAfternoon}</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-black">{summaryDailyEntries.averagePricePerLiterPaidByBelen}</td>
                         </tr>
                         
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">LITROS DE LECHE ENVIADOS A GLORIA</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalQuantitySendFromBelenToGloria}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right"></td>
-                        </tr>
-                        
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">PROMEDIO DE COSTOS POR LITRO DE LECHE A GLORIA PAGADO POR GLORIA</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.costAveragePerLiterGloria}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalQuantitySendFromBelenToGloria * summaryDailyEntries.costAveragePerLiterGloria}</td>
-                        </tr>
-                        
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">PROMEDIO DE COSTOS POR LITRO DE LECHE A GLORIA PAGADO POR BELEN</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.costAveragePerLiterAfternoon}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalQuantitySendFromBelenToGloria * summaryDailyEntries.costAveragePerLiterAfternoon}</td>
-                        </tr>
-                        
-                        <tr className="bg-white dark:bg-gray-800">
-                            <td className="align-middle px-4 py-4 border font-medium text-gray-900">DIFERENCIA DE PAGOS</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.sumCostTotalTomorrowAndAfternoon}</td>
-                            <td className="align-middle px-4 py-4 border text-lg text-right">{summaryDailyEntries.totalQuantitySendFromBelenToGloria * summaryDailyEntries.costAveragePerLiterGloria - summaryDailyEntries.totalQuantitySendFromBelenToGloria * summaryDailyEntries.costAveragePerLiterAfternoon}</td>
+                        <tr className="bg-gray-400 dark:bg-gray-800">
+                            <td className="align-middle px-2 py-1 border font-medium text-white">DIFERENCIA DE PAGOS</td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right"></td>
+                            <td className="align-middle px-2 py-1 border text-lg text-right text-white">{summaryDailyEntries.paymentDifference}</td>
                         </tr>
 
                         
@@ -82,12 +82,12 @@ function FortnightProductionSummary({filterObj, setSummaryDailyEntries, summaryD
                         aria-label="Table navigation">
 
                         <p className="text-sm">
-                        <span className="font-normal text-gray-500 dark:text-gray-400">ACIDEZ: </span>
-                        <span className="font-semibold text-gray-900 dark:text-white">35</span>
+                        <span className="font-normal text-gray-500 dark:text-gray-400"></span>
+                        <span className="font-semibold text-gray-900 dark:text-white"></span>
                         </p>
                         <p className="text-sm">
-                        <span className="font-normal text-gray-500 dark:text-gray-400">DENSIDAD: </span>
-                        <span className="font-semibold text-gray-900 dark:text-white">18</span>
+                        <span className="font-normal text-gray-500 dark:text-gray-400"></span>
+                        <span className="font-semibold text-gray-900 dark:text-white"></span>
                         </p>
                     </nav>
                 </div>
