@@ -1,6 +1,6 @@
 import { IOperation, IProductTariff, IWarehouse } from "@/app/types";
-
-import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { ChangeEvent ,useState, useEffect, KeyboardEvent, MouseEvent, FormEvent } from "react";
 
 
 const options = [
@@ -8,70 +8,71 @@ const options = [
     {id: "S", value: "SALIDA"},
 ];
 
-    const initialStateDetailObj = {
+function InventoryRegisterOperationForm({operation, setOperation, productTariffs, warehouses, fetchRegularizationOperations} : any) {
 
-        productTariffId: 0,
-        quantity: 0,
-        price: 0
-    }
-
-function InventoryRegisterOperationForm({operation, setOperation, productTariffs, warehouses} : any) {
-
-    const [detailObj, setDetailObj] = useState(initialStateDetailObj);
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setOperation({...operation, [name]: value});
     }
 
-    const handleInputChange2 = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
-        setDetailObj({...detailObj, [name]: value});
+    const handleClickButtonAdd = (e: MouseEvent<HTMLButtonElement>) => {
+        if(operation.warehouseId>0){
+            if(operation.productTariffId>0){
+                if(operation.quantity>0){
+                    if((operation.operationAction=="E" && operation.price > 0) || operation.operationAction=="S"){
+                        save()
+                    }
+                    else
+                        toast("Validar precio", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+                }
+                else
+                    toast("Validar cantidad", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+            }
+            else
+                toast("Validar presentacion de producto", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+        }
+        else
+            toast("Validar almacen", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+
+    }
+    async function save(){
+        let queryFetch: String = "";
+        
+        queryFetch = `
+            mutation{
+                saveRegularizationOperation(
+                    warehouseId: ${operation.warehouseId}, 
+                    userId: ${operation.userId}, 
+                    operationAction: "${operation.operationAction}", 
+                    operationDate: "${operation.operationDate}", 
+                    observation: "${operation.observation}", 
+                    productTariffId: ${operation.productTariffId}, 
+                    price: ${Number(operation.price)!==0?operation.price:0}
+                    quantity: ${Number(operation.quantity)!==0?operation.quantity:0}, 
+                ){
+                    message
+                }
+            }
+        `;
+
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({query: queryFetch})
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            toast(data.data.saveRegularizationOperation.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+
+            setOperation( (prev : any) => ({...prev, observation: "", productTariffId: 0,  quantity: 0, price: 0}))
+            document.getElementById("btn-close-supplier-modal")?.click();
+            fetchRegularizationOperations()
+
+        }).catch(e=>console.log(e))
+        
     }
 
-    useEffect(() => {
-       
-        console.log(operation.productTariffs)
-    }, [operation]);
 
-    const handleSaveSupplier = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(detailObj)
-
-        // setOperation({...operation, productTariffs: A})
-        setOperation((operation:any )=> ({
-            ...operation, 
-            // [productTariffs]: [...operation[productTariffs], detailObj.productTariffId]
-        }))
-        /*/let queryFetch: String = "";
-        
-            queryFetch = `
-                mutation{
-                    createOperation(
-                        warehouseId: "${operation.warehouseId}", userId: "${operation.userId}", operationAction: "${operation.operationAction}", 
-                        operationStatus:"${operation.operationStatus}", operationType:"${operation.operationType}", operationType:"${operation.operationType}", 
-                        operationDate:"${operation.operationDate}", turn:${operation.turn}
-                    ){
-                        message
-                    }
-                }
-            `;
-            
-            await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
-                method: 'POST',
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify({query: queryFetch})
-            })
-            .then(res=>res.json())
-            .then(data=>{
-                // toast(data.data.createSupplier.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                // setOperation(initialState);
-                const closeModalElement = document.getElementById('btn-close-supplier-modal');
-                closeModalElement?.click();
-                // fetchSuppliers();
-
-            }).catch(e=>console.log(e))*/
-        
-
-    };
     return (
         <>
         
@@ -90,9 +91,9 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
                             </button>
                         </div>
                         
-                        <form onSubmit={handleSaveSupplier}>
+                        <form>
 
-                            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                            <div className="grid gap-4 mb-4 sm:grid-cols-4">
 
                                 <div className="mb-0">
                                     <label htmlFor="warehouseId2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ALMACEN</label>
@@ -109,9 +110,7 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
                                     <select  id="operationAction2" name="operationAction" value={operation.operationAction} onChange={handleInputChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         <option value={"E"}>ENTRADA</option>
                                         <option value={"S"}>SALIDA</option>
-                                    
                                     </select>
-
                                 </div>
                                 <div>
                                     <label htmlFor="operationDate2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">FECHA</label>
@@ -126,73 +125,46 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
 
                             </div>
 
-                            <div className="grid gap-4 mb-4 sm:grid-cols-4 items-end ">
+                            <div className="grid gap-4 mb-4 sm:grid-cols-3 items-end ">
                                 <div>
-                                    <label htmlFor="productTariffId2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PRODUCTO [UNIDAD]</label>
-                                    <select id="productTariffId2" name="productTariffId" value={detailObj.productTariffId} onChange={handleInputChange2} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <label htmlFor="productTariffId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PRODUCTO [UNIDAD]</label>
+                                    <select id="productTariffId" name="productTariffId" value={operation.productTariffId} onChange={handleInputChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         <option value={0}>Elige una presentacion</option>
                                         {productTariffs.map((item: IProductTariff) => 
-                                            <option key={item.id} value={item.id}>{item.productName}</option>
+                                            <option key={item.id} value={item.id}>{item.productName} [{item.unitName}]</option>
                                         )}
                                     </select>
                                 </div>
                                 
                                 <div>
-                                    <label htmlFor="quantity2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">CANTIDAD:</label>
-                                    <input type="number" name="quantity" id="quantity2" value={detailObj.quantity} onChange={handleInputChange2} onFocus={(e) => e.target.select()} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0"  />
+                                    <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">CANTIDAD:</label>
+                                    <input type="number" name="quantity" id="quantity" value={operation.quantity} onChange={handleInputChange} onFocus={(e) => e.target.select()} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0"  />
                                 </div>
                                 
                                 <div>
-                                    <label htmlFor="price2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PRECIO:</label>
-                                    <input type="number" name="price" id="price2" value={detailObj.price} onChange={handleInputChange2} onFocus={(e) => e.target.select()} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0"  />
+                                    <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PRECIO:</label>
+                                    <input type="number" name="price" id="price" disabled={operation.operationAction=="E"?false:true} value={operation.price} onChange={handleInputChange} onFocus={(e) => e.target.select()} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0"  />
                                 </div>
 
-                                <div className=" text-left">
-                                    <button id="btn-save-product" type="submit" className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ">
-                                        +
-                                    </button>
-                                </div>
                             </div>
 
                             
+                            <div>
+                                <label htmlFor="observation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">OBSERVACION</label>
+                                <textarea id="observation" name="observation" value={operation.observation} onChange={handleInputChange}  rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Escribe tu observacion aqui..."></textarea>
+                            </div>
+
+                        
+
+                            <div className=" text-right mt-2">
+                                <button id="btn-save-product" type="button" onClick={handleClickButtonAdd} className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ">
+                                    + GUARDAR
+                                </button>
+                            </div>
                             
                         </form>
 
-
-                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" className="px-3 py-3 border font-normal">Producto [unidad]</th>
-                                        <th scope="col" className="px-3 py-3 border font-normal">Stock</th>
-                                        <th scope="col" className="px-3 py-3 border font-normal">Precio</th>
-                                        <th scope="col" className="px-3 py-3 border font-normal">Cantidad</th>
-                                        <th scope="col" className="px-3 py-3 border font-normal">Subtotal</th>
-                                        <th scope="col" className="px-3 py-3 border font-normal"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <td className="px-3 py-4 border">SAL [Kg]</td>
-                                        <td className="px-3 py-4 border">50</td>
-                                        <td className="px-3 py-4 border">S/ 1.5</td>
-                                        <td className="px-3 py-4 border">2</td>
-                                        <td className="px-3 py-4 border">S/ 3</td>
-                                        <td className="px-3 py-4 border"></td>
-                                    </tr>
-                                {/*operation.product_tariffs.map((pt: number, index : number) => 
-                                    <tr  key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <td className="px-3 py-4 border">{productTariffs[index].productName}</td>
-                                        <td className="px-3 py-4 border">{Number(operation.prices[index]).toFixed(2)}</td>
-                                        <td className="px-3 py-4 border">{Number(operation.quantities[index]).toFixed(2)}</td>
-                                        <td className="px-3 py-4 border">
-                                        </td>
-                                    </tr>
-                                        )*/}
-                                   
-                                </tbody>
-                            </table>
-                        </div>
 
 
                     </div>

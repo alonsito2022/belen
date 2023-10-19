@@ -153,6 +153,10 @@ export interface IOperation {
     turn?: string
     operationDate?: string
     operationType?: string
+    operationTypeDisplay?: string
+    operationAction?: string
+    observation?: string
+    user?: IUser
 }
 
 export interface IOperationDetail {
@@ -161,7 +165,10 @@ export interface IOperationDetail {
     productTariff?: IProductTariff
     price?: number
     quantity?: number
+    subtotal?: number
     remainingQuantity?: number
+    remainingPrice?: number
+    remainingPriceTotal?: number
 }
 
 /*type Product = {
