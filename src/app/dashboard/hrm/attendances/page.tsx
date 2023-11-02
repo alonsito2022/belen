@@ -1,0 +1,230 @@
+"use client";
+import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
+import AttendanceList from "@/components/hrm/attendances/AttendanceList"
+import AttendanceRegisterForm from "@/components/hrm/attendances/AttendanceRegisterForm"
+import { ISubsidiary, IAttendanceOfMonth, IDayOfMonth, IAttendanceIncidence, IUser, IAttendanceDetail } from '@/app/types';
+import { toast } from "react-toastify";
+import { Modal, ModalOptions } from 'flowbite'
+
+const initialStateFilterObj = {
+    collectFullDateString: "",
+    collectDate: "",
+    collectType: "06",
+    productTariffId: 5,
+    warehouseId: 6,
+    year: 0,
+    month: 0,
+    subsidiaryId: 0,
+}
+const initialState = {
+
+    attendanceDetailId: 0,
+    firstName: "",
+    lastName: "",
+    statusChoice: "NA",
+    registerDate: "",
+  
+}
+function AttendancePage() {
+    const [filterObj, setFilterObj] = useState(initialStateFilterObj);
+    const [futureYears, setFutureYears] = useState<number[]|null>([]);
+    const [monthNames, setMonthNames] = useState<string[]|null>([
+        'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+    ]);
+    const [subsidiaries, setSubsidiaries] = useState< ISubsidiary[]>([]);
+    const [daysOfMonth, setDaysOfMonth] = useState< IDayOfMonth[]>([]);
+    const [attendancesOfMonth, setAttendancesOfMonth] = useState< IAttendanceOfMonth[]>([]);
+    const [modal, setModal] = useState< Modal | any>(null);
+    const [attendanceIncidence, setAttendanceIncidence] = useState<any | IAttendanceIncidence>(initialState);
+
+    const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
+        setFilterObj({...filterObj, [name]: value});
+    }
+
+    async function fetchSubsidiaries(){
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                    query {
+                        subsidiaries {
+                            id
+                            name
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setSubsidiaries(data.data.subsidiaries);
+        })
+    }
+
+    async function fetchDaysOfMonth(){
+
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                    {
+                        daysOfMonth(month:${filterObj.month}, year:${filterObj.year}) {
+                            id
+                            name
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setDaysOfMonth(data.data.daysOfMonth);
+        })
+        
+    }
+
+    async function fetchAttendancesOfMonth(){
+
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                    {
+                        attendancesOfMonth(month:${filterObj.month}, year:${filterObj.year}, subsidiaryId:${filterObj.subsidiaryId}) {
+                            employee{
+                                id
+                                firstName
+                                lastName
+                            }
+                            attendancedetailSet{
+                                id
+                                registerDate
+                                status
+                            }
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            if(data.data.attendancesOfMonth != null){
+                const datos = data.data.attendancesOfMonth.map((am: IAttendanceOfMonth) => {
+                    let countT = 0;
+                    let countPE = 0;
+                    let countNT = 0;
+                
+                    am.attendancedetailSet?.forEach((asistencia: IAttendanceDetail) => {
+                        if (asistencia.status === "T") {
+                            countT++;
+                        } else if (asistencia.status === "PE") {
+                            countPE++;
+                        } else if (asistencia.status === "NT") {
+                            countNT++;
+                        }
+                    });
+                
+                    return { 
+                        ...am, 
+                        countT,
+                        countPE,
+                        countNT 
+                    };
+                });
+                //console.log(datos)
+                setAttendancesOfMonth(datos);
+            }
+            
+        })
+        
+    }
+
+    useEffect(() => {
+        const date = new Date();
+        const defaultValue = date.toLocaleDateString('en-CA');
+        const formatFullDate = date.toLocaleDateString("es-PE", {
+            weekday: "long", // narrow, short
+            year: "numeric", // 2-digit
+            month: "short", // numeric, 2-digit, narrow, long
+            day: "numeric" // 2-digit
+        });
+        setFilterObj({...filterObj, collectDate: defaultValue, collectFullDateString: formatFullDate, year: date.getFullYear(), month: date.getMonth() + 1 });
+        const years = [];
+        const currentYear = date.getFullYear();
+        years.push(currentYear);
+        for (let i = 1; i < 10; i++) {
+            years.push(currentYear + i);
+        }
+        setFutureYears(years);
+        fetchSubsidiaries();
+          
+    }, []);
+
+
+
+    const handleClickButton = (e: MouseEvent<HTMLElement>) => {
+        if(filterObj.subsidiaryId > 0){
+            fetchAttendancesOfMonth()
+            fetchDaysOfMonth()
+        }
+        else
+            toast("Seleccione sede", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+    }
+
+
+    return (
+        <>
+            <h2 className="text-4xl font-bold dark:text-white pb-4">Asistencias</h2>
+            <div className="mb-4 grid grid-cols-4 items-end gap-2  justify-end ">
+                <div className="sm:col-span-2">
+                    <label htmlFor="subsidiaryId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SEDE</label>
+                    <select id="subsidiaryId" 
+                    name="subsidiaryId" value={filterObj.subsidiaryId} onChange={handleInputChange} required
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value={0}>Elegir sede</option>
+                        {subsidiaries.map((o,k)=>(
+                            <option key={k} value={o.id}>{o.name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="">
+                    <label htmlFor="year" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">AÑO</label>
+                    <select id="year" 
+                    name="year" value={filterObj.year} onChange={handleInputChange}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        {futureYears?.map((o)=>(
+                                <option key={o} value={o}>{o}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="">
+                    <label htmlFor="month" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MES</label>
+                    <select id="month" 
+                    name="month" value={filterObj.month} onChange={handleInputChange}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        {monthNames?.map((m, k)=>(
+                                <option key={k} value={k+1}>{m}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="">
+                    <button type="button" onClick={handleClickButton} className="mr-0 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">Buscar</button>
+                </div>
+
+            </div>
+            <AttendanceList filterObj={filterObj} daysOfMonth={daysOfMonth} attendancesOfMonth={attendancesOfMonth} modal={modal} 
+            setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} />
+            <AttendanceRegisterForm filterObj={filterObj}  modal={modal} setModal={setModal} fetchAttendancesOfMonth={fetchAttendancesOfMonth} 
+            setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} initialState={initialState} />
+
+        </>
+    )
+}
+
+export default AttendancePage

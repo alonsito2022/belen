@@ -198,7 +198,7 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                     <tbody>
                         
                         <tr className=" bg-gray-100 text-black">
-                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">BRUTO</td>
+                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">BRUTO TOTAL</td>
                             <td className="align-middle px-4 py-1 border text-lg text-right">{summaryDailyEntries.grossCost}</td>
                         </tr>
                         
@@ -210,7 +210,7 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                         </tr>
                         
                         
-                        <tr className=" bg-gray-100 text-black">
+                        <tr className=" bg-red-200 text-black">
                             <td className="align-middle px-4 py-1 border font-medium text-gray-900">PAGO TIO MIGUEL</td>
                             <td className="align-middle px-4 py-1 border text-lg text-right">
                                 <input type='number' name='paymentUncleMichael' 
@@ -222,8 +222,8 @@ function FortnightGlorySummary({filterObj, setSummaryDailyEntries, summaryDailyE
                         
                         
                         <tr className=" bg-gray-100 text-black">
-                            <td className="align-middle px-4 py-1 border font-medium text-gray-900">GANANCIA NETA</td>
-                            <td className="align-middle px-4 py-1 border text-lg text-right">{Number(summaryDailyEntries.totalNetIncome).toFixed(2)}</td>
+                            <td className="align-middle px-4 py-1 border font-bold text-lg  text-gray-900">GANANCIA NETA</td>
+                            <td className="align-middle px-4 py-1 border font-bold text-lg text-right">{Number(summaryDailyEntries.totalNetIncome).toFixed(2)}</td>
                         </tr>
 
                         

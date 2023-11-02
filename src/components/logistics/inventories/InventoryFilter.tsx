@@ -1,13 +1,16 @@
 import { IProductTariff, IWarehouse } from "@/app/types";
 import { ChangeEvent, MouseEvent } from "react";
 
-function InventoryFilter({filterObj, setFilterObj, productTariffs, warehouses, setOperation, fetchRegularizationOperations} : any) {
+
+
+function InventoryFilter({modal, filterObj, setFilterObj, productTariffs, warehouses, setOperation, fetchRegularizationOperations} : any) {
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFilterObj({...filterObj, [name]: value});
     }
     const handleClickButton = (e: MouseEvent<HTMLElement>) => {
         fetchRegularizationOperations()
     }
+
     return (
         <>
             
@@ -43,7 +46,9 @@ function InventoryFilter({filterObj, setFilterObj, productTariffs, warehouses, s
 
                 <div className="mb-4 grid grid-cols-1 items-end gap-2  justify-end ">
                     
-                    <button data-modal-target="supplierFormModal" data-modal-toggle="supplierFormModal" onClick={(e)=>{
+                    <button 
+                              
+                    onClick={(e)=>{
                         
                             const date = new Date();
                             const defaultValue = date.toLocaleDateString('en-CA');
@@ -54,6 +59,9 @@ function InventoryFilter({filterObj, setFilterObj, productTariffs, warehouses, s
                                 operationDate: defaultValue,
                                 turn: "NA"
                             }))
+
+                            
+                            modal.show();
                         
                                 
                         }} className=" block text-white bg-gray-400 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button">

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { IProduct } from '@/app/types';
 import { toast } from "react-toastify";
+import { Modal, ModalOptions } from 'flowbite'
 
 const initialState = {
     id: 0,
@@ -11,8 +12,8 @@ const initialState = {
     stockMin: 50,
     stockMax: 100,
     path: "",
-    cheeseClassification: "NA",
-    isSupply: false,
+    classification: "NA",
+    isCollected: false,
     isPurchased: false,
     isManufactured: false,
     available: true,
@@ -28,11 +29,16 @@ const initialStateQualification = {
 function ProductPage() {
     const router = useRouter();
     const options = [
-        {id: '01', value: 'PARIA'}, {id: '02', value: 'TILSIT'}, {id: '03', value: 'ANDINO'},  {id: '04', value: 'EDAM'}, {id: '05', value: 'GOUDA'}, {id: '06', value: 'MOZZARELLA'}, {id: 'NA', value: 'NO APLICA'},
+        {id: '01', value: 'MATERIAS PRIMAS Y INGREDIENTES'}, 
+        {id: '02', value: 'MATERIALES DE EMPAQUE'}, 
+        {id: '03', value: 'PRODUCTOS DE LIMPIEZA Y DESINFECCIÓN'},  
+        {id: '04', value: 'COMBUSTIBLES Y ENERGÍA'}, 
+        {id: 'NA', value: 'NO APLICA'},
     ];
     const [products, setProducts] = useState< IProduct[]>([]);
     const [product, setProduct] = useState(initialState);
     const [qualifications, setQualifications] = useState(initialStateQualification);
+    const [modal, setModal] = useState< Modal | any>(null);
 
     const filterProducts = ({target: { name, checked} }: ChangeEvent<HTMLInputElement>) => {
         setQualifications({...qualifications, [name]: checked});
@@ -55,8 +61,8 @@ function ProductPage() {
             queryFetch = `
                 mutation{
                     updateProduct(
-                        id:${product.id}, code:${product.code}, name: "${product.name}", stockMin:${product.stockMin}, stockMax:${product.stockMax}, cheeseClassification: "${product.cheeseClassification}",
-                        isSupply: ${product.isSupply}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}
+                        id:${product.id}, code:${product.code}, name: "${product.name}", stockMin:${product.stockMin}, stockMax:${product.stockMax}, classification: "${product.classification}",
+                        isCollected: ${product.isCollected}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}
                     ){
                         product {
                             id
@@ -65,8 +71,8 @@ function ProductPage() {
                             stockMin
                             stockMax 
                             path
-                            cheeseClassification
-                            isSupply
+                            classification
+                            isCollected
                             isPurchased
                             isManufactured
                             available
@@ -85,8 +91,7 @@ function ProductPage() {
             .then(data=>{
                 toast(data.data.updateProduct.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
                 setProduct(initialState);
-                const closeModalElement = document.getElementById('btn-close-modal');
-                closeModalElement?.click();
+                modal.hide();
                 fetchProducts();
 
             }).catch(e=>console.log(e))
@@ -95,8 +100,8 @@ function ProductPage() {
             queryFetch = `
                 mutation{
                     createProduct(
-                        code:${product.code}, name: "${product.name}", stockMin:${product.stockMin}, stockMax:${product.stockMax}, cheeseClassification: "${product.cheeseClassification}",
-                        isSupply: ${product.isSupply}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}
+                        code:${product.code}, name: "${product.name}", stockMin:${product.stockMin}, stockMax:${product.stockMax}, classification: "${product.classification}",
+                        isCollected: ${product.isCollected}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}
                     ){
                         product {
                             id
@@ -105,8 +110,8 @@ function ProductPage() {
                             stockMin
                             stockMax 
                             path
-                            cheeseClassification
-                            isSupply
+                            classification
+                            isCollected
                             isPurchased
                             isManufactured
                             available
@@ -124,8 +129,7 @@ function ProductPage() {
             .then(data=>{
                 toast(data.data.createProduct.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
                 setProduct(initialState);
-                const closeModalElement = document.getElementById('btn-close-modal');
-                closeModalElement?.click();
+                modal.hide();
                 fetchProducts();
 
             }).catch(e=>console.log(e))
@@ -153,12 +157,13 @@ function ProductPage() {
                             stockMin
                             stockMax
                             path
-                            cheeseClassification
-                            cheeseClassificationReadable
-                            isSupply
+                            classification
+                            classificationReadable
+                            isCollected
                             isPurchased
                             isManufactured
                             available
+                            totalProductTariff
                         }
                     }
                 `
@@ -192,8 +197,8 @@ function ProductPage() {
                             stockMin
                             stockMax
                             path
-                            cheeseClassification
-                            isSupply
+                            classification
+                            isCollected
                             isPurchased
                             isManufactured
                             available
@@ -208,10 +213,48 @@ function ProductPage() {
         })
     }
 
+    async function deleteProductByID(pk: number){
+        
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                mutation {
+                        deleteProduct(id: ${pk}) {
+                            message
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            toast(data.data.deleteProduct.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            fetchProducts()
+        })
+        
+    }
 
     useEffect(() => {
+        
+        if(modal == null){
+
+            const $targetEl = document.getElementById('defaultModal');
+            const options: ModalOptions = {
+                placement: 'bottom-right',
+                backdrop: 'static',
+                backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+                closable: false ,
+
+            };
+
+            setModal(new Modal($targetEl, options))
+        }
+
         fetchProducts();
     }, []);
+
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
@@ -221,7 +264,7 @@ function ProductPage() {
                 query: `
                     query {
                         qualificationOfProducts(
-                            isSupply: ${qualifications["filter-qualification-1"]},
+                            isCollected: ${qualifications["filter-qualification-1"]},
                             isPurchased: ${qualifications["filter-qualification-2"]},
                             isManufactured: ${qualifications["filter-qualification-3"]},
                             available: ${qualifications["filter-qualification-4"]}
@@ -232,11 +275,13 @@ function ProductPage() {
                             stockMin
                             stockMax
                             path
-                            cheeseClassification
-                            isSupply
+                            classification
+                            classificationReadable
+                            isCollected
                             isPurchased
                             isManufactured
                             available
+                            totalProductTariff
                         }
                     }
                 `
@@ -252,10 +297,24 @@ function ProductPage() {
     return (
         <>
         <h2 className="text-4xl font-bold dark:text-white pb-4">Productos del negocio</h2>
+
+   
+
+
         <div className="p-4 relative overflow-x-auto shadow-md sm:rounded-lg">
-            <div className="flex items-center justify-between pb-4">
+            <div className="flex  justify-end pb-4 gap-2">
                 <div>
-                    <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                    
+                    <label htmlFor="table-search" className="sr-only">Search</label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
+                        </div>
+                        <input type="text" id="table-search" className="block px-2 py-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items" />
+                    </div>
+                </div>
+                <div>
+                    <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
                         <svg className="w-3 h-3 text-gray-500 dark:text-gray-400 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
                             </svg>
@@ -270,7 +329,7 @@ function ProductPage() {
                             <li>
                                 <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                     <input id="filter-qualification-1" type="checkbox" onChange={filterProducts} checked={qualifications["filter-qualification-1"]} name="filter-qualification-1" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                    <label htmlFor="filter-qualification-1" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Es insumo</label>
+                                    <label htmlFor="filter-qualification-1" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Es elaborado</label>
                                 </div>
                             </li>
                             <li>
@@ -288,56 +347,73 @@ function ProductPage() {
                             <li>
                                 <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                     <input id="filter-qualification-4" type="checkbox" onChange={filterProducts} checked={qualifications["filter-qualification-4"]} name="filter-qualification-4" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                    <label htmlFor="filter-qualification-4" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Estado</label>
+                                    <label htmlFor="filter-qualification-4" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Disponible</label>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <label htmlFor="table-search" className="sr-only">Search</label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
-                    </div>
-                    <input type="text" id="table-search" className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items" />
+
+     
+       
+                <div >
+                    <button id="btn-new" onClick={(e)=>{
+                            modal.show();
+                            document.getElementById("modal-title")!.innerHTML = "Nuevo producto";
+                            document.getElementById("btn-save-product")!.innerHTML = "Guardar producto";
+                            setProduct(initialState);
+
+                    }} className="border block text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button">
+                        Crear producto
+                    </button>
+
+
                 </div>
+
             </div>
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" className="p-4">#</th>
-                        <th scope="col" className="px-6 py-3">NOMBRE</th>
-                        <th scope="col" className="px-6 py-3">Tipo de queso</th>
-                        <th scope="col" className="px-6 py-3">ES insumo?</th>
-                        <th scope="col" className="px-6 py-3">Es comprado?</th>
-                        <th scope="col" className="px-6 py-3">Es elaborado?</th>
-                        <th scope="col" className="px-6 py-3">ESTADO</th>
-                        <th scope="col" className="px-6 py-3">AcCion</th>
+                        <th scope="col" className="px-2 py-2 text-center">#</th>
+                        <th scope="col" className="px-2 py-2 text-center">NOMBRE</th>
+                        <th scope="col" className="px-2 py-2 text-center">Clasificacion</th>
+                        <th scope="col" className="px-2 py-2 text-center">ES elaborado?</th>
+                        <th scope="col" className="px-2 py-2 text-center">Es comprado?</th>
+                        <th scope="col" className="px-2 py-2 text-center">Es elaborado?</th>
+                        <th scope="col" className="px-2 py-2 text-center">Disponible</th>
+                        <th scope="col" className="px-2 py-2 text-center">AcCion</th>
                     </tr>
                 </thead>
                 <tbody>
                     {products.map((item) => 
                     <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="w-4 p-4  bg-gray-50 dark:bg-gray-800">{item.code}</td>
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.name}</th>
-                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{
-                        item.cheeseClassificationReadable}</td>
-                        <td className="px-6 py-4">{item.isSupply?"SI":"NO"}</td>
-                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{item.isPurchased?"SI":"NO"}</td>
-                        <td className="px-6 py-4">{item.isManufactured?"SI":"NO"}</td>
-                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{item.available?"ACTIVO":"INACTIVO"}</td>
-                        <td className="px-6 py-4">
+                        <td className="w-4 px-2 py-2  bg-gray-50 dark:bg-gray-800">{item.code}</td>
+                        <th scope="row" className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.name}</th>
+                        <td className="px-2 py-2">{item.classificationReadable}</td>
+                        <td className="px-2 py-2 text-center">{item.isCollected?"SI":"NO"}</td>
+                        <td className="px-2 py-2 text-center bg-gray-50 dark:bg-gray-800">{item.isPurchased?"SI":"NO"}</td>
+                        <td className="px-2 py-2 text-center">{item.isManufactured?"SI":"NO"}</td>
+                        <td className="px-2 py-2 text-center bg-gray-50 dark:bg-gray-800">{item.available?"SI":"NO"}</td>
+                        <td className="px-2 py-2 text-center">
                             <button type="button" onClick={ async ()=>{
 
-                                await fetchProductByID(item.id);
-                                /*const modalElement = document.querySelector('#defaultModal');
-                                const modal = new Modal(modalElement as HTMLElement);
-                                modal.show();*/
-                                document.getElementById("defaultModalButton")?.click();
-                                document.getElementById("modal-title")!.innerHTML = "Editar producto";
-                                document.getElementById("btn-save-product")!.innerHTML = "Actualizar producto";
-                            }}
-                            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+                                    await fetchProductByID(item.id);
+                                    modal.show();
+                                    document.getElementById("modal-title")!.innerHTML = "Editar producto";
+                                    document.getElementById("btn-save-product")!.innerHTML = "Actualizar producto";
+                                }}
+                                className="w-full block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Editar
+                            </button>
+                            {item.totalProductTariff==0?
+                            <button type="button" onClick={ ()=>{deleteProductByID(item.id)}} 
+                                className="w-full block text-white bg-red-600 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                   Quitar
+                            </button>
+                            
+                            :""}
+                            
+                        
                         </td>
                     </tr>
                     )}
@@ -345,24 +421,6 @@ function ProductPage() {
             </table>
         </div>
 
-
-       
-<div className="flex justify-center m-5">
-    <button id="btn-new" data-modal-toggle="defaultModal" onClick={(e)=>{
-        
-            document.getElementById("modal-title")!.innerHTML = "Nuevo producto";
-            document.getElementById("btn-save-product")!.innerHTML = "Guardar producto";
-            setProduct(initialState);
-        
-            
-    }} className=" block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-    Crear producto
-    </button>
-
-    <button id="defaultModalButton" data-modal-toggle="defaultModal" className="hidden" type="button">
-    Editar producto
-    </button>
-</div>
 
 
 <div id="defaultModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
@@ -374,7 +432,7 @@ function ProductPage() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white" id="modal-title">
                     Editar Producto
                 </h3>
-                <button type="button" id="btn-close-modal" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="defaultModal">
+                <button type="button" onClick={()=>{modal.hide();}} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                     <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                     <span className="sr-only">Close modal</span>
                 </button>
@@ -382,8 +440,9 @@ function ProductPage() {
             
             <form onSubmit={handleSaveProduct}>
                 <input type="hidden" name="id" id="id" value={product.id} />
-                <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                    <div>
+                <div className="grid gap-4 mb-4 sm:grid-cols-4">
+
+                    <div className="sm:col-span-3">
                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
                         <input type="text" name="name" id="name" value={product.name} onChange={handleInputChange} onFocus={(e) => e.target.select()} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type product name" required />
                     </div>
@@ -401,53 +460,36 @@ function ProductPage() {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <label htmlFor="cheeseClassification" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de queso</label>
-                        <select name="cheeseClassification" id="cheeseClassification" onChange={handleInputChange} value={product.cheeseClassification.replace("A_", "")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <label htmlFor="classification" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clasificacion</label>
+                        <select name="classification" id="classification" onChange={handleInputChange} value={product.classification.replace("A_", "")} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             {options.map((o,k)=>(
                                 <option key={k} value={o.id}>{o.value}</option>
                             ))}
                         </select>
                     </div>
 
-
-                    <div className="sm:col-span-2">
-                        <div className="flex items-center justify-center w-full">
-                            <label htmlFor="path" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                    </svg>
-                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                                </div>
-                                <input id="path" type="file" className="hidden" />
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className="sm:col-span-2">
-                        <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Calificacion</h3>
-                        <ul className="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                        <div className="flex items-center pl-3 w-full">
-                            <input name="isSupply" id="isSupply" type="checkbox" checked={product.isSupply} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                            <label htmlFor="isSupply" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es insumo</label>
-                        </div></li>
-                        <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                        <div className="flex items-center pl-3">
-                            <input name="isPurchased" id="isPurchased" type="checkbox" checked={product.isPurchased} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                            <label htmlFor="isPurchased" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es comprado</label>
-                        </div></li>
-                        <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                        <div className="flex items-center pl-3">
-                            <input name="isManufactured" id="isManufactured" type="checkbox" checked={product.isManufactured} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                            <label htmlFor="isManufactured" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es elaborado</label>
-                        </div></li>
-                        <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                        <div className="flex items-center pl-3">
-                            <input name="available" id="available" type="checkbox" checked={product.available} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                            <label htmlFor="available" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Estado</label>
-                        </div></li>
+                    <div className="sm:col-span-4 ">
+                        <ul className="text-sm font-medium text-gray-900 bg-gray-50 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                            <div className="flex items-center pl-3 w-full">
+                                <input name="isCollected" id="isCollected" type="checkbox" checked={product.isCollected} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                <label htmlFor="isCollected" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es recolectado</label>
+                            </div></li>
+                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                            <div className="flex items-center pl-3">
+                                <input name="isPurchased" id="isPurchased" type="checkbox" checked={product.isPurchased} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                <label htmlFor="isPurchased" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es comprado</label>
+                            </div></li>
+                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                            <div className="flex items-center pl-3">
+                                <input name="isManufactured" id="isManufactured" type="checkbox" checked={product.isManufactured} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                <label htmlFor="isManufactured" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es elaborado</label>
+                            </div></li>
+                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                            <div className="flex items-center pl-3">
+                                <input name="available" id="available" type="checkbox" checked={product.available} onChange={handleCheckboxChange} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                <label htmlFor="available" className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Disponible</label>
+                            </div></li>
                         </ul>
                     </div>
                 </div>

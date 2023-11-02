@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { Modal, ModalOptions } from 'flowbite'
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { IProductTariff, IProduct, IUnit } from '@/app/types';
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ function ProductTariffPage() {
     const [productTariff, setProductTariff] = useState(initialState);
     const [products, setProducts] = useState< IProduct[]>([]);
     const [units, setUnits] = useState< IUnit[]>([]);
+    const [modal, setModal] = useState< Modal | any>(null);
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setProductTariff({...productTariff, [name]: value});
@@ -54,8 +55,7 @@ function ProductTariffPage() {
             .then(data=>{
                 toast(data.data.updateProductTariff.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
                 setProductTariff(initialState);
-                const closeModalElement = document.getElementById('btn-close-modal');
-                closeModalElement?.click();
+                modal.hide();
                 fetchProductTariffs();
 
             }).catch(e=>console.log(e))
@@ -83,8 +83,7 @@ function ProductTariffPage() {
             .then(data=>{
                 toast(data.data.createProductTariff.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
                 setProductTariff(initialState);
-                const closeModalElement = document.getElementById('btn-close-modal');
-                closeModalElement?.click();
+                modal.hide();
                 fetchProductTariffs();
 
             }).catch(e=>console.log(e))
@@ -197,24 +196,56 @@ function ProductTariffPage() {
         fetchProductTariffs();
         fetchProducts();
         fetchUnits();
+
+        if(modal == null){
+            console.log('useEffect modal definided')
+            const $targetEl = document.getElementById('defaultModal');
+            const options: ModalOptions = {
+                placement: 'bottom-right',
+                backdrop: 'static',
+                backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+                closable: false ,
+
+            };
+        
+           // const modal = ;
+            setModal(new Modal($targetEl, options))
+        }
     }, []);
+
 
     return (
         <>
 
-<h2 className="text-4xl font-bold dark:text-white pb-4">Lista de precios del negocio</h2>
+<h2 className="text-4xl font-bold dark:text-white pb-4">Presentaciones</h2>
+
+
+       
+<div className="flex justify-end mr-4">
+    <button id="btn-new" onClick={(e)=>{
+            modal.show();
+            document.getElementById("modal-title")!.innerHTML = "Crear presentacion de producto";
+            document.getElementById("btn-save-product")!.innerHTML = "Guardar presentacion de producto";
+            setProductTariff(initialState);
+            
+    }} className=" block text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button">
+     + Nuevo
+    </button>
+
+</div>
+
 
         <div className="p-4 relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" className="p-4">#</th>
-                        <th scope="col" className="px-6 py-3">NOMBRE</th>
-                        <th scope="col" className="px-6 py-3">Unidad</th>
-                        <th scope="col" className="px-6 py-3">Precio de venta 1</th>
-                        <th scope="col" className="px-6 py-3">Precio de venta 2</th>
-                        <th scope="col" className="px-6 py-3">Canidad minima</th>
-                        <th scope="col" className="px-6 py-3">AcCion</th>
+                        <th scope="col" className="px-3 py-3 text-center">#</th>
+                        <th scope="col" className="px-3 py-3 text-center">NOMBRE</th>
+                        <th scope="col" className="px-3 py-3 text-center">Unidad</th>
+                        <th scope="col" className="px-3 py-3 text-center">Precio de venta 1</th>
+                        <th scope="col" className="px-3 py-3 text-center">Precio de venta 2</th>
+                        <th scope="col" className="px-3 py-3 text-center">Cantidad minima</th>
+                        <th scope="col" className="px-3 py-3 text-center">AcCion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -230,11 +261,11 @@ function ProductTariffPage() {
                             <button type="button" onClick={ async ()=>{
 
                                 await fetchProductTariffByID(item.id);
-                                document.getElementById("defaultModalButton")?.click();
+                                modal.show();
                                 document.getElementById("modal-title")!.innerHTML = "Editar presentacion de producto";
                                 document.getElementById("btn-save-product")!.innerHTML = "Actualizar presentacion de producto";
                             }}
-                            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+                            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Editar</button>
                         </td>
                     </tr>
                     )}
@@ -242,24 +273,6 @@ function ProductTariffPage() {
             </table>
         </div>
 
-
-       
-<div className="flex justify-center m-5">
-    <button id="btn-new" data-modal-toggle="defaultModal" onClick={(e)=>{
-        
-            document.getElementById("modal-title")!.innerHTML = "Crear presentacion de producto";
-            document.getElementById("btn-save-product")!.innerHTML = "Guardar presentacion de producto";
-            setProductTariff(initialState);
-        
-            
-    }} className=" block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-    Crear presentacion de producto
-    </button>
-
-    <button id="defaultModalButton" data-modal-toggle="defaultModal" className="hidden" type="button">
-    Editar presentacion de producto
-    </button>
-</div>
 
 
 <div id="defaultModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
@@ -271,7 +284,7 @@ function ProductTariffPage() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white" id="modal-title">
                     Editar presentacion de Producto
                 </h3>
-                <button type="button" id="btn-close-modal" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="defaultModal">
+                <button type="button" onClick={()=>{modal.hide();}} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                     <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                     <span className="sr-only">Close modal</span>
                 </button>

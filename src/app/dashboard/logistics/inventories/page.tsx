@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import InventoryFilter from "@/components/logistics/inventories/InventoryFilter"
 import InventoryList from "@/components/logistics/inventories/InventoryList"
 import InventoryRegisterOperationForm from "@/components/logistics/inventories/InventoryRegisterOperationForm"
 import { IProductTariff, IWarehouse, IOperation, IOperationDetail } from "@/app/types";
 import { IUser } from '@/app/types';
 import { useSession} from 'next-auth/react';
-
+import { Modal, ModalOptions } from 'flowbite'
 
 const initialStateFilterObj = {
     startDate: "",
@@ -22,7 +22,7 @@ const initialState = {
     operationStatus: "02",
     operationType: "07",
     operationDate: "",
-    observation: "",
+    observation: "CONSUMO DE PRODUCCION",
     turn: "NA",
 
     productTariffId: 0,
@@ -69,6 +69,10 @@ function InventoryPage() {
                             remainingQuantity
                             remainingPrice
                             remainingPriceTotal
+                            batchCode
+                            batchStock
+                            batchPrice
+                            batchPriceTotal
                             operation{
                                 id
                                 operationDate
@@ -99,8 +103,9 @@ function InventoryPage() {
         })
         .then(res=>res.json())
         .then(data=>{
-
-            const result = data.data.regularizationOperations.map((item: IOperationDetail) => {
+            if(data.data.regularizationOperations != null)
+            {
+                const result = data.data.regularizationOperations.map((item: IOperationDetail) => {
                 const subtotal = Number(item.price!* item.quantity!);
                 // const remainingPrice = Number(item.price!* item.quantity!);
                 if(item.operation?.operationAction=="E"){}
@@ -116,6 +121,7 @@ function InventoryPage() {
                 };
             });
             setOperationDetails(result);
+        }
         })
         
     }
@@ -169,19 +175,35 @@ function InventoryPage() {
         })
         
     }
+
+    const divRefEnPadre = useRef<HTMLDivElement>(null);
+    const [modal, setModal] = useState< Modal | any>(null);
     useEffect(() => {
         const date = new Date();
         const defaultValue = date.toLocaleDateString('en-CA');
         setFilterObj({...filterObj, startDate: defaultValue, endDate: defaultValue});
         fetchproductTariffs();
         fetchWarehouses();
+
+        
+
     }, []);
+
+    /*const cambiarColorDesdePadre = () => {
+
+        console.log('cambiarColorDesdePadre', divRefEnPadre)
+        if (divRefEnPadre.current) {
+          divRefEnPadre.current.style.background = 'blue';
+        }
+      };*/
+    
     return (
         <>
             <h2 className="text-4xl font-bold dark:text-white pb-4">Control de insumos</h2>
-            <InventoryFilter filterObj={filterObj} setFilterObj={setFilterObj} productTariffs={productTariffs} warehouses={warehouses} setOperation={setOperation} fetchRegularizationOperations={fetchRegularizationOperations} />
+
+            <InventoryFilter modal={modal} filterObj={filterObj} setFilterObj={setFilterObj} productTariffs={productTariffs} warehouses={warehouses} setOperation={setOperation} fetchRegularizationOperations={fetchRegularizationOperations} />
             <InventoryList operationDetails={operationDetails} />
-            <InventoryRegisterOperationForm operation={operation} setOperation={setOperation} productTariffs={productTariffs} warehouses={warehouses} fetchRegularizationOperations={fetchRegularizationOperations}/>
+            <InventoryRegisterOperationForm modal={modal} setModal={setModal} operation={operation} setOperation={setOperation} productTariffs={productTariffs} warehouses={warehouses} fetchRegularizationOperations={fetchRegularizationOperations}   />
         </>
     )
 }

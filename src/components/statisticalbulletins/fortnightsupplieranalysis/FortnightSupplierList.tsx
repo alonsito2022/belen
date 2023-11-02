@@ -124,34 +124,34 @@ function FortnightSupplierList({suppliers, filterObj, setFilterObj, totalSupplie
                 <table className="w-full">
                     <thead className="text-xs text-gray-900 uppercase ">
                         <tr>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-gray-300" rowSpan={3}>FECHA</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-500" colSpan={6}>MAÑANA</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-400" colSpan={6}>TARDE</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-gray-300" rowSpan={3}>FECHA</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-yellow-500" colSpan={6}>MAÑANA</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-sky-400" colSpan={6}>TARDE</th>
                         </tr>
                         <tr>
                             
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-400" colSpan={3}>PRODUCCION</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-400" colSpan={3}>GLORIA</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-300" colSpan={3}>PRODUCCION</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-300" colSpan={3}>GLORIA</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-yellow-400" colSpan={3}>PRODUCCION</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-400" colSpan={3}>GLORIA</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-sky-300" colSpan={3}>PRODUCCION</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-300" colSpan={3}>GLORIA</th>
                         </tr>
                         <tr>
 
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-300">LITROS</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-300">MONTO<br/>VALOR<br/>LITRO</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-300">TOTAL</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-yellow-300">LITROS</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-yellow-300">MONTO<br/>VALOR<br/>LITRO</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-yellow-300">TOTAL</th>
 
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-300">LITROS</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-300">MONTO<br/>VALOR<br/>LITRO</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-yellow-300">TOTAL</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-300">LITROS</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-300">MONTO<br/>VALOR<br/>LITRO</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-300">TOTAL</th>
 
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-200">LITROS</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-200">MONTO<br/>VALOR<br/>LITRO</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-200">TOTAL</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-sky-200">LITROS</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-sky-200">MONTO<br/>VALOR<br/>LITRO</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-sky-200">TOTAL</th>
 
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-200">LITROS</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-200">MONTO<br/>VALOR<br/>LITRO</th>
-                            <th scope="col" className="px-2 py-2 border border-gray-300 text-center bg-sky-200">TOTAL</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-200">LITROS</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-200">MONTO<br/>VALOR<br/>LITRO</th>
+                            <th scope="col" className="px-2 py-2 border border-black text-center bg-red-200">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,75 +159,81 @@ function FortnightSupplierList({suppliers, filterObj, setFilterObj, totalSupplie
                     {supplierWithData.map((item: IPerson, index: number) => 
 
                         <tr key={index}  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td className="px-1 py-1 border bg-yellow-300 text-center">{item.date}</td>
+                            <td className="px-1 py-1 border border-black bg-yellow-300 text-center">{item.date}</td>
 
-                            <td className="px-1 py-1 border text-center">{item.productionQuantityTomorrow}</td>
-                            <td className="px-1 py-1 border text-right">S/ {item.productionPriceTomorrow}</td>
-                            <td className="px-1 py-1 border text-right">S/ {item.productionTotalTomorrow}</td>
+                            <td className="px-1 py-1 border border-black text-center">{Number(item.productionQuantityTomorrow)>0?item.productionQuantityTomorrow:""}</td>
+                            <td className="px-1 py-1 border border-black text-right">{Number(item.productionPriceTomorrow)>0?"S/ " + Number(item.productionPriceTomorrow).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right">{Number(item.productionTotalTomorrow)>0?"S/ " + Number(item.productionTotalTomorrow).toFixed(1):""}</td>
 
-                            <td className="px-1 py-1 border text-center">{item.gloriaShipmentQuantityTomorrow}</td>
-                            <td className="px-1 py-1 border text-right">S/ {item.gloriaShipmentPriceTomorrow}</td>
-                            <td className="px-1 py-1 border text-right">S/ {item.gloriaShipmentTotalTomorrow}</td>
+                            <td className="px-1 py-1 border border-black text-center text-red-600">{Number(item.gloriaShipmentQuantityTomorrow)>0?item.gloriaShipmentQuantityTomorrow:""}</td>
+                            <td className="px-1 py-1 border border-black text-right text-red-600">{Number(item.gloriaShipmentPriceTomorrow)>0?"S/ " + Number(item.gloriaShipmentPriceTomorrow).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right text-red-600">{Number(item.gloriaShipmentTotalTomorrow)>0?"S/ " + Number(item.gloriaShipmentTotalTomorrow).toFixed(1):""}</td>
 
-                            <td className="px-1 py-1 border text-center ">{item.productionQuantityAfternoon}</td>
-                            <td className="px-1 py-1 border text-right ">S/ {item.productionPriceAfternoon}</td>
-                            <td className="px-1 py-1 border text-right ">S/ {item.productionTotalAfternoon}</td>
+                            <td className="px-1 py-1 border border-black text-center ">{Number(item.productionQuantityAfternoon)>0?item.productionQuantityAfternoon:""}</td>
+                            <td className="px-1 py-1 border border-black text-right ">{Number(item.productionPriceAfternoon)>0?"S/ " + Number(item.productionPriceAfternoon).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right ">{Number(item.productionTotalAfternoon)>0?"S/ " + Number(item.productionTotalAfternoon).toFixed(1):""}</td>
 
 
-                            <td className="px-1 py-1 border text-center ">{item.gloriaShipmentQuantityAfternoon}</td>
-                            <td className="px-1 py-1 border text-right ">S/ {item.gloriaShipmentPriceAfternoon}</td>
-                            <td className="px-1 py-1 border text-right ">S/ {item.gloriaShipmentTotalAfternoon}</td>
+                            <td className="px-1 py-1 border border-black text-center  text-red-600">{Number(item.gloriaShipmentQuantityAfternoon)>0?item.gloriaShipmentQuantityAfternoon:""}</td>
+                            <td className="px-1 py-1 border border-black text-right  text-red-600">{Number(item.gloriaShipmentPriceAfternoon)>0?"S/ " + Number(item.gloriaShipmentPriceAfternoon).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right  text-red-600">{Number(item.gloriaShipmentTotalAfternoon)>0?"S/ " + Number(item.gloriaShipmentTotalAfternoon).toFixed(1):""}</td>
                         </tr>
                         )}
                        
                     </tbody>
                     <tfoot>
                         <tr className="">
-                            <td className="px-1 py-1 border bg-gray-300 text-center font-semibold">TOTAL</td>
+                            <td className="px-1 py-1 border border-black bg-gray-300 text-center font-semibold">TOTAL</td>
 
-                            <td className="px-1 py-1 border bg-yellow-300 text-center">
+                            <td className="px-1 py-1 border border-black bg-yellow-300 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityTomorrow!), 0))}
                             </td>
-                            <td className="px-1 py-1 border bg-yellow-300"></td>
-                            <td className="px-1 py-1 border bg-yellow-300 text-right">
-                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalTomorrow!), 0)).toFixed(4)}
+                            <td className="px-1 py-1 border border-black bg-yellow-300"></td>
+                            <td className="px-1 py-1 border border-black bg-yellow-300 text-right">
+                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalTomorrow!), 0)).toFixed(1)}
                             </td>
-                            <td className="px-1 py-1 border bg-yellow-300 text-center">
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentQuantityTomorrow!), 0))}
                             </td>
-                            <td className="px-1 py-1 border bg-yellow-300"></td>
-                            <td className="px-1 py-1 border bg-yellow-300 text-right">
-                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentTotalTomorrow!), 0)).toFixed(4)}
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800"></td>
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-right">
+                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentTotalTomorrow!), 0)).toFixed(1)}
                             </td>
-                            <td className="px-1 py-1 border bg-sky-300 text-center">
+                            <td className="px-1 py-1 border border-black bg-sky-300 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityAfternoon!), 0))}
                             </td>
-                            <td className="px-1 py-1 border bg-sky-300"></td>
-                            <td className="px-1 py-1 border bg-sky-300 text-right">
-                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalAfternoon!), 0)).toFixed(4)}
+                            <td className="px-1 py-1 border border-black bg-sky-300"></td>
+                            <td className="px-1 py-1 border border-black bg-sky-300 text-right">
+                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalAfternoon!), 0)).toFixed(1)}
                             </td>
-                            <td className="px-1 py-1 border bg-sky-300 text-center">
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentQuantityAfternoon!), 0))}
                             </td>
-                            <td className="px-1 py-1 border bg-sky-300"></td>
-                            <td className="px-1 py-1 border bg-sky-300 text-right">
-                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentTotalAfternoon!), 0)).toFixed(4)}
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800"></td>
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-right">
+                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentTotalAfternoon!), 0)).toFixed(1)}
                             </td>
                         </tr>
                         <tr className="">
-                            <td className="px-1 py-1 border bg-gray-300 text-center font-semibold">LITROS TOTALES</td>
-                            <td className="px-1 py-1 border bg-yellow-300 text-center" colSpan={6}>
+                            <td className="px-1 py-1 border border-black bg-gray-300 text-center font-semibold">LITROS TOTALES</td>
+                            <td className="px-1 py-1 border border-black bg-yellow-300 text-center" colSpan={6}>
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityTomorrow + currentValue.gloriaShipmentQuantityTomorrow), 0))}
                             </td>
-                            <td className="px-1 py-1 border bg-sky-300 text-center" colSpan={6}>
+                            <td className="px-1 py-1 border border-black bg-sky-300 text-center" colSpan={6}>
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityAfternoon + currentValue.gloriaShipmentQuantityAfternoon), 0))}
                             </td>
                         </tr>
                         <tr className="">
-                            <td className="px-1 py-1 border bg-gray-300 text-center font-semibold">MONTO FINAL</td>
+                            <td className="px-1 py-1 border border-black bg-gray-300 text-center font-semibold">LITROS QUINCENALES</td>
+                            <td className="px-1 py-1 border border-black bg-gray-300 text-center" colSpan={12}>
+                            {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityTomorrow + currentValue.gloriaShipmentQuantityTomorrow + currentValue.productionQuantityAfternoon + currentValue.gloriaShipmentQuantityAfternoon), 0))}
+                            </td>
+                        </tr>
+                        <tr className="">
+                            <td className="px-1 py-1 border border-black bg-gray-300 text-center font-semibold">PAGO FINAL</td>
 
-                            <td className="px-1 py-1 border bg-gray-300 text-center" colSpan={12}>
-                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalTomorrow + currentValue.gloriaShipmentTotalTomorrow + currentValue.productionTotalAfternoon + currentValue.gloriaShipmentTotalAfternoon), 0)).toFixed(4)}
+                            <td className="px-1 py-1 border border-black bg-gray-300 text-center" colSpan={12}>
+                            S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalTomorrow + currentValue.gloriaShipmentTotalTomorrow + currentValue.productionTotalAfternoon + currentValue.gloriaShipmentTotalAfternoon), 0)).toFixed(1)}
                             </td>
                         </tr>
                     </tfoot>

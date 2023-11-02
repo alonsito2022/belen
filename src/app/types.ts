@@ -83,13 +83,14 @@ export interface IProduct {
     stockMin: number 
     stockMax: number 
     path: string
-    cheeseClassification: string
-    cheeseClassificationReadable?: string
-    isSupply: boolean
+    classification: string
+    classificationReadable?: string
+    isCollected: boolean
     isPurchased: boolean
     isManufactured: boolean
     available: boolean
     producttariffSet?: IProductTariff
+    totalProductTariff?: number
 }
 
 export interface IProductTariff {
@@ -119,8 +120,26 @@ export interface IUser {
     firstName?: string
     lastName?: string
     groups: Array<any>
-    subsidiary: any,
-    fortnightValue?: number
+    subsidiary?: ISubsidiary,
+    fortnightValue?: number,
+
+    role?: string,
+    roleReadable?: string,
+    code?: number,
+    remuneration?: number,
+    names?: string,
+    document?: string,
+    phone?: string,
+    address?: string,
+    birthDate?: string,
+    phoneOfRelative?: string,
+    startDate?: string,
+    endDate?: string,
+    isActive?: boolean,
+    id?: number
+    subsidiaryId?: number
+
+
 }
 
 export interface IUnit {
@@ -138,6 +157,14 @@ export interface IWarehouse {
     subsidiaryName?: string
 }
 
+export interface IAttendanceIncidence {
+    attendanceDetailID?: number
+    statusChoice?: string
+    registerDate?: string
+    firstName?: string
+    lastName?: string
+}
+
 export interface ISubsidiary {
     id?: number
     name?: string
@@ -146,6 +173,27 @@ export interface ISubsidiary {
     serial?: string
     phone?: string
     ruc?: string
+}
+
+export interface IAttendanceOfMonth {
+    employee?: IUser
+    attendancedetailSet?: Array<IAttendanceDetail>
+    countT?: number
+    countPE?: number
+    countNT?: number
+    countNA?: number
+}
+
+export interface IDayOfMonth {
+    id?: number
+    name?: string
+}
+
+export interface IAttendanceDetail {
+    id?: number
+    day?: number
+    status?: string
+    registerDate?: string
 }
 
 export interface IOperation {
@@ -169,6 +217,10 @@ export interface IOperationDetail {
     remainingQuantity?: number
     remainingPrice?: number
     remainingPriceTotal?: number
+    batchCode?: number
+    batchStock?: number
+    batchPrice?: number
+    batchPriceTotal?: number
 }
 
 /*type Product = {

@@ -1,15 +1,14 @@
 import { IOperation, IProductTariff, IWarehouse } from "@/app/types";
 import { toast } from "react-toastify";
-import { ChangeEvent ,useState, useEffect, KeyboardEvent, MouseEvent, FormEvent } from "react";
-
+import { ChangeEvent ,useState, useEffect, useRef, MouseEvent, FormEvent } from "react";
+import { Modal, ModalOptions } from 'flowbite'
 
 const options = [
     {id: "E", value: "ENTRADA"},
     {id: "S", value: "SALIDA"},
 ];
 
-function InventoryRegisterOperationForm({operation, setOperation, productTariffs, warehouses, fetchRegularizationOperations} : any) {
-
+function InventoryRegisterOperationForm({modal, setModal , operation, setOperation, productTariffs, warehouses, fetchRegularizationOperations} : any) {
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setOperation({...operation, [name]: value});
@@ -21,6 +20,7 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
                 if(operation.quantity>0){
                     if((operation.operationAction=="E" && operation.price > 0) || operation.operationAction=="S"){
                         save()
+                        
                     }
                     else
                         toast("Validar precio", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
@@ -62,10 +62,12 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
         })
         .then(res=>res.json())
         .then(data=>{
+            console.log(data.data)
             toast(data.data.saveRegularizationOperation.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
 
-            setOperation( (prev : any) => ({...prev, observation: "", productTariffId: 0,  quantity: 0, price: 0}))
-            document.getElementById("btn-close-supplier-modal")?.click();
+            setOperation( (prev : any) => ({...prev, observation: "CONSUMO DE PRODUCCION", productTariffId: 0,  quantity: 0, price: 0}))
+            // document.getElementById("btn-close-supplier-modal")?.click();
+            modal.hide();
             fetchRegularizationOperations()
 
         }).catch(e=>console.log(e))
@@ -73,11 +75,39 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
     }
 
 
+      useEffect(() => {
+        
+        if(modal == null){
+            console.log('useEffect modal definided')
+            const $targetEl = document.getElementById('top-left-modal');
+            const options: ModalOptions = {
+                placement: 'bottom-right',
+                backdrop: 'static',
+                backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+                closable: false ,
+                /*onHide: () => {
+                    console.log('modal is hidden');
+                },
+                onShow: () => {
+                    console.log('modal is shown');
+                },
+                onToggle: () => {
+                    console.log('modal has been toggled');
+                }*/
+            };
+        
+           // const modal = ;
+            setModal(new Modal($targetEl, options))
+        }
+
+      }, []);
+
     return (
         <>
-        
-        <div id="supplierFormModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-                <div className="relative w-full max-w-4xl max-h-full">
+
+
+        <div id="top-left-modal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+    <div className="relative p-4 w-full max-w-2xl h-full md:h-auto">
 
                     <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
                         
@@ -85,7 +115,8 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white" id="modal-title">
                                 NUEVA OPERACION
                             </h3>
-                            <button type="button" id="btn-close-supplier-modal" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="supplierFormModal">
+                        
+                            <button type="button" onClick={()=>{modal.hide();}} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
                                 <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 <span className="sr-only">Close modal</span>
                             </button>
@@ -150,7 +181,7 @@ function InventoryRegisterOperationForm({operation, setOperation, productTariffs
 
                             
                             <div>
-                                <label htmlFor="observation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">OBSERVACION</label>
+                                <label htmlFor="observation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DESCRIPCION</label>
                                 <textarea id="observation" name="observation" value={operation.observation} onChange={handleInputChange}  rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="Escribe tu observacion aqui..."></textarea>
                             </div>
