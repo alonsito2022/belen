@@ -158,11 +158,18 @@ export interface IWarehouse {
 }
 
 export interface IAttendanceIncidence {
-    attendanceDetailID?: number
+    attendanceDetailId?: number
+    employeeId?: number
+    substituteEmployeeId?: number
     statusChoice?: string
     registerDate?: string
     firstName?: string
     lastName?: string
+    observation?: string
+}
+
+export interface IAttendanceListUser {
+    userId?: number
 }
 
 export interface ISubsidiary {
@@ -194,6 +201,10 @@ export interface IAttendanceDetail {
     day?: number
     status?: string
     registerDate?: string
+    observation?: string
+    substituteEmployeeId?: number
+    substituteEmployee?: IUser
+
 }
 
 export interface IOperation {

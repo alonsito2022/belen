@@ -30,10 +30,23 @@ function AttendanceList({filterObj, daysOfMonth, attendancesOfMonth, modal, setA
                                 
                                 <button onClick={(e)=>{
                                     modal.show();
-                                    setAttendanceIncidence({...attendanceIncidence, attendanceDetailId: a.id, firstName: item.employee?.firstName, lastName: item.employee?.lastName, statusChoice: a.status, registerDate: a.registerDate });
+                                    setAttendanceIncidence({...attendanceIncidence, 
+                                        attendanceDetailId: a.id, 
+                                        employeeId: item.employee?.id, 
+                                        firstName: item.employee?.firstName, 
+                                        lastName: item.employee?.lastName, 
+                                        statusChoice: a.status, 
+                                        registerDate: a.registerDate, 
+                                        observation: a.observation,
+                                        substituteEmployeeId: a.substituteEmployee?.id
+                                    });
                                 }} 
-                                    className="w-full text-black bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button">
-                                    {a.status}
+                                    className={a.status=="T"?"w-full text-black bg-green-300 hover:bg-green-400  font-medium rounded-lg text-sm px-2 py-2.5 text-center":
+                                        a.status=="NT"?"w-full text-black bg-red-300 hover:bg-red-400  font-medium rounded-lg text-sm px-2 py-2.5 text-center":
+                                        a.status=="PE"?"w-full text-black bg-blue-300 hover:bg-blue-400  font-medium rounded-lg text-sm px-2 py-2.5 text-center":
+                                        a.status=="PS"?"w-full text-black bg-purple-300 hover:bg-purple-400  font-medium rounded-lg text-sm px-2 py-2.5 text-center":
+                                        a.status=="TS"?"w-full text-black bg-yellow-300 hover:bg-yellow-400  font-medium rounded-lg text-sm px-2 py-2.5 text-center":
+                                        "w-full text-gray-200 bg-gray-100 hover:bg-gray-200  font-medium rounded-lg text-sm px-2 py-2.5 text-center"} type="button">{a.status}
                                 </button>
                             </td>
                         )}

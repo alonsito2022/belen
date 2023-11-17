@@ -1,7 +1,6 @@
 "use client";
 import { ChangeEvent ,useState, useEffect, KeyboardEvent, MouseEvent, FocusEvent } from "react";
 import { IPerson } from '@/app/types';
-import { toast } from "react-toastify";
 
 const initialStateSelectedSupplier = {
     id: 0,
@@ -73,7 +72,8 @@ function FortnightSupplierList({suppliers, filterObj, setFilterObj, totalSupplie
             setSelectedItem(-1);
         }
     }
-
+   
+    
     return (
         <>
             
@@ -119,6 +119,9 @@ function FortnightSupplierList({suppliers, filterObj, setFilterObj, totalSupplie
                     </div>
                 )}
                 </div>
+            </div>
+            <div>
+            <button onClick={()=>{}}>Export to Word</button>
             </div>
 
                 <table className="w-full">

@@ -2,28 +2,29 @@
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import AttendanceList from "@/components/hrm/attendances/AttendanceList"
 import AttendanceRegisterForm from "@/components/hrm/attendances/AttendanceRegisterForm"
-import { ISubsidiary, IAttendanceOfMonth, IDayOfMonth, IAttendanceIncidence, IUser, IAttendanceDetail } from '@/app/types';
+import AttendanceAddUserForm from "@/components/hrm/attendances/AttendanceAddUserForm"
+import { ISubsidiary, IAttendanceOfMonth, IDayOfMonth, IAttendanceIncidence, IUser, IAttendanceDetail, IAttendanceListUser } from '@/app/types';
 import { toast } from "react-toastify";
 import { Modal, ModalOptions } from 'flowbite'
 
 const initialStateFilterObj = {
-    collectFullDateString: "",
     collectDate: "",
-    collectType: "06",
-    productTariffId: 5,
-    warehouseId: 6,
     year: 0,
     month: 0,
     subsidiaryId: 0,
 }
-const initialState = {
-
+const initialStateIncidence = {
     attendanceDetailId: 0,
+    employeeId: 0,
     firstName: "",
     lastName: "",
     statusChoice: "NA",
     registerDate: "",
-  
+    observation: "",
+    substituteEmployeeId: 0,
+}
+const initialState = {
+    userId: 0,
 }
 function AttendancePage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
@@ -33,13 +34,38 @@ function AttendancePage() {
         'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
     ]);
     const [subsidiaries, setSubsidiaries] = useState< ISubsidiary[]>([]);
+    const [users, setUsers] = useState< IUser[]>([]);
     const [daysOfMonth, setDaysOfMonth] = useState< IDayOfMonth[]>([]);
     const [attendancesOfMonth, setAttendancesOfMonth] = useState< IAttendanceOfMonth[]>([]);
     const [modal, setModal] = useState< Modal | any>(null);
-    const [attendanceIncidence, setAttendanceIncidence] = useState<any | IAttendanceIncidence>(initialState);
+    const [modalAddUser, setModalAddUser] = useState< Modal | any>(null);
+    const [attendanceIncidence, setAttendanceIncidence] = useState<any | IAttendanceIncidence>(initialStateIncidence);
+    const [attendanceListUser, setAttendanceListUser] = useState<any | IAttendanceListUser>(initialState);
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFilterObj({...filterObj, [name]: value});
+    }
+
+    async function fetchUsers(){
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                    query {
+                        users {
+                            id
+                            firstName
+                            lastName
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setUsers(data.data.users);
+        })
     }
 
     async function fetchSubsidiaries(){
@@ -104,6 +130,12 @@ function AttendancePage() {
                                 id
                                 registerDate
                                 status
+                                observation
+                                substituteEmployee{
+                                    id
+                                    firstName
+                                    lastName
+                                }
                             }
                         }
                     }
@@ -146,13 +178,7 @@ function AttendancePage() {
     useEffect(() => {
         const date = new Date();
         const defaultValue = date.toLocaleDateString('en-CA');
-        const formatFullDate = date.toLocaleDateString("es-PE", {
-            weekday: "long", // narrow, short
-            year: "numeric", // 2-digit
-            month: "short", // numeric, 2-digit, narrow, long
-            day: "numeric" // 2-digit
-        });
-        setFilterObj({...filterObj, collectDate: defaultValue, collectFullDateString: formatFullDate, year: date.getFullYear(), month: date.getMonth() + 1 });
+        setFilterObj({...filterObj, collectDate: defaultValue, year: date.getFullYear(), month: date.getMonth() + 1 });
         const years = [];
         const currentYear = date.getFullYear();
         years.push(currentYear);
@@ -161,6 +187,7 @@ function AttendancePage() {
         }
         setFutureYears(years);
         fetchSubsidiaries();
+        fetchUsers();
           
     }, []);
 
@@ -179,7 +206,7 @@ function AttendancePage() {
     return (
         <>
             <h2 className="text-4xl font-bold dark:text-white pb-4">Asistencias</h2>
-            <div className="mb-4 grid grid-cols-4 items-end gap-2  justify-end ">
+            <div className="mb-4 grid grid-cols-6 items-end gap-2  justify-end ">
                 <div className="sm:col-span-2">
                     <label htmlFor="subsidiaryId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SEDE</label>
                     <select id="subsidiaryId" 
@@ -213,15 +240,46 @@ function AttendancePage() {
                         ))}
                     </select>
                 </div>
-                <div className="">
+                <div className="sm:col-span-2 ">
                     <button type="button" onClick={handleClickButton} className="mr-0 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">Buscar</button>
+                
+                    <button type="button" 
+                    onClick={()=>{
+                        modalAddUser.show();
+                    }} 
+                    className="ml-2 mr-0 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Añadir asociado</button>
                 </div>
 
+            </div>
+
+            <div className="flex mb-1">
+                <div className="flex items-center mr-4">
+                    <span className="bg-green-300 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">T</span>
+                    <label  className="text-sm font-medium text-gray-900 dark:text-gray-300">TRABAJÓ</label>
+                </div>
+                <div className="flex items-center mr-4">
+                    <span className="bg-red-300 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">NT</span>
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-300">NO TRABAJO</label>
+                </div>
+                <div className="flex items-center mr-4">
+                    <span className="bg-blue-300 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">PE</span>
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-300">PERMISO</label>
+                </div>
+                <div className="flex items-center mr-4">
+                    <span className="bg-purple-300 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">PE</span>
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-300">PERMISO POR SALUD</label>
+                </div>
+                <div className="flex items-center mr-4">
+                    <span className="bg-yellow-300 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">TS</span>
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-300">TRABAJO DE SUPLENCIA</label>
+                </div>
             </div>
             <AttendanceList filterObj={filterObj} daysOfMonth={daysOfMonth} attendancesOfMonth={attendancesOfMonth} modal={modal} 
             setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} />
             <AttendanceRegisterForm filterObj={filterObj}  modal={modal} setModal={setModal} fetchAttendancesOfMonth={fetchAttendancesOfMonth} 
-            setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} initialState={initialState} />
+            setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} initialStateIncidence={initialStateIncidence} users={users} />
+            <AttendanceAddUserForm modalAddUser={modalAddUser} setModalAddUser={setModalAddUser} users={users} 
+            attendanceListUser={attendanceListUser} setAttendanceListUser={setAttendanceListUser} filterObj={filterObj} fetchAttendancesOfMonth={fetchAttendancesOfMonth} initialState={initialState} />
 
         </>
     )

@@ -1,11 +1,11 @@
 import { ChangeEvent ,useState, useEffect, useRef, MouseEvent, FormEvent } from "react";
 import { Modal, ModalOptions } from 'flowbite'
 import { toast } from "react-toastify";
-import { IAttendanceIncidence, IWarehouse } from '@/app/types';
+import { IAttendanceIncidence, IUser } from '@/app/types';
 
 
 
-function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfMonth, setAttendanceIncidence, attendanceIncidence, initialState}:any) {
+function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfMonth, setAttendanceIncidence, attendanceIncidence, initialStateIncidence, users}:any) {
     
     
     const [statusChoices, setStatusChoices] = useState([
@@ -23,11 +23,14 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
                 updateAttendanceIncidence(
                     attendanceDetailId:${attendanceIncidence.attendanceDetailId}, 
                     statusChoice: "${attendanceIncidence.statusChoice}"
+                    observation: "${attendanceIncidence.observation}"
+                    substituteEmployeeId: ${attendanceIncidence.substituteEmployeeId!=undefined?attendanceIncidence.substituteEmployeeId:0}
                 ){
                     message
                 }
             }
-        `;      
+        `;  
+        // console.log(queryFetch)    
 
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
@@ -37,7 +40,7 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
         .then(res=>res.json())
         .then(data=>{
             toast(data.data.updateAttendanceIncidence.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-            setAttendanceIncidence(initialState);
+            setAttendanceIncidence(initialStateIncidence);
             modal.hide();
             fetchAttendancesOfMonth();
 
@@ -112,7 +115,7 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
                                 </div>
 
 
-                                <div className="sm:col-span-1">
+                                <div className="sm:col-span-2">
                                     <label htmlFor="statusChoice" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
                                     <select id="statusChoice" 
                                     name="statusChoice" value={attendanceIncidence.statusChoice} onChange={handleInputChange}
@@ -121,8 +124,28 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
                                         <option value={"NT"}>NO TRABAJO</option>
                                         <option value={"PE"}>PERMISO</option>
                                         <option value={"PS"}>PERMISO POR SALUD</option>
+                                        <option value={"TS"}>TRABAJO DE SUPLENCIA</option>
                                         <option value={"NA"}>NO APLICA</option>
                                     </select>
+                                </div>
+                                {attendanceIncidence.statusChoice=="TS"?
+                                    <div className="sm:col-span-4">
+                                        <label htmlFor="substituteEmployeeId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Suplente </label>
+                                        <select id="substituteEmployeeId" name="substituteEmployeeId" value={attendanceIncidence.substituteEmployeeId} onChange={handleInputChange}
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value={0}>Elegir asociado</option>
+                                            {users.filter((u: IUser) => u.id !== attendanceIncidence.employeeId).map((u: IUser)=>(
+                                                <option key={u.id} value={u.id}>{u.lastName}, {u.firstName}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                :""}
+                                
+                                <div className="sm:col-span-4">
+
+                                    <label htmlFor="observation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observacion</label>
+                                    <textarea id="observation" name="observation" maxLength={400} rows={4} value={attendanceIncidence.observation || ''} onChange={handleInputChange} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Comentarios aquí..."></textarea>
+
                                 </div>
 
                                 
