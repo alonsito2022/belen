@@ -137,7 +137,7 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
           for (let dia = 0; dia <= 6; dia++) {
             const ventasDelDia = weekData[`salesOf${dia}` as keyof IEntriesByWeek] || [];
             if (ventasDelDia && Array.isArray(ventasDelDia)) {
-                sumasPorDia[dia] = ventasDelDia.reduce((acumulador, venta: ISaleOfWeekDay) => ({
+                sumasPorDia[dia] = ventasDelDia.reduce((acumulador, venta: any) => ({
                   quantity: acumulador.quantity + venta.quantity!,
                   discount: acumulador.discount + venta.discount!,
                   subtotal: acumulador.subtotal + venta.subtotal!,
