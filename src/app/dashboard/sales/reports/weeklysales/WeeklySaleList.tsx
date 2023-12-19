@@ -131,90 +131,90 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
     });
 
     useEffect(() => {
-        const sumasPorDia : Array<ISaleOfWeekDay> = Array.from({ length: 7 }, () => ({ quantity: 0, subtotal: 0, discount: 0, subtotalWithDiscount: 0 } ));
-        console.log("sumasPorDia",  sumasPorDia)
+        // const sumasPorDia : Array<ISaleOfWeekDay> = Array.from({ length: 7 }, () => ({ quantity: 0, subtotal: 0, discount: 0, subtotalWithDiscount: 0 } ));
+        // console.log("sumasPorDia",  sumasPorDia)
     
-        outputsByWeek.forEach((weekData: IEntriesByWeek) => {
-          for (let dia = 0; dia <= 6; dia++) {
-            const ventasDelDia = weekData[`salesOf${dia}` as keyof IEntriesByWeek] || [];
-            if (ventasDelDia && Array.isArray(ventasDelDia)) {
-                sumasPorDia[dia] = ventasDelDia.reduce((acumulador: ISaleOfWeekDay, venta: ISaleOfWeekDay) => ({
-                    quantity: (acumulador.quantity || 0) + (venta.quantity || 0),
-                    discount: (acumulador.discount || 0) + (venta.discount || 0),
-                    subtotal: (acumulador.subtotal || 0) + (venta.subtotal || 0),
-                    subtotalWithDiscount: (acumulador.subtotalWithDiscount || 0) + (venta.subtotalWithDiscount || 0),
-                }),
-                sumasPorDia[dia]
-              );
-            }
-            // console.log(ventasDelDia);
-          }
-        });
+        // outputsByWeek.forEach((weekData: IEntriesByWeek) => {
+        //   for (let dia = 0; dia <= 6; dia++) {
+        //     const ventasDelDia = weekData[`salesOf${dia}` as keyof IEntriesByWeek] || [];
+        //     if (ventasDelDia && Array.isArray(ventasDelDia)) {
+        //         sumasPorDia[dia] = ventasDelDia.reduce((acumulador: ISaleOfWeekDay, venta: ISaleOfWeekDay) => ({
+        //             quantity: (acumulador.quantity || 0) + (venta.quantity || 0),
+        //             discount: (acumulador.discount || 0) + (venta.discount || 0),
+        //             subtotal: (acumulador.subtotal || 0) + (venta.subtotal || 0),
+        //             subtotalWithDiscount: (acumulador.subtotalWithDiscount || 0) + (venta.subtotalWithDiscount || 0),
+        //         }),
+        //         sumasPorDia[dia]
+        //       );
+        //     }
+        //     // console.log(ventasDelDia);
+        //   }
+        // });
         
-        const sumasPorProducto = outputsByWeek.reduce((acumulador:any, producto:IEntriesByWeek) => {
-            const ventasDelProducto = Array.from({ length: 7 }, (_, dia) => producto[`salesOf${dia}` as keyof IEntriesByWeek]).flat();
+        // const sumasPorProducto = outputsByWeek.reduce((acumulador:any, producto:IEntriesByWeek) => {
+        //     const ventasDelProducto = Array.from({ length: 7 }, (_, dia) => producto[`salesOf${dia}` as keyof IEntriesByWeek]).flat();
       
-            if (ventasDelProducto && Array.isArray(ventasDelProducto)) {
-                // console.log("ventasDelProducto", ventasDelProducto);
+        //     if (ventasDelProducto && Array.isArray(ventasDelProducto)) {
+        //         // console.log("ventasDelProducto", ventasDelProducto);
 
-                const sumaPorProducto = ventasDelProducto.reduce((acumuladorProducto: any, venta: any) => ({
-                    quantity: acumuladorProducto.quantity + Number(venta.quantity),
-                    subtotalWithDiscount: (acumuladorProducto.subtotalWithDiscount || 0) + Number(venta.subtotalWithDiscount),
-                }),
-                    { quantity: 0, subtotalWithDiscount: 0 }
-                );
-                acumulador[producto.productName!] = sumaPorProducto;
+        //         const sumaPorProducto = ventasDelProducto.reduce((acumuladorProducto: any, venta: any) => ({
+        //             quantity: acumuladorProducto.quantity + Number(venta.quantity),
+        //             subtotalWithDiscount: (acumuladorProducto.subtotalWithDiscount || 0) + Number(venta.subtotalWithDiscount),
+        //         }),
+        //             { quantity: 0, subtotalWithDiscount: 0 }
+        //         );
+        //         acumulador[producto.productName!] = sumaPorProducto;
                 
-            }
+        //     }
       
-            return acumulador;
-        }, {} as Record<string, { quantity: number; subtotalWithDiscount: number }>);
+        //     return acumulador;
+        // }, {} as Record<string, { quantity: number; subtotalWithDiscount: number }>);
               
-        // Inicializar sumas
-        let sumQuantity = 0;
-        let sumSubtotalWithDiscount = 0;
-        // Iterar sobre las ventas y sumar
-        for (const producto in sumasPorProducto) {
-            if (sumasPorProducto.hasOwnProperty(producto)) {
-                sumQuantity += sumasPorProducto[producto].quantity;
-                sumSubtotalWithDiscount += sumasPorProducto[producto].subtotalWithDiscount;
-            }
-        }
+        // // Inicializar sumas
+        // let sumQuantity = 0;
+        // let sumSubtotalWithDiscount = 0;
+        // // Iterar sobre las ventas y sumar
+        // for (const producto in sumasPorProducto) {
+        //     if (sumasPorProducto.hasOwnProperty(producto)) {
+        //         sumQuantity += sumasPorProducto[producto].quantity;
+        //         sumSubtotalWithDiscount += sumasPorProducto[producto].subtotalWithDiscount;
+        //     }
+        // }
 
-        setSalesSummary({...salesSummary, 
-            salesSummaryQuantityOf0: sumasPorDia[0].quantity, 
-            salesSummarySubtotalOf0: sumasPorDia[0].subtotal,
-            salesSummaryDiscountOf0: sumasPorDia[0].discount,
-            salesSummarySubtotalWithDiscountOf0: sumasPorDia[0].subtotalWithDiscount,
-            salesSummaryQuantityOf1: sumasPorDia[1].quantity, 
-            salesSummarySubtotalOf1: sumasPorDia[1].subtotal,
-            salesSummaryDiscountOf1: sumasPorDia[1].discount,
-            salesSummarySubtotalWithDiscountOf1: sumasPorDia[1].subtotalWithDiscount,
-            salesSummaryQuantityOf2: sumasPorDia[2].quantity, 
-            salesSummarySubtotalOf2: sumasPorDia[2].subtotal,
-            salesSummaryDiscountOf2: sumasPorDia[2].discount,
-            salesSummarySubtotalWithDiscountOf2: sumasPorDia[2].subtotalWithDiscount,
-            salesSummaryQuantityOf3: sumasPorDia[3].quantity, 
-            salesSummarySubtotalOf3: sumasPorDia[3].subtotal,
-            salesSummaryDiscountOf3: sumasPorDia[3].discount,
-            salesSummarySubtotalWithDiscountOf3: sumasPorDia[3].subtotalWithDiscount,
-            salesSummaryQuantityOf4: sumasPorDia[4].quantity, 
-            salesSummarySubtotalOf4: sumasPorDia[4].subtotal,
-            salesSummaryDiscountOf4: sumasPorDia[4].discount,
-            salesSummarySubtotalWithDiscountOf4: sumasPorDia[4].subtotalWithDiscount,
-            salesSummaryQuantityOf5: sumasPorDia[5].quantity, 
-            salesSummarySubtotalOf5: sumasPorDia[5].subtotal,
-            salesSummaryDiscountOf5: sumasPorDia[5].discount,
-            salesSummarySubtotalWithDiscountOf5: sumasPorDia[5].subtotalWithDiscount,
-            salesSummaryQuantityOf6: sumasPorDia[6].quantity, 
-            salesSummarySubtotalOf6: sumasPorDia[6].subtotal,
-            salesSummaryDiscountOf6: sumasPorDia[6].discount,
-            salesSummarySubtotalWithDiscountOf6: sumasPorDia[6].subtotalWithDiscount,
+        // setSalesSummary({...salesSummary, 
+        //     salesSummaryQuantityOf0: sumasPorDia[0].quantity, 
+        //     salesSummarySubtotalOf0: sumasPorDia[0].subtotal,
+        //     salesSummaryDiscountOf0: sumasPorDia[0].discount,
+        //     salesSummarySubtotalWithDiscountOf0: sumasPorDia[0].subtotalWithDiscount,
+        //     salesSummaryQuantityOf1: sumasPorDia[1].quantity, 
+        //     salesSummarySubtotalOf1: sumasPorDia[1].subtotal,
+        //     salesSummaryDiscountOf1: sumasPorDia[1].discount,
+        //     salesSummarySubtotalWithDiscountOf1: sumasPorDia[1].subtotalWithDiscount,
+        //     salesSummaryQuantityOf2: sumasPorDia[2].quantity, 
+        //     salesSummarySubtotalOf2: sumasPorDia[2].subtotal,
+        //     salesSummaryDiscountOf2: sumasPorDia[2].discount,
+        //     salesSummarySubtotalWithDiscountOf2: sumasPorDia[2].subtotalWithDiscount,
+        //     salesSummaryQuantityOf3: sumasPorDia[3].quantity, 
+        //     salesSummarySubtotalOf3: sumasPorDia[3].subtotal,
+        //     salesSummaryDiscountOf3: sumasPorDia[3].discount,
+        //     salesSummarySubtotalWithDiscountOf3: sumasPorDia[3].subtotalWithDiscount,
+        //     salesSummaryQuantityOf4: sumasPorDia[4].quantity, 
+        //     salesSummarySubtotalOf4: sumasPorDia[4].subtotal,
+        //     salesSummaryDiscountOf4: sumasPorDia[4].discount,
+        //     salesSummarySubtotalWithDiscountOf4: sumasPorDia[4].subtotalWithDiscount,
+        //     salesSummaryQuantityOf5: sumasPorDia[5].quantity, 
+        //     salesSummarySubtotalOf5: sumasPorDia[5].subtotal,
+        //     salesSummaryDiscountOf5: sumasPorDia[5].discount,
+        //     salesSummarySubtotalWithDiscountOf5: sumasPorDia[5].subtotalWithDiscount,
+        //     salesSummaryQuantityOf6: sumasPorDia[6].quantity, 
+        //     salesSummarySubtotalOf6: sumasPorDia[6].subtotal,
+        //     salesSummaryDiscountOf6: sumasPorDia[6].discount,
+        //     salesSummarySubtotalWithDiscountOf6: sumasPorDia[6].subtotalWithDiscount,
 
-            sumQuantity: sumQuantity,
-            sumSubtotalWithDiscount: sumSubtotalWithDiscount
+        //     sumQuantity: sumQuantity,
+        //     sumSubtotalWithDiscount: sumSubtotalWithDiscount
         
-        });
+        // });
 
 
       }, [outputsByWeek]);
