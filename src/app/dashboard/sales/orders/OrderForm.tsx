@@ -290,7 +290,7 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, filterObj,
                                                     <option key={k} value={o.id}>{o.names}</option>
                                             ))}
                                         </select>
-                                        <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">Se encontraron <a href="#" className="font-medium text-blue-600 hover:underline dark:text-blue-500">{clients.length}</a> resultados en centro de venta "{output.saleCenterName}".</p>
+                                        <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">Se encontraron <a href="#" className="font-medium text-blue-600 hover:underline dark:text-blue-500">{clients.length}</a> resultados en centro de venta {output.saleCenterName}.</p>
 
                                     </div>
 

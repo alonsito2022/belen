@@ -9,7 +9,6 @@ import {obtenerSemanaActual, getDates} from '@/libs/functions'
 const initialStateFilterObj = {
     searchFullDateString: "",
     registerDate: "",
-
     productTariffId: 5,
     warehouseId: 7,
     supplierId: 0,
@@ -19,7 +18,7 @@ const initialStateFilterObj = {
     daysOfWeek: ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO','DOMINGO']
 }
 
-function weeklysalePage() {
+function WeeklySalePage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
     const [fechaInicio, setFechaInicio] = useState<Date | null>(null);
     const [fechaFin, setFechaFin] = useState<Date | null>(null);
@@ -232,4 +231,4 @@ function weeklysalePage() {
     )
 }
 
-export default weeklysalePage
+export default WeeklySalePage
