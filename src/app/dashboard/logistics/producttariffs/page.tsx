@@ -3,6 +3,7 @@ import { Modal, ModalOptions } from 'flowbite'
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { IProductTariff, IProduct, IUnit } from '@/app/types';
 import { toast } from "react-toastify";
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialState = {
     id: 0,
@@ -217,25 +218,23 @@ function ProductTariffPage() {
     return (
         <>
 
-<h2 className="text-4xl font-bold dark:text-white pb-4">Presentaciones</h2>
+        <Breadcrumb section={"Logística"} article={"Presentaciones"} />
+
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
 
 
-       
-<div className="flex justify-end mr-4">
-    <button id="btn-new" onClick={(e)=>{
-            modal.show();
-            document.getElementById("modal-title")!.innerHTML = "Crear presentacion de producto";
-            document.getElementById("btn-save-product")!.innerHTML = "Guardar presentacion de producto";
-            setProductTariff(initialState);
-            
-    }} className=" block text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button">
-     + Nuevo
-    </button>
+            <div className="flex items-center justify-end bg-gray-200 p-2 border border-gray-200">
+                <button id="btn-new" onClick={(e)=>{
+                        modal.show();
+                        document.getElementById("modal-title")!.innerHTML = "Crear presentacion";
+                        document.getElementById("btn-save-product")!.innerHTML = "Guardar";
+                        setProductTariff(initialState);
+                        
+                }} className="btn-cyan" type="button">
+                Nuevo
+                </button>
+            </div>
 
-</div>
-
-
-        <div className="p-4 relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -252,20 +251,20 @@ function ProductTariffPage() {
                     {productTariffs.map((item) => 
                     <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td className="w-4 p-4  bg-gray-50 dark:bg-gray-800">{item.id}</td>
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.productName}</th>
-                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{item.unitName}</td>
-                        <td className="px-6 py-4">{item.salePrice1}</td>
-                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{item.salePrice2}</td>
-                        <td className="px-6 py-4">{item.quantityMinimum}</td>
-                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                        <th scope="row" className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.productName}</th>
+                        <td className="px-4 py-2 bg-gray-50 dark:bg-gray-800">{item.unitName}</td>
+                        <td className="px-4 py-2">{item.salePrice1}</td>
+                        <td className="px-4 py-2 bg-gray-50 dark:bg-gray-800">{item.salePrice2}</td>
+                        <td className="px-4 py-2">{item.quantityMinimum}</td>
+                        <td className="px-4 py-2 bg-gray-50 dark:bg-gray-800">
                             <button type="button" onClick={ async ()=>{
 
                                 await fetchProductTariffByID(item.id);
                                 modal.show();
-                                document.getElementById("modal-title")!.innerHTML = "Editar presentacion de producto";
-                                document.getElementById("btn-save-product")!.innerHTML = "Actualizar presentacion de producto";
+                                document.getElementById("modal-title")!.innerHTML = "Editar presentacion";
+                                document.getElementById("btn-save-product")!.innerHTML = "Actualizar";
                             }}
-                            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Editar</button>
+                            className="btn-green">Editar</button>
                         </td>
                     </tr>
                     )}
@@ -280,9 +279,9 @@ function ProductTariffPage() {
 
         <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
             
-            <div className="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+            <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white" id="modal-title">
-                    Editar presentacion de Producto
+                    Editar presentacion
                 </h3>
                 <button type="button" onClick={()=>{modal.hide();}} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                     <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
@@ -294,8 +293,6 @@ function ProductTariffPage() {
                 <input type="hidden" name="id" id="id" value={productTariff.id} />
                 <div className="grid gap-4 mb-4 sm:grid-cols-1">
 
-
-
                     <div>
                         <label htmlFor="productId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Producto</label>
                         <select name="productId" id="productId" onChange={handleInputChange} value={productTariff.productId} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -306,8 +303,6 @@ function ProductTariffPage() {
                         </select>
                     </div>
                  
-                 
-
                     <div>
                         <label htmlFor="unitId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unidad</label>
                         <select name="unitId" id="unitId" onChange={handleInputChange} value={productTariff.unitId} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -317,7 +312,6 @@ function ProductTariffPage() {
                             ))}
                         </select>
                     </div>
-
 
                     <div>
                         <label htmlFor="salePrice1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio Venta 1</label>
@@ -332,16 +326,13 @@ function ProductTariffPage() {
                         <input type="number" name="quantityMinimum" id="quantityMinimum" value={productTariff.quantityMinimum} onChange={handleInputChange} onFocus={(e) => e.target.select()} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="$2999" required />
                     </div>
                  
-
                 
                 </div>
 
                  
-
-
-                <button id="btn-save-product" type="submit" className="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ">
+                <button id="btn-save-product" type="submit" className="btn-blue">
                     <svg className="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                    Actualizar presentacion de producto
+                    Actualizar
                 </button>
             </form>
         </div>

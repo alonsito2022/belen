@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import InventoryFilter from "@/components/logistics/inventories/InventoryFilter"
-import InventoryList from "@/components/logistics/inventories/InventoryList"
-import InventoryRegisterOperationForm from "@/components/logistics/inventories/InventoryRegisterOperationForm"
+import InventoryFilter from "./InventoryFilter"
+import InventoryList from "./InventoryList"
+import InventoryRegisterOperationForm from "./InventoryRegisterOperationForm"
 import { IProductTariff, IWarehouse, IOperation, IOperationDetail } from "@/app/types";
 import { IUser } from '@/app/types';
 import { useSession} from 'next-auth/react';
 import { Modal, ModalOptions } from 'flowbite'
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialStateFilterObj = {
     startDate: "",
@@ -44,7 +45,7 @@ function InventoryPage() {
     useEffect(() => {
         if(u!==undefined){
             // setOperation({...operation, userId: u?.userID, username: `${u?.firstName!}  ${u?.lastName!}`});
-            setOperation( (prev : any) => ({...prev, userId: u?.userID, username: `${u?.firstName!}  ${u?.lastName!}`}))
+            setOperation( (prev : any) => ({...prev, userId: u?.id, username: `${u?.firstName!}  ${u?.lastName!}`}))
         }
     }, [u]);
 
@@ -199,11 +200,12 @@ function InventoryPage() {
     
     return (
         <>
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Control de insumos</h2>
-
+            <Breadcrumb section={"Logística"} article={"Control de insumos"} />
+            <div className="relative overflow-x-auto mt-2">
             <InventoryFilter modal={modal} filterObj={filterObj} setFilterObj={setFilterObj} productTariffs={productTariffs} warehouses={warehouses} setOperation={setOperation} fetchRegularizationOperations={fetchRegularizationOperations} />
             <InventoryList operationDetails={operationDetails} />
             <InventoryRegisterOperationForm modal={modal} setModal={setModal} operation={operation} setOperation={setOperation} productTariffs={productTariffs} warehouses={warehouses} fetchRegularizationOperations={fetchRegularizationOperations}   />
+            </div>
         </>
     )
 }

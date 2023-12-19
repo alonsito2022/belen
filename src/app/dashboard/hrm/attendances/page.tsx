@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
-import AttendanceList from "@/components/hrm/attendances/AttendanceList"
-import AttendanceRegisterForm from "@/components/hrm/attendances/AttendanceRegisterForm"
-import AttendanceAddUserForm from "@/components/hrm/attendances/AttendanceAddUserForm"
+import AttendanceList from "./AttendanceList"
+import AttendanceRegisterForm from "./AttendanceRegisterForm"
+import AttendanceAddUserForm from "./AttendanceAddUserForm"
 import { ISubsidiary, IAttendanceOfMonth, IDayOfMonth, IAttendanceIncidence, IUser, IAttendanceDetail, IAttendanceListUser } from '@/app/types';
 import { toast } from "react-toastify";
 import { Modal, ModalOptions } from 'flowbite'
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialStateFilterObj = {
     collectDate: "",
@@ -205,7 +206,9 @@ function AttendancePage() {
 
     return (
         <>
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Asistencias</h2>
+            
+            <Breadcrumb section={"Administración"} article={"Asistencias"} />
+            
             <div className="mb-4 grid grid-cols-6 items-end gap-2  justify-end ">
                 <div className="sm:col-span-2">
                     <label htmlFor="subsidiaryId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SEDE</label>

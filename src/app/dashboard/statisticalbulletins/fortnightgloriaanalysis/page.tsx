@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { IPerson, IProductTariff, ISupplierTariff, IWarehouse } from '@/app/types';
-import { toast } from "react-toastify";
+import Breadcrumb from "@/components/Breadcrumb"
 import { useAppSelector } from "@/redux/hooks"
-import FortnightGloryList from "@/components/statisticalbulletins/fortnightgloriaanalysis/FortnightGloryList"
-import FortnightGlorySummary from "@/components/statisticalbulletins/fortnightgloriaanalysis/FortnightGlorySummary"
+import FortnightGloryList from "./FortnightGloryList"
+import FortnightGlorySummary from "./FortnightGlorySummary"
 
 const initialStateFilterObj = {
     collectDate: "",
@@ -190,15 +190,16 @@ function FortnightGloriaAnalysisPage() {
     return (
         <>
         
-            <div className="flex justify-between my-3">
 
-                <h2 className="text-4xl font-bold dark:text-white pb-2">Resumen de gloria {obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}</h2>
+            <Breadcrumb section={"Reportes"} article={`Resumen de gloria ${obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}`} />
 
-            </div>
+            <div className="bg-white mt-2">
 
-            <FortnightGloryList suppliers={suppliers} summaryDailyEntries={summaryDailyEntries} />
-            <FortnightGlorySummary suppliers={suppliers} filterObj={filterObj}
+                <FortnightGloryList suppliers={suppliers} summaryDailyEntries={summaryDailyEntries} />
+                <FortnightGlorySummary suppliers={suppliers} filterObj={filterObj}
                 setSummaryDailyEntries={setSummaryDailyEntries} summaryDailyEntries={summaryDailyEntries} fort={fort}/>
+            </div>
+            
         </>
     )
 }

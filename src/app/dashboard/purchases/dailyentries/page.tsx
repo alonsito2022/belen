@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { IPerson } from '@/app/types';
-import DailyEntryList from "@/components/purchases/dailyentries/DailyEntryList"
-import DailyEntryFilter from "@/components/purchases/dailyentries/DailyEntryFilter"
+import DailyEntryList from "./DailyEntryList"
+import DailyEntryFilter from "./DailyEntryFilter"
 import { useAppSelector } from "@/redux/hooks"
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialStateFilterObj = {
     collectFullDateString: "",
@@ -100,7 +101,9 @@ function DailyEntryPage() {
 
     return (
         <>
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Registro diario</h2>
+
+            <Breadcrumb section={"Producción"} article={`Registro diario`} />
+
             <DailyEntryFilter fetchDailyEntries={fetchDailyEntries}  setFilterObj={setFilterObj} filterObj={filterObj} />
             <DailyEntryList suppliers={suppliers} suppliersWithDailyEntries={suppliersWithDailyEntries} filterObj={filterObj} fetchDailyEntries={fetchDailyEntries} fort={fort}/>
         </>

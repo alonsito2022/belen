@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { IPerson } from '@/app/types';
-import { toast } from "react-toastify";
-import GloriaShipmentList from "@/components/purchases/gloriashipments/GloriaShipmentList"
-import GloriaShipmentFilter from "@/components/purchases/gloriashipments/GloriaShipmentFilter"
+import Breadcrumb from "@/components/Breadcrumb"
+import GloriaShipmentList from "./GloriaShipmentList"
+import GloriaShipmentFilter from "./GloriaShipmentFilter"
 import { useAppSelector } from "@/redux/hooks"
 
 const initialStateFilterObj = {
@@ -102,7 +102,7 @@ function GloriaShipmentPage() {
 
     return (
         <>
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Envios Gloria</h2>
+            <Breadcrumb section={"Producción"} article={`Envios Gloria`} />
             <GloriaShipmentFilter getGloriaShipments={getGloriaShipments} setFilterObj={setFilterObj} filterObj={filterObj} />
             <GloriaShipmentList suppliers={suppliers} suppliersWithGloriaShipments={suppliersWithGloriaShipments} filterObj={filterObj} getGloriaShipments={getGloriaShipments} fort={fort} />
             

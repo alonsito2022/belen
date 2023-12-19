@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import FortnightSupplierList from "@/components/statisticalbulletins/fortnightsupplieranalysis/FortnightSupplierList"
-import FortnightSupplierFilter from "@/components/statisticalbulletins/fortnightsupplieranalysis/FortnightSupplierFilter"
+import FortnightSupplierList from "./FortnightSupplierList"
+import FortnightSupplierFilter from "./FortnightSupplierFilter"
 import { IProductTariff, IWarehouse, IPerson } from "@/app/types";
 import { useAppSelector } from "@/redux/hooks"
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialStateFilterObj = {
     supplierId: 0,
@@ -90,14 +91,20 @@ function FortnightSupplierAnalysisPage() {
 
     return (
         <>
-        <div className="relative overflow-x-auto p-4 mx-auto max-w-5xl bg-white">
 
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Boleta quincenal de proveedores</h2>
-            <FortnightSupplierFilter />
-            <FortnightSupplierList suppliers={suppliers} supplierWithData={supplierWithData} 
-            filterObj={filterObj} setFilterObj={setFilterObj} />
+
+        <Breadcrumb section={"Reportes"} article={`Boleta quincenal de proveedores`} />
+        <div className="bg-white mt-2">
+
+        
+            <div className="relative overflow-x-auto p-4 mx-auto max-w-5xl bg-white">
+
+                <FortnightSupplierFilter />
+                <FortnightSupplierList suppliers={suppliers} supplierWithData={supplierWithData} 
+                filterObj={filterObj} setFilterObj={setFilterObj} />
+            </div>
         </div>
-            
+
         </>
 
     )

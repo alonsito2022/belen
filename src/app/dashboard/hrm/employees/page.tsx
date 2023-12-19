@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import EmployeeList from "@/components/hrm/employees/EmployeeList"
-import EmployeeRegisterForm from "@/components/hrm/employees/EmployeeRegisterForm"
+import EmployeeList from "./EmployeeList"
+import EmployeeRegisterForm from "./EmployeeRegisterForm"
 import { Modal, ModalOptions } from 'flowbite'
 import { IUser } from '@/app/types';
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialState = {
 
@@ -99,7 +100,6 @@ function EmployeePage() {
                             phoneOfRelative
                             startDate
                             endDate
-                            password
                             email
                             code
                             remuneration
@@ -114,13 +114,15 @@ function EmployeePage() {
         })
         .then(res=>res.json())
         .then(data=>{
+            console.log(data.data.userById)
             setUser(data.data.userById);
         })
     }
 
     return (
         <>
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Empleados</h2>
+            
+            <Breadcrumb section={"Administración"} article={"Empleados"} />
             <div className="mb-4 grid grid-cols-1 items-end gap-2  justify-end ">
                 <button onClick={(e)=>{
                     modal.show();

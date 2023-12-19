@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { IPerson, IProductTariff, ISupplierTariff, IWarehouse } from '@/app/types';
-import { toast } from "react-toastify";
+import Breadcrumb from "@/components/Breadcrumb"
 import { useAppSelector } from "@/redux/hooks"
-import FortnightProductionSummary from "@/components/statisticalbulletins/fortnightproductionanalysis/FortnightProductionSummary"
-import FortnightProductionFilter from "@/components/statisticalbulletins/fortnightproductionanalysis/FortnightProductionFilter"
+import FortnightProductionSummary from "./FortnightProductionSummary"
+import FortnightProductionFilter from "./FortnightProductionFilter"
 
 const initialStateFilterObj = {
   collectDate: "",
@@ -132,14 +132,16 @@ function FortnightProductionAnalysisPage() {
 
     return (
         <>
-            <div className="flex  my-3">
+            
+            <Breadcrumb section={"Reportes"} article={`Resumen de produccion ${obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}`} />
 
-                <h2 className="text-4xl font-bold dark:text-white pb-2">Resumen de produccion  {obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}</h2>
+            <div className="bg-white mt-2">
 
-            </div>
-            <FortnightProductionFilter filterObj={filterObj} setFilterObj={setFilterObj} />
-            <FortnightProductionSummary suppliers={suppliers} filterObj={filterObj}
+                <FortnightProductionFilter filterObj={filterObj} setFilterObj={setFilterObj} />
+                <FortnightProductionSummary suppliers={suppliers} filterObj={filterObj}
                 setSummaryDailyEntries={setSummaryDailyEntries} summaryDailyEntries={summaryDailyEntries} fort={fort}/>
+            </div>
+            
         
         </>
     )

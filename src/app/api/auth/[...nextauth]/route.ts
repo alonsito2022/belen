@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
 import {connectDB} from '@/libs/mongodb'
 import User from '@/models/user';
+import { IUser } from '@/app/types';
 import bcrypt from 'bcryptjs';
 
 
@@ -11,36 +12,49 @@ const handler = NextAuth({
             name: "Credentials",
             credentials: {
                 email: { label: "Email", type: "email", placeholder: "jsmith" },
-                password: { label: "Password", type: "password", placeholder: "******" }
+                password: { label: "Password", type: "password", placeholder: "******" },
+                role: { label: "Role", type: "text", placeholder: "rol" }
             },
             async authorize(credentials, req) {
-                // mongoose
-                /*await connectDB();
-                const userFound = await User.findOne({email: credentials?.email}).select('+password');
-                if(!userFound) throw new Error("Invalid credentials");
-                const passwordMatch = await bcrypt.compare(credentials!.password, userFound.password)
-                if(!passwordMatch) throw new Error("Invalid credentials");
-                return userFound*/
-
-                const apiTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/hrm/auth/login/`, {
+                
+                let queryfecth = `
+                    mutation {
+                        auth(email: "${credentials?.email}", password: "${credentials?.password}", role: "${credentials?.role}") {
+                            user {
+                                id
+                                username
+                                firstName
+                                lastName
+                                phone
+                                email
+                                document
+                                isSuperuser
+                                isStaff
+                                lastLogin
+                                role
+                                roleReadable
+                            }
+                            message
+                        }
+                    }
+                `;
+                const apiUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
                     method: 'POST',
-                    body: JSON.stringify(credentials),
-                    headers: { "Content-Type": "application/json" }
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        query: queryfecth
+                    })
                 });
-                if(apiTokenResponse.status!==200) throw new Error("Invalid credentials");
                 
-                const tokenObtained = await apiTokenResponse.json()
-                
-                const apiUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/hrm/api/get_user/`, {
-                    method: 'GET',
-                    headers: {  Authorization: `Bearer ${tokenObtained?.access}`, "Content-Type": "application/json" }
-                });
-                const user = await apiUserResponse.json()
-                // If no error and we have user data, return it
-                if (apiUserResponse.ok && user) {
-                    return user
+
+                const data: any = await apiUserResponse.json()
+                if (apiUserResponse.ok && data) {
+                    
+                    if(data.data.auth)
+                        return data.data.auth.user
+                    else
+                        throw new Error(data.errors[0].message);
                 }
-                // Return null if user data could not be retrieved
                 return null
             }
         })

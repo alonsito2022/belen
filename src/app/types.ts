@@ -1,4 +1,62 @@
 
+export interface ICheeseSupplier {
+    id: number
+    name?: string
+    
+    pariah?: string
+    mozzarella?: string
+    tilsit?: string
+    andean?: string
+    edam?: string
+    gouda?: string
+}
+
+export interface IChoice {
+    id: string
+    value?: string
+}
+
+export interface IEntry {
+    id: number
+    saleCenterId?: number
+    operationDate?: string
+    operationStatus?: string
+    clientId?: number
+    previousBalance?: number
+    supplierId?: number
+    userId?: number
+    productTariffId?: number
+    quantity?: number
+    price?: number
+    
+
+    suppliers?: Array<number>
+    productTariffs?: Array<number>
+    quantities?: Array<number>
+    prices?: Array<number>
+    discounts?: Array<number>
+    productNames?: Array<string>
+    supplierNames?: Array<string>
+
+    baseCost?: number
+    igvCost?: number
+    totalSale?: number
+
+    totalPreviousBalance?: number
+    totalNet?: number
+    cash?: number
+    deposit?: number
+    subtraction?: number
+
+    hasIgv?: boolean
+    observation?: string
+    documentType?: string
+    documentNumber?: string
+
+    operationdetailSet?: Array<IOperationDetail>
+    client?: IPerson
+
+}
 export interface IPerson {
     id: number
     clientType: string
@@ -13,6 +71,8 @@ export interface IPerson {
     license?: string
     district?: string
     districtReadable?: string
+    salesCenter?: string
+    salesCenterReadable?: string
     
     isEnabled: boolean,
     countSupplierTariffs?: number
@@ -74,6 +134,10 @@ export interface IPerson {
 
 
     milkId?: number
+    saleCenterId?: number
+    saleCenterName?: string
+    saleCenter?: ISaleCenter
+    lastSubtraction?: string
 }
 
 export interface IProduct {
@@ -83,6 +147,8 @@ export interface IProduct {
     stockMin: number 
     stockMax: number 
     path: string
+    typeDairy: string
+    typeDairyReadable?: string
     classification: string
     classificationReadable?: string
     isCollected: boolean
@@ -102,6 +168,7 @@ export interface IProductTariff {
     quantityMinimum?: number 
     productName?: string
     unitName?: string
+    purchasePrice1?: number 
 }
 
 export interface ISupplierTariff {
@@ -146,6 +213,11 @@ export interface IUnit {
     id?: number
     shortName?: string
     description?: string
+}
+
+export interface ISaleCenter {
+    id?: number
+    name?: string
 }
 
 export interface IWarehouse {
@@ -208,21 +280,79 @@ export interface IAttendanceDetail {
 }
 
 export interface IOperation {
-    id?: number
+    id: number
     turn?: string
+    formattedDate?: string
+    dayNameResult?: string
     operationDate?: string
+    operationStatus?: string
     operationType?: string
+    documentTypeReadable?: string
     operationTypeDisplay?: string
     operationAction?: string
     observation?: string
+    documentNumber?: string
     user?: IUser
+    supplier?: IPerson
+    client?: IPerson
+    lastSubtraction?: number
+    baseCost?: number
+    igvCost?: number
+    totalSale?: number
+
+    previousBalance?: number
+    totalNet?: number
+    cash?: number
+    deposit?: number
+    subtraction?: number
+}
+
+export interface IEntryAndSaleByWeek {
+    startDate?: string
+    endDate?: string
+    entries?: Array<ISaleOfWeekDay>
+    sales?: Array<ISaleOfWeekDay>
+    shippingCost?: number
+}
+
+export interface IDateAndWeekday {
+    formattedDate?: string
+    formattedWeekday?: string
+}
+
+export interface IEntriesByWeek {
+    productName?: string
+    daysBetweenDates?: Array<IDateAndWeekday>
+    salesOf0?: Array<ISaleOfWeekDay>
+    salesOf1?: Array<ISaleOfWeekDay>
+    salesOf2?: Array<ISaleOfWeekDay>
+    salesOf3?: Array<ISaleOfWeekDay>
+    salesOf4?: Array<ISaleOfWeekDay>
+    salesOf5?: Array<ISaleOfWeekDay>
+    salesOf6?: Array<ISaleOfWeekDay>
+}
+
+export interface ISaleOfWeekDay{
+    operationDetailId?: number
+    clientName?: string
+    supplierName?: string
+    saleCenterName?: string
+    day?: number
+    formattedDate?: string
+    quantity?: number
+    price?: number
+    subtotal?: number
+    discount?: number
+    subtotalWithDiscount?: number
 }
 
 export interface IOperationDetail {
     id?: number
     operation?: IOperation
     productTariff?: IProductTariff
+    supplier?: IPerson
     price?: number
+    discount?: number
     quantity?: number
     subtotal?: number
     remainingQuantity?: number
@@ -232,6 +362,7 @@ export interface IOperationDetail {
     batchStock?: number
     batchPrice?: number
     batchPriceTotal?: number
+    productTariffs?: Array<number>
 }
 
 /*type Product = {

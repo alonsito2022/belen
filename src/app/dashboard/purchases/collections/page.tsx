@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { IPerson, IProductTariff, IWarehouse } from '@/app/types';
-import CollectionList from "@/components/purchases/collections/CollectionList"
-import CollectionFilter from "@/components/purchases/collections/CollectionFilter"
-import CollectionSummary from "@/components/purchases/collections/CollectionSummary"
+import CollectionList from "./CollectionList"
+import CollectionFilter from "./CollectionFilter"
+import CollectionSummary from "./CollectionSummary"
 import { useAppSelector } from "@/redux/hooks"
+import Breadcrumb from "@/components/Breadcrumb"
 
 const initialStateFilterObj = {
     collectDate: "",
@@ -287,7 +288,8 @@ function CollectionPage() {
 
     return (
         <>
-            <h2 className="text-4xl font-bold dark:text-white pb-4">Produccion</h2>
+            <Breadcrumb section={"Producción"} article={`Produccion`} />
+
             <CollectionFilter getSuppliersWithDailyEntries={getSuppliersWithDailyEntries} setFilterObj={setFilterObj} filterObj={filterObj} />
             <CollectionList suppliers={suppliers} summaryDailyEntries={summaryDailyEntries}  fort={fort} filterObj={filterObj} getSuppliersWithDailyEntries={getSuppliersWithDailyEntries} />
             <CollectionSummary suppliers={suppliers} filterObj={filterObj}
