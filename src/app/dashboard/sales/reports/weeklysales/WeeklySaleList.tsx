@@ -131,17 +131,18 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
     });
 
     useEffect(() => {
-        const sumasPorDia = Array.from({ length: 7 }, () => ({ quantity: 0, subtotal: 0, discount: 0, subtotalWithDiscount: 0 }));
+        const sumasPorDia : Array<ISaleOfWeekDay> = Array.from({ length: 7 }, () => ({ quantity: 0, subtotal: 0, discount: 0, subtotalWithDiscount: 0 } ));
+        console.log("sumasPorDia",  sumasPorDia)
     
-        outputsByWeek.forEach((weekData:IEntriesByWeek) => {
+        outputsByWeek.forEach((weekData: IEntriesByWeek) => {
           for (let dia = 0; dia <= 6; dia++) {
             const ventasDelDia = weekData[`salesOf${dia}` as keyof IEntriesByWeek] || [];
             if (ventasDelDia && Array.isArray(ventasDelDia)) {
-                sumasPorDia[dia] = ventasDelDia.reduce((acumulador: any, venta: any) => ({
-                  quantity: acumulador.quantity + venta.quantity!,
-                  discount: acumulador.discount + venta.discount!,
-                  subtotal: acumulador.subtotal + venta.subtotal!,
-                  subtotalWithDiscount: acumulador.subtotalWithDiscount + venta.subtotalWithDiscount!,
+                sumasPorDia[dia] = ventasDelDia.reduce((acumulador: ISaleOfWeekDay, venta: ISaleOfWeekDay) => ({
+                    quantity: (acumulador.quantity || 0) + (venta.quantity || 0),
+                    discount: (acumulador.discount || 0) + (venta.discount || 0),
+                    subtotal: (acumulador.subtotal || 0) + (venta.subtotal || 0),
+                    subtotalWithDiscount: (acumulador.subtotalWithDiscount || 0) + (venta.subtotalWithDiscount || 0),
                 }),
                 sumasPorDia[dia]
               );
