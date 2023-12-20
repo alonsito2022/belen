@@ -327,6 +327,18 @@ function OrderPage() {
         setFechaInicio(inicioSemana);
         setFechaFin(finSemana);
 
+        // const formattedDate = inicioSemana.toISOString().split('T')[0];
+        const year = inicioSemana.getFullYear();
+        let mes = (inicioSemana.getMonth() + 1).toString().padStart(2, '0'); // Agrega un 0 al mes si es necesario
+        let dia = inicioSemana.getDate().toString().padStart(2, '0'); // Agrega un 0 al día si es necesario
+
+        const formattedDate = `${year}-${mes}-${dia}`;
+
+        setOutput({...output, operationDate: formattedDate});
+
+        // console.log('inicioSemana', inicioSemana)
+        // console.log('finSemana', finSemana)
+
     }
 
     useEffect(() => {
@@ -334,6 +346,7 @@ function OrderPage() {
             fetchSuppliers();
             fetchOutputs();
             obtenerFechaInicioFin(filterObj.week);
+            // console.log('obtenerFechaInicioFin', filterObj.week)
         }
 
     }, [filterObj]);
@@ -360,11 +373,15 @@ function OrderPage() {
             <Breadcrumb section={"Ventas"} article={"Ventas del dia"} />
             <OrderList outputs={outputs} setOutputs={setOutputs} output={output} setOutput={setOutput} fetchOutputs={fetchOutputs} modal={modal}  
             setFilterObj={setFilterObj} filterObj={filterObj} salesCenter={salesCenter} getOutputById={getOutputById} annulSaleById={annulSaleById} modalReview={modalReview}
-            obtenerFechaInicioFin={obtenerFechaInicioFin} fechaInicio={fechaInicio} fechaFin={fechaFin}
+            
             />
-            <OrderForm modal={modal} setModal={setModal} setOutput={setOutput} output={output} fetchOutputs={fetchOutputs} filterObj={filterObj} 
+            <OrderForm modal={modal} setModal={setModal} setOutput={setOutput} output={output} fetchOutputs={fetchOutputs} 
+            setFilterObj={setFilterObj}  filterObj={filterObj} 
             suppliers={suppliers} productTariffs={productTariffs} setProductTariffs={setProductTariffs} 
-            tempProductTariffs={tempProductTariffs} setTempProductTariffs={setTempProductTariffs} salesCenter={salesCenter} clients={clients} fetchClients={fetchClients}/>
+            tempProductTariffs={tempProductTariffs} setTempProductTariffs={setTempProductTariffs} salesCenter={salesCenter} clients={clients} fetchClients={fetchClients}
+            obtenerFechaInicioFin={obtenerFechaInicioFin} 
+            fechaInicio={fechaInicio} fechaFin={fechaFin}
+            />
             <OrderReview modalReview={modalReview} setModalReview={setModalReview} outputFound={outputFound} />
 
         </>

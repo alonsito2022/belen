@@ -3,11 +3,10 @@ import { ChangeEvent ,useState, useEffect } from "react";
 import { IOperation, ICheeseSupplier, ISaleCenter } from '@/app/types';
 import { toast } from "react-toastify";
 
-function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal, setFilterObj, filterObj, salesCenter, getOutputById, annulSaleById, modalReview, obtenerFechaInicioFin, fechaInicio, fechaFin}: any) {
+function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal, setFilterObj, filterObj, salesCenter, getOutputById, annulSaleById, modalReview}: any) {
         
     const handleInputChangeWeek = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
-        if(name=="week")
-            obtenerFechaInicioFin (value)
+        
         setFilterObj({...filterObj, [name]: value});
     }
 
@@ -65,16 +64,6 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
             <div className="relative overflow-x-auto mt-2">
 
                 <div className="flex items-center justify-around bg-gray-200 p-2 border gap-2 border-gray-200">
-                   
-                        <div className="">
-                            <input type="week" name="week" value={filterObj.week } onChange={handleInputChangeWeek} className="form-control" />
-                        </div>
-
-                        <div className="">
-                        {fechaInicio && fechaFin && (
-                            <p className=" text-2xl font-thin">{`Del ${fechaInicio.toLocaleDateString()} al ${fechaFin.toLocaleDateString()}`}</p>
-                        )}
-                        </div>
                    
                     
                  

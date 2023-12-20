@@ -6,11 +6,14 @@ import { toast } from "react-toastify";
 import { initFlowbite} from "flowbite";
 
 
-function OrderForm({modal, setModal, setOutput, output, fetchOutputs, filterObj, suppliers, productTariffs, tempProductTariffs, salesCenter, clients, fetchClients }: any) {
+function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterObj, filterObj, suppliers, productTariffs, tempProductTariffs, salesCenter, clients, fetchClients, obtenerFechaInicioFin, fechaInicio, fechaFin }: any) {
     
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
-
+        if(name=="week"){
+            obtenerFechaInicioFin (value);
+            setFilterObj({...filterObj, [name]: value});
+        }
         if(name=="saleCenterId"){
             fetchClients(value)
             let sc = salesCenter.find((item:ISaleCenter) =>  item.id == Number(value))
@@ -258,6 +261,17 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, filterObj,
                         <form onSubmit={handleSaveSupplier}>
 
                             <div className="grid gap-4 mb-4 sm:grid-cols-4">
+                                    <div className="sm:col-span-2">
+                                    <label htmlFor="week" className="form-label">Semana:</label>
+
+                                            <input type="week" name="week" value={filterObj.week } onChange={handleInputChange} className="form-control" />
+                                     </div>
+
+                                     <div className="sm:col-span-2 flex justify-end items-end pb-2.5">
+                                        {fechaInicio && fechaFin && (
+                                            <p className=" text-2xl font-thin">{`Del ${fechaInicio.toLocaleDateString()} al ${fechaFin.toLocaleDateString()}`}</p>
+                                        )}
+                                    </div>
 
                                 <div>
                                     <label htmlFor="saleCenterId" className="form-label">Centro de venta:</label>
@@ -305,6 +319,8 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, filterObj,
                                      <legend></legend>
 
                                      
+                                     
+
                                      <div className="sm:col-span-4">
                                         <label htmlFor="supplierId" className="form-label">Proveedor:</label>
                                         <select name="supplierId" id="supplierId" onChange={handleInputChange} value={output.supplierId} className="form-control">
