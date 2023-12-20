@@ -147,7 +147,7 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
                 sumasPorDia[dia]
               );
             }
-            // console.log(ventasDelDia);
+            console.log(ventasDelDia);
           }
         });
         
