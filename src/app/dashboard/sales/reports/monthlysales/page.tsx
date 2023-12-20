@@ -50,7 +50,7 @@ function MonthlySalePage() {
                 }
             }
         `;
-        console.log(queryfecth)
+        // console.log(queryfecth)
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -60,7 +60,7 @@ function MonthlySalePage() {
         })
         .then(res=>res.json())
         .then(data=>{
-            console.log(data.data.entriesAndSalesByMonth)
+            // console.log(data.data.entriesAndSalesByMonth)
             setEntriesAndSalesByMonth(data.data.entriesAndSalesByMonth);
         })
         
