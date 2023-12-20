@@ -69,28 +69,28 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
             )
         }
 
-        // const sumTotalEntries = weekData.entries!.reduce(
-        //     (acumulador, venta: ISaleOfWeekDay) => {
-        //       return {
-        //         totalEntriesQuantity: acumulador.totalEntriesQuantity + venta.quantity!,
-        //         totalEntriesSubtotal: acumulador.totalEntriesSubtotal + venta.subtotal!,
-        //       };
-        //     },
-        //     { totalEntriesQuantity: 0, totalEntriesSubtotal: 0 }
-        // );
+        const sumTotalEntries = weekData.entries!.reduce(
+            (acumulador, venta: ISaleOfWeekDay) => {
+              return {
+                totalEntriesQuantity: acumulador.totalEntriesQuantity + venta.quantity!,
+                totalEntriesSubtotal: acumulador.totalEntriesSubtotal + venta.subtotal!,
+              };
+            },
+            { totalEntriesQuantity: 0, totalEntriesSubtotal: 0 }
+        );
 
-        const sumTotalEntries = { totalEntriesQuantity: 0, totalEntriesSubtotal: 0 } ;
-        const sumTotalSales = { totalSalesQuantity: 0, totalSalesSubtotal: 0 } ;
+        // const sumTotalEntries = { totalEntriesQuantity: 0, totalEntriesSubtotal: 0 } ;
+        // const sumTotalSales = { totalSalesQuantity: 0, totalSalesSubtotal: 0 } ;
 
-        // const sumTotalSales = weekData.sales!.reduce(
-        //     (acumulador, venta: ISaleOfWeekDay) => {
-        //       return {
-        //         totalSalesQuantity: acumulador.totalSalesQuantity + venta.quantity!,
-        //         totalSalesSubtotal: acumulador.totalSalesSubtotal + venta.subtotal!,
-        //       };
-        //     },
-        //     { totalSalesQuantity: 0, totalSalesSubtotal: 0 }
-        // );
+        const sumTotalSales = weekData.sales!.reduce(
+            (acumulador, venta: ISaleOfWeekDay) => {
+              return {
+                totalSalesQuantity: acumulador.totalSalesQuantity + venta.quantity!,
+                totalSalesSubtotal: acumulador.totalSalesSubtotal + venta.subtotal!,
+              };
+            },
+            { totalSalesQuantity: 0, totalSalesSubtotal: 0 }
+        );
         rows.push(
             <tr key={maxRows}>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base">TOTAL</td>
