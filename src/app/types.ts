@@ -322,7 +322,6 @@ export interface IDateAndWeekday {
 
 export interface IEntriesByWeek {
     productName?: string
-    daysBetweenDates?: Array<IDateAndWeekday>
     salesOf0?: Array<ISaleOfWeekDay>
     salesOf1?: Array<ISaleOfWeekDay>
     salesOf2?: Array<ISaleOfWeekDay>
@@ -330,6 +329,7 @@ export interface IEntriesByWeek {
     salesOf4?: Array<ISaleOfWeekDay>
     salesOf5?: Array<ISaleOfWeekDay>
     salesOf6?: Array<ISaleOfWeekDay>
+    // [key: string]: Array<ISaleOfWeekDay> | string | undefined;
 }
 
 export interface ISaleOfWeekDay{
