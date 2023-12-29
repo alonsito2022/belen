@@ -68,17 +68,20 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
 
     const handleCheckboxChange = ({target: { name, checked} }: ChangeEvent<HTMLInputElement>) => {
         let igv, total;
+        let documentType;
 
         if(checked){
             igv =  output.baseCost * 0.18;
             total =  output.baseCost + igv;
+            documentType = "03";
         }
         else{
             igv =  0;
             total =  output.baseCost;
+            documentType = "01";
         }
 
-        setOutput({...output, [name]: checked, igvCost: igv, totalSale: total});
+        setOutput({...output, [name]: checked, igvCost: igv, totalSale: total, documentType: documentType});
     }
     
     const handleSaveSupplier = async (e: FormEvent<HTMLFormElement>) => {

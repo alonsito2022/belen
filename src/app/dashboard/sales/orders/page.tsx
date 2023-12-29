@@ -256,8 +256,8 @@ function OrderPage() {
          .then(res=>res.json())
          .then(data=>{
              setOutputs(data.data.outputsByDate);
-             initFlowbite();
-         })
+             
+         }).then(()=>{initFlowbite();})
     }
     
     async function fetchProductTariffs(){
@@ -342,9 +342,10 @@ function OrderPage() {
     }
 
     useEffect(() => {
-        if(filterObj.week.length > 0){
+        if(filterObj.searchDate.length > 0){
             fetchSuppliers();
             fetchOutputs();
+            
             obtenerFechaInicioFin(filterObj.week);
             // console.log('obtenerFechaInicioFin', filterObj.week)
         }

@@ -47,6 +47,7 @@ function MonthlySalePage() {
                         subtotal
                     }
                     shippingCost
+                    description
                 }
             }
         `;
@@ -120,6 +121,8 @@ function MonthlySalePage() {
                 filterObj={filterObj} 
                 suppliers={suppliers}
                 entriesAndSalesByMonth={entriesAndSalesByMonth}
+                fetchEntriesAndSalesByMonth={fetchEntriesAndSalesByMonth}
+                setEntriesAndSalesByMonth={setEntriesAndSalesByMonth}
             />
         </>
     )

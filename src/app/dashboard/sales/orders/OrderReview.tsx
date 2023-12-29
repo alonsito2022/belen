@@ -5,7 +5,18 @@ import { IOperationDetail } from '@/app/types';
 
 
 function OrderReview({modalReview, setModalReview, outputFound }: any) {
-    
+
+    const [hostname, setHostname] = useState("");
+
+    useEffect(() => {
+        
+        if(hostname == ""){
+
+            setHostname(`${process.env.NEXT_PUBLIC_BASE_API}`)
+
+        }
+    }, [hostname]);
+
     useEffect(() => {
         
         if(modalReview == null){
@@ -167,9 +178,18 @@ function OrderReview({modalReview, setModalReview, outputFound }: any) {
 
                                 </tfoot>
                             </table>
+
+<a 
+                        className="btn-blue py-1 px-2.5" 
+                        href={`${hostname}/manufacturing/logistic/${outputFound.id}/`} 
+                        target="_blank" 
+                        title="Descargar PDF" download
+                    >DESCARGAR PDF</a>
                             
                         </form>
                     </div>
+                    
+
                 </div>
             </div>
         </>

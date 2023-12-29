@@ -87,3 +87,17 @@ export function traducirFechaAlEspanol(dateArray: DateObject[]): { formattedDate
         };
     });
 }
+
+export function getWeekDayInSpanish(value: string){
+    return value.toLocaleUpperCase().replace("Ã©", "É").replace("Ã¡", "Á").replace("MONDAY", "LUNES").replace("TUESDAY", "MARTES").replace("WEDNESDAY", "MIERCOLES").replace("THURSDAY", "JUEVES").replace("FRIDAY", "VIERNES").replace("SATURDAY", "SABADO").replace("SUNDAY", "DOMINGO");
+}
+
+export function getShortNameMonth(value: string){
+    return value.toLocaleUpperCase().replace("DEC", "DIC");
+}
+
+
+export function getDayNameByIndex(value: number){
+    const diasSemana = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+    return diasSemana[value];
+}

@@ -153,6 +153,7 @@ function EntryPage() {
         })
         .then(res=>res.json())
         .then(data=>{
+            // if(data.data.suppliersByWeekAndTypeOfDairyProduct.length)
             setSuppliers(data.data.suppliersByWeekAndTypeOfDairyProduct);
         })
         
@@ -191,7 +192,8 @@ function EntryPage() {
             })
             .then(res=>res.json())
             .then(data=>{
-                setEntries(data.data.entriesByWeek);
+                // if(data.data.entriesByWeek.length)
+                    setEntries(data.data.entriesByWeek);
             })
          
         

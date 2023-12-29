@@ -2,9 +2,9 @@
 import { ChangeEvent ,useState, FormEvent, useEffect } from "react";
 import { IEntriesByWeek, ISaleOfWeekDay, IPerson, IEntryAndSaleByWeek } from '@/app/types';
 import { toast } from "react-toastify";
-// import { formatFecha, getFirstMondayOfMonth, getLastDayOfMonth } from "@/libs/functions"
+import {getShortNameMonth, getWeekDayInSpanish} from '@/libs/functions'
 
-function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByMonth} :any) {
+function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByMonth, fetchEntriesAndSalesByMonth, setEntriesAndSalesByMonth} :any) {
     const getFirstMondayOfMonth = (date: Date): Date => {
         const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
         const dayOfWeek = firstDayOfMonth.getDay();
@@ -37,6 +37,86 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
 
     }, [filterObj.month]);
 
+    const [inputTimeout, setInputTimeout] = useState<any>(null)
+
+    useEffect(() => () => clearTimeout(inputTimeout), [inputTimeout])
+
+    async function saveAccountPayable(startDate:string, total: number, description: string){
+        let queryFetch: String = "";
+        queryFetch = `
+            mutation{
+                saveAccountPayable(
+                    userId: ${filterObj.userId}, 
+                    supplierId: ${filterObj.supplierId}, 
+                    year:${Number((filterObj.month.toString().split('-'))[0])}, 
+                    month:${Number((filterObj.month.toString().split('-'))[1])}, 
+                    day:${Number((startDate.split('-'))[0])},
+                    total:${Number(total)},
+                    description:"${description}"
+                ){
+                    message
+                }
+            }
+        `;
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({query: queryFetch})
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            toast(data.data.saveAccountPayable.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            fetchEntriesAndSalesByMonth()
+
+        }).catch(e=>console.log(e))
+    }
+
+    const handleInputChange = async ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>, weekItem: IEntryAndSaleByWeek) => {
+
+        if(filterObj.supplierId > 0){
+            
+            // if (inputTimeout) clearTimeout(inputTimeout)
+            // setInputTimeout(
+            //     setTimeout(() => {
+            //         saveAccountPayable(weekItem, Number(value))
+            //     }, 1500)
+            // )
+
+
+
+            let updatedList = entriesAndSalesByMonth.map((item:IEntryAndSaleByWeek) => {
+                if (item.startDate === weekItem.startDate){
+                    let description = "";
+                    let total = 0;
+                    if(name==="description"){
+                        description = value;
+                        total = Number(weekItem.shippingCost);
+                    }
+                    if(name==="shippingCost"){
+                        description = weekItem.description!;
+                        total = Number(value);
+                    }
+                    if (inputTimeout) clearTimeout(inputTimeout)
+                    setInputTimeout(
+                        setTimeout(() => {
+                            saveAccountPayable(weekItem.startDate!, total, description)
+                        }, 1000)
+                    )
+                    return {...item, [name]: value}; //gets everything that was already in item, and updates "done"
+                }
+                return item; // else return unmodified item 
+            });
+            setEntriesAndSalesByMonth(updatedList);
+
+
+        }
+        else{
+            toast("Eliga proveedor", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+        }
+        
+    
+    }
+
     let tbodies; 
     tbodies= entriesAndSalesByMonth.map((weekData: IEntryAndSaleByWeek, index: number) => {
         const maxRows = Math.max(weekData.entries!.length, weekData.sales!.length || 1);
@@ -46,18 +126,30 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
             const entry = weekData.entries![i];
             const sale = weekData.sales![i];
 
-            const weekIndex = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows +1}>DEL {weekData.startDate!.replace(".","")}<br/> AL {weekData.endDate!.replace(".","")}</td>) : null;
+            const weekIndex = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows +1}>DEL {getShortNameMonth(weekData.startDate!.replace(".",""))}<br/> AL {getShortNameMonth(weekData.endDate!.replace(".",""))}</td>) : null;
             const revenue = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows}></td>) : null;
-            const totalDiscount = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows}></td>) : null;
+            const totalDiscount = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows}>
+                {((weekData.entries!.length || weekData.sales!.length) && filterObj.supplierId>0)?(
+                <textarea 
+                    className="form-control text-base font-light" 
+                    rows={maxRows} 
+                    name="description"
+                    value={weekData.description}
+                    placeholder="Escriba aqui un comentario"
+                    onFocus={(e) => e.target.select()}
+                    onChange={e=>handleInputChange(e, weekData)} 
+                ></textarea>
+                ):null}
+            </td>) : null;
             const totalNetProfit = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows }></td>) : null;
             rows.push(
                 <tr key={i}>
                     {weekIndex}
-                    <td className="px-2 py-2 border border-gray-400">{entry?.formattedDate}</td>
+                    <td className="px-2 py-2 border border-gray-400">{entry?.formattedDate?.toString().replace("Dec", "Dic")}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{entry?.quantity}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.price}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.subtotal}`):null}</td>
-                    <td className="px-2 py-2 border border-gray-400">{sale?.formattedDate}</td>
+                    <td className="px-2 py-2 border border-gray-400">{sale?.formattedDate?.toString().replace("Dec", "Dic")}</td>
                     <td className="px-2 py-2 border border-gray-400">{sale?.saleCenterName}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{sale?.quantity}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${sale?.price}`):null}</td>
@@ -104,47 +196,15 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">
-                    <input 
+                {((weekData.entries!.length || weekData.sales!.length) && filterObj.supplierId>0)?( <input 
                         type="number"
                         className="form-control"
+                        name="shippingCost"
                         value={weekData.shippingCost}
                         onFocus={(e) => e.target.select()}
-                        onChange={async (e)=>{
-                            if(filterObj.supplierId > 0){
-                                let queryFetch: String = "";
-                                queryFetch = `
-                                    mutation{
-                                        saveAccountPayable(
-                                            userId: ${filterObj.userId}, 
-                                            supplierId: ${filterObj.supplierId}, 
-                                            year:${Number((filterObj.month.toString().split('-'))[0])} 
-                                            month:${Number((filterObj.month.toString().split('-'))[1])} 
-                                            day:${Number((weekData.startDate!.toString().split('-'))[0])}
-                                            total:${Number(e.target.value)}
-                                        ){
-                                            message
-                                        }
-                                    }
-                                `;
-                                await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
-                                    method: 'POST',
-                                    headers: { "Content-Type": "application/json"},
-                                    body: JSON.stringify({query: queryFetch})
-                                })
-                                .then(res=>res.json())
-                                .then(data=>{
-                                    toast(data.data.saveAccountPayable.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-
-                                }).catch(e=>console.log(e))
-
-                            }
-                            else{
-                                toast("Eliga proveedor", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
-
-                            }
-                            
-                        }}
-                    />
+                        onChange={e=>handleInputChange(e, weekData)} 
+                        
+                    />):null}
                 </td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">
                 {sumTotalSales?(`S/ ${(sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal) - Number(weekData.shippingCost)}`):null}
@@ -187,7 +247,7 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" colSpan={4}>INGRESO</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" colSpan={5}>VENTAS</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>GANANCIA</th>
-                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>DSCTO</th>
+                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>DSCTO ENVIO</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>GANANCIA<br/>NETA</th>
                         </tr>
                         <tr>

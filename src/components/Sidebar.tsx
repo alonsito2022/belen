@@ -15,18 +15,18 @@ function Sidebar() {
     const [fortnight, setFortnight] = useState<any>(0);
     const dispatch = useAppDispatch();
     async function getFortnightFromUser(){
-
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify({
-                query: `
+        let query=`
                     {
                         userById(pk:${u?.id}) {
                             fortnightValue
                         }
                     }
-                `
+                `;
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: query
             })
         })
         .then(res=>res.json())
@@ -513,7 +513,7 @@ function Sidebar() {
                                             <path d="M11 11H9v1h2v-1Z"/>
                                         </svg>    
 
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Balance semanal</span>
+                                        <span className="flex-1 ml-3 whitespace-nowrap">Reporte semanal</span>
                                         </Link>
                                     </li>
 
@@ -530,6 +530,38 @@ function Sidebar() {
                                         </svg>    
 
                                         <span className="flex-1 ml-3 whitespace-nowrap">Ventas mensuales</span>
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link 
+                                            onClick={() => seleccionarOpcion(53)}
+                                            style={{backgroundColor: 53 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/sales/reports/expenses" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                            <path d="M7 11H5v1h2v-1Zm4 3H9v1h2v-1Zm-4 0H5v1h2v-1ZM5 5V.13a2.98 2.98 0 0 0-1.293.749L.88 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+                                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM13 16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6Zm-1-8H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Zm0-3H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Z"/>
+                                            <path d="M11 11H9v1h2v-1Z"/>
+                                        </svg>    
+
+                                        <span className="flex-1 ml-3 whitespace-nowrap">Egresos del dia</span>
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link 
+                                            onClick={() => seleccionarOpcion(54)}
+                                            style={{backgroundColor: 54 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/sales/reports/dailyeffectivebalances" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                            <path d="M7 11H5v1h2v-1Zm4 3H9v1h2v-1Zm-4 0H5v1h2v-1ZM5 5V.13a2.98 2.98 0 0 0-1.293.749L.88 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+                                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM13 16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6Zm-1-8H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Zm0-3H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Z"/>
+                                            <path d="M11 11H9v1h2v-1Z"/>
+                                        </svg>    
+
+                                        <span className="flex-1 ml-3 whitespace-nowrap">Balance efectivo diario</span>
                                         </Link>
                                     </li>
 

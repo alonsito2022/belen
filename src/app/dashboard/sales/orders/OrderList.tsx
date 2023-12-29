@@ -2,6 +2,7 @@
 import { ChangeEvent ,useState, useEffect } from "react";
 import { IOperation, ICheeseSupplier, ISaleCenter } from '@/app/types';
 import { toast } from "react-toastify";
+import { initFlowbite} from "flowbite";
 
 function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal, setFilterObj, filterObj, salesCenter, getOutputById, annulSaleById, modalReview}: any) {
         
@@ -45,7 +46,7 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                     message
                 }
             }
-        `;            
+        `;         
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -55,6 +56,7 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
         .then(data=>{
             toast(data.data.saveSalePayment.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
             fetchOutputs();
+            initFlowbite();
 
         }).catch(e=>console.log(e));
     }
@@ -197,40 +199,27 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                             </td>
                             <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.subtraction}</td>
                             <td className="px-2 py-2 border border-gray-600">
-                                <button 
-                                    id={"dropdownDefaultButton" + item.id}
-                                    data-dropdown-toggle={"dropdown" + item.id} 
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    type="button"
-                                >Acciones
-                                    <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
-
-                                <div id={"dropdown" + item.id} className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby={"dropdownDefaultButton" + item.id}>
-                                        <li>
-                                            <button 
-                                                type="button" 
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                onClick={()=>{
-                                                    modalReview.show();
-                                                    getOutputById(item.id);
-                                                }}
-                                            >Ver detalles</button>
-                                        </li>
-                                        <li>
+                                
+                                <div className="flex gap-1">
+                                    
+                                        <button 
+                                            type="button" 
+                                            className="btn-blue px-2 pt-1"
+                                            onClick={()=>{
+                                                modalReview.show();
+                                                getOutputById(item.id);
+                                            }}
+                                        >Ver Detalles</button>
+                                      
                                         <button 
                                             type="button"
-                                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            className="btn-red px-2 pt-1"
                                             onClick={()=>{
                                                 if (window.confirm("Realmente desea anular la venta?"))
                                                     annulSaleById(item.id);
                                             }}
                                         >Anular</button>
-                                        </li>
-                                    </ul>
+                                        
                                 </div>
                             </td>
                         </tr>

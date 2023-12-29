@@ -313,11 +313,23 @@ export interface IEntryAndSaleByWeek {
     entries?: Array<ISaleOfWeekDay>
     sales?: Array<ISaleOfWeekDay>
     shippingCost?: number
+    description?: string
 }
 
 export interface IDateAndWeekday {
     formattedDate?: string
     formattedWeekday?: string
+}
+
+export interface IBalanceByWeek {
+    productTariffId?: number
+    productName?: string
+    totalEntries?: number
+    totalRemnants?: number
+    totalLosses?: number
+    totalReturns?: number
+    totalSales?: number
+    totalGeneral?: number
 }
 
 export interface IEntriesByWeek {
@@ -329,7 +341,32 @@ export interface IEntriesByWeek {
     salesOf4?: Array<ISaleOfWeekDay>
     salesOf5?: Array<ISaleOfWeekDay>
     salesOf6?: Array<ISaleOfWeekDay>
-    // [key: string]: Array<ISaleOfWeekDay> | string | undefined;
+}
+
+export interface IExpensesByWeek {
+    expensesOf0?: Array<IExpenseOfWeekDay>
+    expensesOf1?: Array<IExpenseOfWeekDay>
+    expensesOf2?: Array<IExpenseOfWeekDay>
+    expensesOf3?: Array<IExpenseOfWeekDay>
+    expensesOf4?: Array<IExpenseOfWeekDay>
+    expensesOf5?: Array<IExpenseOfWeekDay>
+    expensesOf6?: Array<IExpenseOfWeekDay>
+}
+
+export interface IDayInfo{
+    incomesInCash?: number
+    incomesInDeposit?: number
+    expenses?: number
+    total?: number
+}
+export interface IExpenseOfWeekDay{
+    id?: number
+    userId?: number
+    userName?: string
+    description?: string
+    total?: number
+    transactionDate?: string
+    transactionType?: string
 }
 
 export interface ISaleOfWeekDay{

@@ -2,7 +2,7 @@
 import { ChangeEvent ,useState, FormEvent, useEffect } from "react";
 import { IEntriesByWeek, ISaleOfWeekDay, ICheeseSupplier, IPerson, IDateAndWeekday } from '@/app/types';
 import { toast } from "react-toastify";
-import {obtenerSemanaActual, traducirFechaAlEspanol} from '@/libs/functions'
+import {getShortNameMonth, getWeekDayInSpanish} from '@/libs/functions'
 
 const initialStateSalesSummary = {
     salesSummaryQuantityOf0: 0,
@@ -49,8 +49,10 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
 
     let theads;
     theads= datesAndWeekdays.map((item: IDateAndWeekday, index: number) => {
+        let objWeekday = getWeekDayInSpanish(item.formattedWeekday!);
+        let objDate = getShortNameMonth(item.formattedDate!);
         return (
-            <th key={index} className="px-6 py-4 border border-gray-400 text-center font-bold text-lg" colSpan={5}>{item.formattedWeekday!.replace("Ã©", "É").replace("Ã¡", "Á")}<br/>{item.formattedDate!.toLocaleLowerCase()}</th>
+            <th key={index} className="px-6 py-4 border border-gray-400 text-center font-bold text-lg" colSpan={5}>{objWeekday}<br/>{objDate}</th>
         );
     });
     
@@ -67,62 +69,70 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
             const salesOf4 = weekData.salesOf4![i];
             const salesOf5 = weekData.salesOf5![i];
             const salesOf6 = weekData.salesOf6![i];
-            const allSales = [...weekData.salesOf0!,...weekData.salesOf1!,...weekData.salesOf2!,...weekData.salesOf3!,...weekData.salesOf4!,...weekData.salesOf5!,...weekData.salesOf6!]
-            const sumTotal = allSales.reduce(
-                (acumulador, venta: ISaleOfWeekDay) => {
-                  return {
-                    totalQuantity: acumulador.totalQuantity + venta.quantity!,
-                    totalSubtotal: acumulador.totalSubtotal + venta.subtotal!,
-                  };
-                },
-                { totalQuantity: 0, totalSubtotal: 0 }
-            );
-            const productName = i === 0 ? (<td className="px-2 py-2 border border-gray-400 font-bold text-lg" rowSpan={maxRows}>{weekData.productName!}</td>) : null;
-            const totalQuantity = i === 0 ? (<td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base whitespace-nowrap text-center" rowSpan={maxRows}>{sumTotal.totalQuantity}</td>) : null;
-            const totalSubtotalWithDiscount = i === 0 ? (<td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base whitespace-nowrap text-right" rowSpan={maxRows}>S/ {sumTotal.totalSubtotal}</td>) : null;
 
-            
+            const sumTotalQuantity = salesOf0.quantity! + salesOf1.quantity! + salesOf2.quantity! + salesOf3.quantity! + salesOf4.quantity! + salesOf5.quantity! + salesOf6.quantity!;
+            const sumTotalPrice = (salesOf0.price! + salesOf1.price! + salesOf2.price! + salesOf3.price! + salesOf4.price! + salesOf5.price! + salesOf6.price!)/7;
+            const sumSubtotalWithDiscount = salesOf0.subtotalWithDiscount! + salesOf1.subtotalWithDiscount! + salesOf2.subtotalWithDiscount! + salesOf3.subtotalWithDiscount! + salesOf4.subtotalWithDiscount! + salesOf5.subtotalWithDiscount! + salesOf6.subtotalWithDiscount!;
+            const productName = i === 0 ? (<td className="px-2 py-2 border border-gray-400 font-bold text-lg" rowSpan={maxRows}>{weekData.productName!}</td>) : null;
+
 
             rows.push(
                 <tr key={i}>
                     {productName}
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf0?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf0?(`S/ ${salesOf0?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf0?(`S/ ${salesOf0?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf0?(`S/ ${salesOf0?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf0?(`S/ ${salesOf0?.subtotalWithDiscount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf1?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf1?(`S/ ${salesOf1?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf1?(`S/ ${salesOf1?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf1?(`S/ ${salesOf1?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf1?(`S/ ${salesOf1?.subtotalWithDiscount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf2?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf2?(`S/ ${salesOf2?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf2?(`S/ ${salesOf2?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf2?(`S/ ${salesOf2?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf2?(`S/ ${salesOf2?.subtotalWithDiscount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf3?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf3?(`S/ ${salesOf3?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf3?(`S/ ${salesOf3?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf3?(`S/ ${salesOf3?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf3?(`S/ ${salesOf3?.subtotalWithDiscount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf4?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf4?(`S/ ${salesOf4?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf4?(`S/ ${salesOf4?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf4?(`S/ ${salesOf4?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf4?(`S/ ${salesOf4?.subtotalWithDiscount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf5?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf5?(`S/ ${salesOf5?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf5?(`S/ ${salesOf5?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf5?(`S/ ${salesOf5?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf5?(`S/ ${salesOf5?.subtotalWithDiscount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{salesOf6?.quantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf6?(`S/ ${salesOf6?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right">{salesOf6?(`S/ ${salesOf6?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold text-red-500">{salesOf6?(`S/ ${salesOf6?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">{salesOf6?(`S/ ${salesOf6?.subtotalWithDiscount}`):""}</td>
-                    {totalQuantity}
-                    {totalSubtotalWithDiscount}
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`${salesOf0?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.subtotalWithDiscount}`):""}</td>
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`${salesOf1?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.subtotalWithDiscount}`):""}</td>
+
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`${salesOf2?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.subtotalWithDiscount}`):""}</td>
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`${salesOf3?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.subtotalWithDiscount}`):""}</td>
+
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`${salesOf4?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.subtotalWithDiscount}`):""}</td>
+
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`${salesOf5?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.subtotalWithDiscount}`):""}</td>
+
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`${salesOf6?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.subtotalWithDiscount}`):""}</td>
+                    
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{sumTotalQuantity}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">S/ {sumTotalPrice}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">S/ {sumSubtotalWithDiscount}</td>
+
+
+
+                    {/* {totalQuantity} */}
+                    {/* {totalSubtotalWithDiscount} */}
 
                 </tr>
             )
@@ -130,94 +140,10 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
         return rows;
     });
 
-    // let tbodies: JSX.Element[];
-    // tbodies = outputsByWeek.map((weekData: IEntriesByWeek, index: number) => {
-    //     const rows: JSX.Element[] = [];
-    //     const maxRows = Math.max(
-    //         ...Array.from({ length: 7 }, (_, i) => (weekData[`salesOf${i}`] || []).length)
-    //     );
-    //     let totalQuantity: JSX.Element | null = null;
-    //     let totalSubtotalWithDiscount: JSX.Element | null = null;
-
-    //     for (let i = 0; i < maxRows; i++) {
-    //         const allSales: ISaleOfWeekDay[] = [];
-        
-    //         for (let dia = 0; dia <= 6; dia++) {
-    //             const salesOfDay = weekData[`salesOf${dia}`] || [];
-    //             const sale = salesOfDay[i];
-            
-    //             if (typeof sale !== "string" && sale) {
-    //                 allSales.push(sale);
-    //             }
-            
-    //             const getColumn = (key: keyof ISaleOfWeekDay, format?: (value: any) => string) => {
-    //                 const value = sale && typeof sale !== "string" ? sale[key] : undefined;
-    //                 return (
-    //                 <td key={key} className={`px-2 py-2 border border-gray-400 whitespace-nowrap ${format ? format(value) : ""}`}>
-    //                     {format ? format(value) : ""}
-    //                 </td>
-    //                 );
-    //             };
-            
-    //             const productName = i === 0 && (
-    //                 <td
-    //                 key="productName"
-    //                 className="px-2 py-2 border border-gray-400 font-bold text-lg"
-    //                 rowSpan={maxRows}
-    //                 >
-    //                 {weekData.productName!}
-    //                 </td>
-    //             );
-            
-            
-    //             rows.push(
-    //                 <tr key={i}>
-    //                 {productName}
-    //                 {getColumn("quantity")}
-    //                 {getColumn("price", (value) => `S/ ${value}`)}
-    //                 {getColumn("subtotal", (value) => `S/ ${value}`)}
-    //                 {getColumn("discount", (value) => `S/ ${value}`)}
-    //                 {getColumn("subtotalWithDiscount", (value) => `S/ ${value}`)}
-    //                 </tr>
-    //             );
-    //         }
-
-    //         totalQuantity = (
-    //             <td
-    //             key="totalQuantity"
-    //             className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base whitespace-nowrap text-center"
-    //             rowSpan={maxRows}
-    //             >
-    //             {allSales.reduce((acc, sale) => acc + (sale.quantity || 0), 0)}
-    //             </td>
-    //         );
-        
-    //         totalSubtotalWithDiscount = (
-    //             <td
-    //             key="totalSubtotalWithDiscount"
-    //             className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base whitespace-nowrap text-right"
-    //             rowSpan={maxRows}
-    //             >
-    //             S/ {allSales.reduce((acc, sale) => acc + (sale.subtotalWithDiscount || 0), 0)}
-    //             </td>
-    //         );
-
-    //         rows.push(
-    //             <tr key={`totalRow-${i}`}>
-    //                 {totalQuantity}
-    //                 {totalSubtotalWithDiscount}
-    //             </tr>
-    //         );
-    //     }
-        
-    //     return rows;
-    // });
 
     useEffect(() => {
         const sumasPorDia : Array<ISaleOfWeekDay> = Array.from({ length: 7 }, () => ({ quantity: 0, subtotal: 0, discount: 0, subtotalWithDiscount: 0 } ));
-        console.log("sumasPorDia",  sumasPorDia)
-        console.log("outputsByWeek",  outputsByWeek)
-    
+
         outputsByWeek.forEach((entriesByWeekAndProduct: IEntriesByWeek) => {
 
             const ventasDelDia0 = entriesByWeekAndProduct.salesOf0 || [];
@@ -311,13 +237,6 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
               );
             }
 
-            console.log(ventasDelDia0);
-            console.log(ventasDelDia1);
-            console.log(ventasDelDia2);
-            console.log(ventasDelDia3);
-            console.log(ventasDelDia4);
-            console.log(ventasDelDia5);
-            console.log(ventasDelDia6);
           
         });
         
@@ -420,6 +339,7 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
                             
                             {theads}
                             <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg" rowSpan={2}>TOTAL<br/>CANT</th>
+                            <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg" rowSpan={2}>PRECIO<br/>VENTA</th>
                             <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg" rowSpan={2}>TOTAL<br/>VENTA</th>
                         </tr>
                         <tr>
@@ -510,6 +430,7 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf6}</td>
 
                             <td className="px-2 py-2 border border-gray-400 bg-gray-200 font-bold text-base text-center">{salesSummary.sumQuantity}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 font-bold text-base text-center"></td>
                             <td className="px-2 py-2 border border-gray-400 bg-gray-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.sumSubtotalWithDiscount}</td>
                         </tr>
                     </tfoot>
