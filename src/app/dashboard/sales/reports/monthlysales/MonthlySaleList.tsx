@@ -145,11 +145,11 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
             rows.push(
                 <tr key={i}>
                     {weekIndex}
-                    <td className="px-2 py-2 border border-gray-400">{entry?.formattedDate?.toString().replace("Dec", "Dic")}</td>
+                    <td className="px-2 py-2 border border-gray-400">{entry?.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{entry?.quantity}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.price}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.subtotal}`):null}</td>
-                    <td className="px-2 py-2 border border-gray-400">{sale?.formattedDate?.toString().replace("Dec", "Dic")}</td>
+                    <td className="px-2 py-2 border border-gray-400">{sale?.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>
                     <td className="px-2 py-2 border border-gray-400">{sale?.saleCenterName}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{sale?.quantity}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${sale?.price}`):null}</td>

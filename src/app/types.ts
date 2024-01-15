@@ -1,4 +1,29 @@
 
+export interface ICategory {
+    id: number
+    name?: string
+    subsidiaryId: number
+    isEnabled: boolean
+}
+export interface ISubcategory {
+    id: number
+    subsidiaryId: number
+    categoryId: number
+    name?: string
+    category?: ICategory
+    isEnabled: boolean
+}
+
+export interface IElement {
+    id: number
+    subsidiaryId: number
+    subcategoryId: number
+    categoryId: number
+    name?: string
+    subcategory?: ISubcategory
+    isEnabled: boolean
+}
+
 export interface ICheeseSupplier {
     id: number
     name?: string
@@ -16,10 +41,20 @@ export interface IChoice {
     value?: string
 }
 
+export interface ICashFlow {
+    id: number
+    userId?: number
+    operationId?: number
+    total?: number
+    transactionDate?: string
+    transactionType?: string
+    description?: string
+}
 export interface IEntry {
     id: number
     saleCenterId?: number
     operationDate?: string
+    operationType?: string
     operationStatus?: string
     clientId?: number
     previousBalance?: number
@@ -48,12 +83,17 @@ export interface IEntry {
     deposit?: number
     subtraction?: number
 
+    payedInCash?: number
+    payedInDeposit?: number
+
     hasIgv?: boolean
+    isFictitious?: boolean
     observation?: string
     documentType?: string
     documentNumber?: string
 
     operationdetailSet?: Array<IOperationDetail>
+    cashflowSet?: Array<ICashFlow>
     client?: IPerson
 
 }
@@ -74,7 +114,7 @@ export interface IPerson {
     salesCenter?: string
     salesCenterReadable?: string
     
-    isEnabled: boolean,
+    isEnabled: boolean
     countSupplierTariffs?: number
     suppliertariffSet?: Array<ISupplierTariff>
     operationDetailSet?: Array<IOperationDetail>
@@ -261,6 +301,12 @@ export interface IAttendanceOfMonth {
     countPE?: number
     countNT?: number
     countNA?: number
+    totalDaysWorked?: number
+    totalDaysNoWorked?: number
+    totalReplacementDays?: number
+    remunerationExtra?: number
+    remunerationDiscounted?: number
+    totalRemuneration?: number
 }
 
 export interface IDayOfMonth {
@@ -275,7 +321,9 @@ export interface IAttendanceDetail {
     registerDate?: string
     observation?: string
     substituteEmployeeId?: number
+    replacementEmployeeId?: number
     substituteEmployee?: IUser
+    replacementEmployee?: IUser
 
 }
 
@@ -289,6 +337,7 @@ export interface IOperation {
     operationType?: string
     documentTypeReadable?: string
     operationTypeDisplay?: string
+    operationTypeReadable?: string
     operationAction?: string
     observation?: string
     documentNumber?: string
@@ -300,11 +349,17 @@ export interface IOperation {
     igvCost?: number
     totalSale?: number
 
+    payedInCash?: number
+    payedInDeposit?: number
+
+    isFictitious?: boolean
+
     previousBalance?: number
     totalNet?: number
     cash?: number
     deposit?: number
     subtraction?: number
+    cashflowSet?: Array<ICashFlow>
 }
 
 export interface IEntryAndSaleByWeek {

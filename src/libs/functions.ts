@@ -93,7 +93,7 @@ export function getWeekDayInSpanish(value: string){
 }
 
 export function getShortNameMonth(value: string){
-    return value.toLocaleUpperCase().replace("DEC", "DIC");
+    return value.toLocaleUpperCase().replace("DEC", "DIC").replace("JAN", "ENE").replace("APR", "ABR");
 }
 
 

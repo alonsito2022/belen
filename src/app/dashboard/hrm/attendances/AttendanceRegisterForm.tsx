@@ -1,15 +1,15 @@
 import { ChangeEvent ,useState, useEffect, useRef, MouseEvent, FormEvent } from "react";
 import { Modal, ModalOptions } from 'flowbite'
 import { toast } from "react-toastify";
-import { IAttendanceIncidence, IUser } from '@/app/types';
+import { IAttendanceOfMonth, IUser } from '@/app/types';
 
 
 
-function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfMonth, setAttendanceIncidence, attendanceIncidence, initialStateIncidence, users}:any) {
+function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfMonth, setAttendanceIncidence, attendanceIncidence, initialStateIncidence, attendancesOfMonth}:any) {
     
     
     const [statusChoices, setStatusChoices] = useState([
-        { id:'T', name:'TRABAJO'}, { id:'NT', name:'NO TRABAJO'}, { id:'PE', name:'PERMISO'}, { id:'PS', name:'PERMISO POR SALUD'}, { id:'NA', name:'NO APLICA'}]);
+        { id:'T', name:'TRABAJO'}, { id:'NT', name:'NO TRABAJO'}, { id:'NA', name:'NO APLICA'}]);
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setAttendanceIncidence({...attendanceIncidence, [name]: value});
     }
@@ -117,29 +117,51 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="statusChoice" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
-                                    <select id="statusChoice" 
+                                    <select id="statusChoice" disabled={attendanceIncidence.replacementEmployeeId>0?true:false}
                                     name="statusChoice" value={attendanceIncidence.statusChoice} onChange={handleInputChange}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         <option value={"T"}>TRABAJO</option>
                                         <option value={"NT"}>NO TRABAJO</option>
-                                        <option value={"PE"}>PERMISO</option>
-                                        <option value={"PS"}>PERMISO POR SALUD</option>
                                         <option value={"TS"}>TRABAJO DE SUPLENCIA</option>
                                         <option value={"NA"}>NO APLICA</option>
                                     </select>
                                 </div>
-                                {attendanceIncidence.statusChoice=="TS"?
+
+                                {attendanceIncidence.statusChoice=="NT"?
+
                                     <div className="sm:col-span-4">
                                         <label htmlFor="substituteEmployeeId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Suplente </label>
-                                        <select id="substituteEmployeeId" name="substituteEmployeeId" value={attendanceIncidence.substituteEmployeeId} onChange={handleInputChange}
+                                        <select id="substituteEmployeeId" name="substituteEmployeeId" 
+                                        
+                                        
+                                        value={attendanceIncidence.substituteEmployeeId} onChange={handleInputChange}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             <option value={0}>Elegir asociado</option>
-                                            {users.filter((u: IUser) => u.id !== attendanceIncidence.employeeId).map((u: IUser)=>(
-                                                <option key={u.id} value={u.id}>{u.lastName}, {u.firstName}</option>
+                                            {attendancesOfMonth?.filter((u: IAttendanceOfMonth) => (u.employee?.id !== attendanceIncidence.employeeId)).map((u: IAttendanceOfMonth)=>(
+                                                <option key={u.employee?.id} value={u.employee?.id}>{u.employee?.lastName}, {u.employee?.firstName} {u.employee?.remuneration}</option>
                                             ))}
                                         </select>
                                     </div>
+
                                 :""}
+
+                                {attendanceIncidence.replacementEmployeeId>0?(
+                                <div className="sm:col-span-4">
+                                    <label htmlFor="replacementEmployeeId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Reemplazo a</label>
+                                    <select id="replacementEmployeeId" name="replacementEmployeeId" 
+                                    disabled={attendanceIncidence.replacementEmployeeId>0?true:false}
+                                    value={attendanceIncidence.replacementEmployeeId} onChange={handleInputChange}
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value={0}>Elegir asociado</option>
+                                            {attendancesOfMonth?.map((u: IAttendanceOfMonth)=>(
+                                                <option key={u.employee?.id} value={u.employee?.id}>{u.employee?.lastName}, {u.employee?.firstName} {u.employee?.remuneration}</option>
+                                            ))}
+                                        </select>
+                                </div>
+                                ):""}
+
+
+
                                 
                                 <div className="sm:col-span-4">
 
@@ -148,7 +170,7 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
 
                                 </div>
 
-                                
+                                {attendanceIncidence.replacementEmployeeId==0?(
 
                                 <div className="sm:col-span-4 text-right">
                                     <hr className="mb-4"/>
@@ -156,7 +178,7 @@ function AttendanceRegisterForm({filterObj, modal, setModal, fetchAttendancesOfM
                                         + GUARDAR
                                     </button>
                                 </div>
-                                
+                                ):""}
                             </div>
 
                         </form>

@@ -1,7 +1,7 @@
 "use client";
 import { Modal, ModalOptions } from 'flowbite'
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { ICheeseSupplier, IPerson, IProductTariff, ISupplierTariff, IUser } from '@/app/types';
+import { ICategory, IElement, IPerson, IProductTariff, ISubcategory, ISupplierTariff, IUser } from '@/app/types';
 import { toast } from "react-toastify";
 
 function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek, filterObj}: any) {
@@ -26,7 +26,6 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                     }
                 }
             `;
-            console.log(queryFetch)
 
             await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
                 method: 'POST',
@@ -51,8 +50,11 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
     };
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
+
         setExpense({...expense, [name]: value});
+        
     }
+
 
     useEffect(() => {
         
@@ -110,9 +112,11 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                                         name="description" 
                                         rows={4} 
                                         onChange={handleInputChange} 
-                                        className="form-control" 
+                                        value={expense.name}
+                                        className="form-control uppercase" 
                                         required 
-                                        placeholder="Escribe tus pensamientos aquí..."
+                                        maxLength={100}
+                                        placeholder="Escribe una descripcion aquí..."
                                     ></textarea>
 
                                 </div>

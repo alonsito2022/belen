@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ChangeEvent ,useState, FormEvent, useEffect } from "react";
-import { IExpensesByWeek, IDateAndWeekday, IExpenseOfWeekDay } from '@/app/types';
+import { IExpensesByWeek, IDateAndWeekday, IExpenseOfWeekDay, ISubcategory, IElement } from '@/app/types';
 import {getShortNameMonth, getWeekDayInSpanish} from '@/libs/functions'
 
 const initialStateExpensesSummary = {
@@ -15,9 +15,11 @@ const initialStateExpensesSummary = {
     summaryOfDay6: 0
 }
 
-function ExpenseList({setFilterObj, filterObj, obtenerFechaInicioFin, fechaInicio, fechaFin, datesAndWeekdays, expensesByWeek, modal, setExpense, expense} : any) {
+function ExpenseList({
+    setFilterObj, filterObj, obtenerFechaInicioFin, fechaInicio, fechaFin, datesAndWeekdays, expensesByWeek, modal, setExpense, expense
 
-    const [expensesSummary, setExpensesSummary] = useState(initialStateExpensesSummary);
+} : any) {
+
 
     const handleInputChangeWeek = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         if(name=="week") obtenerFechaInicioFin (value);
@@ -154,7 +156,7 @@ function ExpenseList({setFilterObj, filterObj, obtenerFechaInicioFin, fechaInici
                             setExpense({...expense, 
                                 id: 0,
                                 description: "",
-                                total: 0,
+                                total: 0
                             });
                         
                             
@@ -226,6 +228,8 @@ function ExpenseList({setFilterObj, filterObj, obtenerFechaInicioFin, fechaInici
                         </tr>
                     </tfoot>
                 </table>
+
+                
             </div>
         </>
     )

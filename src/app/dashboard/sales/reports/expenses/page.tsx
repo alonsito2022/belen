@@ -1,6 +1,6 @@
 "use client";
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { IExpenseOfWeekDay, ICheeseSupplier, IProductTariff, IExpensesByWeek, IUser, IDateAndWeekday } from '@/app/types';
+import { IExpenseOfWeekDay, ICategory, ISubsidiary, IExpensesByWeek, IUser, IDateAndWeekday, ISubcategory, IElement } from '@/app/types';
 import { useSession} from 'next-auth/react';
 import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
@@ -8,6 +8,7 @@ import { Modal, ModalOptions } from 'flowbite'
 import ExpenseList from "./ExpenseList"
 import {obtenerSemanaActual, getDates} from '@/libs/functions'
 import ExpenseForm from "./ExpenseForm"
+
 const initialStateFilterObj = {
     cashId: 0,
     week: ""
@@ -18,10 +19,11 @@ const initialStateExpense = {
     userId: 0,
     description: "",
     total: 0,
+    categoryId: 0,
+    subcategoryId: 0,
     transactionDate: "",
     transactionType: "S",
 }
-
 
 function ExpensePage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
@@ -29,10 +31,17 @@ function ExpensePage() {
     const [fechaFin, setFechaFin] = useState<Date | null>(null);
     const [datesAndWeekdays, setDatesAndWeekdays] = useState< IDateAndWeekday[]>([]);
     const [expensesByWeek, setExpensesByWeek] = useState< IExpensesByWeek[]>([]);
+
     const [modal, setModal] = useState< Modal | any>(null);
+
     const [expense, setExpense] = useState<any | IExpenseOfWeekDay>(initialStateExpense);
+
     const { data: session } = useSession();
     const u = session?.user as IUser;
+
+ 
+
+
 
     async function fetchDaysBetweenDates(){
         let queryfecth = `
@@ -140,7 +149,6 @@ function ExpensePage() {
 
     useEffect(() => {
         if(filterObj.week.length > 0){
-            
             fetchExpensesByWeek();
             obtenerFechaInicioFin(filterObj.week);
         }
@@ -167,7 +175,10 @@ function ExpensePage() {
                 modal={modal}
                 setExpense={setExpense}
                 expense={expense}
+
+                
             />
+
             <ExpenseForm 
                 modal={modal}
                 setModal={setModal}
@@ -175,7 +186,10 @@ function ExpensePage() {
                 expense={expense}
                 fetchExpensesByWeek={fetchExpensesByWeek}
                 filterObj={filterObj}
+
             />
+
+
         </>
     )
 }

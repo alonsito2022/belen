@@ -91,58 +91,78 @@ function EntryForm({modal, setModal, setEntry, entry, fetchEntries, filterObj, s
     }
 
     const handleSaveSupplier = async (e: FormEvent<HTMLFormElement>) => {
-
         e.preventDefault();
-        let queryFetch: String = "";
+        if(Number(entry.productTariffId) > 0){
+            if(Number(entry.supplierId) > 0){
+                if(Number(entry.quantityMold) > 0){
+                    if(Number(entry.price) > 0){
 
-            queryFetch = `
-                mutation{
-                    createEntry(
-                        
-                        supplierId: ${entry.supplierId}, 
-                        productTariffId: ${entry.productTariffId}, 
-                        quantityMold: ${entry.quantityMold}, 
-                        price: ${entry.price}, 
-                        weekValue:${Number(filterObj.week.toString().replace("-W", ""))},
-                        warehouseId:${filterObj.warehouseId}, 
-                        employeeId: ${entry.employeeId}, 
-                        observation: "${entry.observation}"
-                        operationDate: "${entry.operationDate}"
-                    ){
-                        message
+                        let queryFetch: String = "";
+
+                        queryFetch = `
+                            mutation{
+                                createEntry(
+                                    
+                                    supplierId: ${entry.supplierId}, 
+                                    productTariffId: ${entry.productTariffId}, 
+                                    quantityMold: ${entry.quantityMold}, 
+                                    price: ${entry.price}, 
+                                    weekValue:${Number(filterObj.week.toString().replace("-W", ""))},
+                                    warehouseId:${filterObj.warehouseId}, 
+                                    employeeId: ${entry.employeeId}, 
+                                    observation: "${entry.observation}"
+                                    operationDate: "${entry.operationDate}"
+                                ){
+                                    message
+                                }
+                            }
+                        `;
+
+                        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+                            method: 'POST',
+                            headers: { "Content-Type": "application/json"},
+                            body: JSON.stringify({query: queryFetch})
+                        })
+                        .then(res=>res.json())
+                        .then(data=>{
+                            toast(data.data.createEntry.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                            // setEntry(initialState);
+                            setEntry({
+                                ...entry, 
+                                id: 0,
+                                names: "",
+                                phone: "",
+                                email: "",
+                                address: "",
+                                district: "040601",
+                                documentType: "01",
+                                documentNumber: "",
+                                isEnabled: true,
+                                
+                                observation: "",
+                                employeeId: 0,
+                            });
+                            modal.hide();
+                            fetchEntries();
+
+                        }).catch(e=>console.log(e))
+                
                     }
+                    else
+                        toast("VERIFICA PRECIO", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+                
+                
                 }
-            `;
+                else
+                    toast("VERIFICA CANTIDAD", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+            
+            }
+            else
+                toast("ELEGIR PROVEEDOR", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
+        }
+        else
+            toast("ELEGIR PRODUCTO", { hideProgressBar: true, autoClose: 2000, type: 'warning' })
 
-            await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
-                method: 'POST',
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify({query: queryFetch})
-            })
-            .then(res=>res.json())
-            .then(data=>{
-                toast(data.data.createEntry.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                // setEntry(initialState);
-                setEntry({
-                    ...entry, 
-                    id: 0,
-                    names: "",
-                    phone: "",
-                    email: "",
-                    address: "",
-                    district: "040601",
-                    documentType: "01",
-                    documentNumber: "",
-                    isEnabled: true,
-                    
-                    observation: "",
-                    employeeId: 0,
-                });
-                modal.hide();
-                fetchEntries();
-
-            }).catch(e=>console.log(e))
-        
 
     };
 

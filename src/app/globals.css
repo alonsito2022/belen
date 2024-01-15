@@ -107,13 +107,13 @@ input[type="number"] {
 .modal-footer {
   @apply hidden
 }
-.landing{
+.landing, .landing2{
   position: relative;
 width: 100%;
 height: 100vh;
 overflow: hidden;
 }
-.landing .split{
+.landing .split, .landing2 .split{
   position: absolute;
   height: 100vh;
   top: 0;
@@ -135,6 +135,18 @@ overflow: hidden;
   /* background-color: black; */
   background-image: url(../../public/saleshd_withoutwatermark_rm_bg_resize.png);
 }
+.landing2 .split.left{
+  width: 50%;
+  left: 0;
+  /* background-color: blueviolet; */
+  background-image: url(../../public/hrm_rm_bg.png);
+}
+.landing2 .split.right{
+  width: 50%;
+  right: 0;
+  /* background-color: black; */
+  background-image: url(../../public/admin_transformed_rm_bg.png);
+}
 .landing .split.left::before{
   content: '';
   position: absolute;
@@ -153,19 +165,37 @@ overflow: hidden;
   right: 0;
   background-color: #579d20a8;
 }
-.landing.hover_left .split.left{
+.landing2 .split.left::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #e74c3ca8;
+}
+.landing2 .split.right::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background-color: #f1c40fab;
+}
+.landing.hover_left .split.left, .landing2.hover_left .split.left{
   width: 75%;
 }
-.landing.hover_left .split.right{
+.landing.hover_left .split.right, .landing2.hover_left .split.right{
   width: 25%;
 }
-.landing.hover_right .split.left{
+.landing.hover_right .split.left, .landing2.hover_right .split.left{
   width: 25%;
 }
-.landing.hover_right .split.right{
+.landing.hover_right .split.right, .landing2.hover_right .split.right{
   width: 75%;
 }
-.landing h1{
+.landing h1, .landing2 h1{
   position: absolute;
   font-size: 4rem;
   font-weight: bold;

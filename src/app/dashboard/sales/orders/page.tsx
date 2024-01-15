@@ -1,6 +1,6 @@
 "use client";
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { IEntry, ICheeseSupplier, IProductTariff, IOperation, ISaleCenter, IUser, IPerson } from '@/app/types';
+import { IEntry, ICheeseSupplier, IProductTariff, IOperation, ISaleCenter, IUser, IPerson, ICashFlow } from '@/app/types';
 import { useSession} from 'next-auth/react';
 import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
@@ -10,6 +10,7 @@ import OrderForm from "./OrderForm"
 import {obtenerSemanaActual} from '@/libs/functions'
 import { initFlowbite} from "flowbite";
 import OrderReview from "./OrderReview";
+import PaymentForm from "./PaymentForm";
 
 const initialStateFilterObj = {
     searchDate: "",
@@ -19,11 +20,23 @@ const initialStateFilterObj = {
     typeOfDairyProduct: "03"
 }
 
+const initialStatePaymentObj = {
+    transactionDate: "",
+    userId: 0,
+    operationId: 0,
+    total: 0,
+    description: "PAGO DE LA VENTA",
+    transactionType: "E",
+    week: "",
+}
+
 const initialStateOutput = {
     id: 0,
     saleCenterId: 0,
     operationDate: "",
     operationStatus: "",
+    operationType: "13",
+    operationTypeReadable: "",
     clientId: 0,
     lastSubtraction: 0,
     supplierId: 0,
@@ -53,7 +66,11 @@ const initialStateOutput = {
     deposit: 0,
     subtraction: 0,
 
+    payedInCash: 0,
+    payedInDeposit: 0,
+
     hasIgv: false,
+    isFictitious: false,
     observation: "",
     documentType: "01",
     documentTypeReadable: "",
@@ -65,8 +82,10 @@ const initialStateOutput = {
 
 function OrderPage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
+    const [paymentObj, setPaymentObj] = useState(initialStatePaymentObj);
     const [modal, setModal] = useState< Modal | any>(null);
     const [modalReview, setModalReview] = useState< Modal | any>(null);
+    const [modalPayment, setModalPayment] = useState< Modal | any>(null);
     const [output, setOutput] = useState<any | IEntry>(initialStateOutput);
     const [outputFound, setOutputFound] = useState<any | IEntry>(initialStateOutput);
 
@@ -76,6 +95,8 @@ function OrderPage() {
     const [tempProductTariffs, setTempProductTariffs] = useState< IProductTariff[]>([]);
     const [clients, setClients] = useState< IPerson[]>([]);
     const [fechaInicio, setFechaInicio] = useState<Date | null>(null);
+    const [startDateOfWeek, setStartDateOfWeek] = useState<Date | null>(null);
+    const [endDateOfWeek, setEndDateOfWeek] = useState<Date | null>(null);
     const [fechaFin, setFechaFin] = useState<Date | null>(null);
     const [salesCenter, setSalesCenter] = useState<ISaleCenter[]>([]);
     const { data: session } = useSession();
@@ -169,6 +190,9 @@ function OrderPage() {
                 outputById(pk:${id}){
                     id
                     operationDate
+                    operationType
+                    operationTypeReadable
+                    isFictitious
                     baseCost
                     igvCost
                     totalSale
@@ -224,10 +248,15 @@ function OrderPage() {
                     formattedDate
                     dayNameResult
                     operationDate
+                    operationType
+                    operationTypeReadable
                     operationStatus
+                    isFictitious
                     baseCost
                     igvCost
                     totalSale
+                    payedInCash
+                    payedInDeposit
                     previousBalance
                     totalNet
                     cash
@@ -242,6 +271,11 @@ function OrderPage() {
                         }
                         names
                     }
+                    cashflowSet{
+                        transactionType
+                        transactionDate
+                        total
+                    }
                 }
             }
         `;
@@ -255,7 +289,18 @@ function OrderPage() {
          })
          .then(res=>res.json())
          .then(data=>{
-             setOutputs(data.data.outputsByDate);
+            const filteredOutputsByDate = data.data.outputsByDate.filter((entry: IEntry) => {
+                const cashAndDeposit = (Number(entry.cash) || 0) + (Number(entry.deposit) || 0);
+                const totalSale = Number(entry.totalSale) || 0;
+                const subtraction = Number(entry.subtraction) || 0;
+                
+                return ((cashAndDeposit - totalSale ) < 0) || (entry.operationDate === filterObj.searchDate);
+              });
+              
+            //  setOutputs(data.data.outputsByDate);
+            //  console.log(data.data.outputsByDate)
+             setOutputs(filteredOutputsByDate);
+            //  console.log("filteredOutputsByDate", filteredOutputsByDate)
              
          }).then(()=>{initFlowbite();})
     }
@@ -327,7 +372,6 @@ function OrderPage() {
         setFechaInicio(inicioSemana);
         setFechaFin(finSemana);
 
-        // const formattedDate = inicioSemana.toISOString().split('T')[0];
         const year = inicioSemana.getFullYear();
         let mes = (inicioSemana.getMonth() + 1).toString().padStart(2, '0'); // Agrega un 0 al mes si es necesario
         let dia = inicioSemana.getDate().toString().padStart(2, '0'); // Agrega un 0 al día si es necesario
@@ -336,8 +380,29 @@ function OrderPage() {
 
         setOutput({...output, operationDate: formattedDate});
 
-        // console.log('inicioSemana', inicioSemana)
-        // console.log('finSemana', finSemana)
+    }
+
+    function getWeekDatesOfStartEnd (semanaSeleccionada:string) {
+        const [anio, numSemana] = semanaSeleccionada.split('-W');
+        // Calcular la fecha de inicio y fin de la semana
+        const inicioAnio = new Date(`${anio}-01-01`);
+        const primerDiaSemana = inicioAnio.getDay();
+        const diasHastaPrimerDia = (8 - primerDiaSemana) % 7 || 7; // Ajuste para considerar el primer día de la semana
+        const inicioSemana = new Date(inicioAnio);
+        inicioSemana.setDate(inicioAnio.getDate() + diasHastaPrimerDia + (parseInt(numSemana) - 1) * 7);
+        const finSemana = new Date(inicioSemana);
+        finSemana.setDate(finSemana.getDate() + 6);
+    
+        setStartDateOfWeek(inicioSemana);
+        setEndDateOfWeek(finSemana);
+
+        const year = inicioSemana.getFullYear();
+        let mes = (inicioSemana.getMonth() + 1).toString().padStart(2, '0'); // Agrega un 0 al mes si es necesario
+        let dia = inicioSemana.getDate().toString().padStart(2, '0'); // Agrega un 0 al día si es necesario
+
+        const formattedDate = `${year}-${mes}-${dia}`;
+
+        setPaymentObj({...paymentObj, transactionDate: formattedDate});
 
     }
 
@@ -358,6 +423,7 @@ function OrderPage() {
         const defaultValue = date.toLocaleDateString('en-CA');
         setFilterObj({...filterObj, week: semanaActual, searchDate:defaultValue});
         setOutput({...output, operationDate: defaultValue});
+        setPaymentObj({...paymentObj, transactionDate: defaultValue, week: semanaActual});
         fetchProductTariffs();
         fetchSalesCenter();
     }, []);
@@ -366,6 +432,7 @@ function OrderPage() {
         if(u!==undefined){
             // setOperation({...operation, userId: u?.userID, username: `${u?.firstName!}  ${u?.lastName!}`});
             setOutput( (prev : any) => ({...prev, userId: u?.id}))
+            setPaymentObj( (prev : any) => ({...prev, userId: u?.id}))
         }
     }, [u]);
 
@@ -373,7 +440,11 @@ function OrderPage() {
         <>
             <Breadcrumb section={"Ventas"} article={"Ventas del dia"} />
             <OrderList outputs={outputs} setOutputs={setOutputs} output={output} setOutput={setOutput} fetchOutputs={fetchOutputs} modal={modal}  
-            setFilterObj={setFilterObj} filterObj={filterObj} salesCenter={salesCenter} getOutputById={getOutputById} annulSaleById={annulSaleById} modalReview={modalReview}
+                setFilterObj={setFilterObj} filterObj={filterObj} salesCenter={salesCenter} getOutputById={getOutputById} annulSaleById={annulSaleById} 
+                modalReview={modalReview} 
+                modalPayment={modalPayment} 
+                paymentObj={paymentObj} 
+                setPaymentObj={setPaymentObj} 
             
             />
             <OrderForm modal={modal} setModal={setModal} setOutput={setOutput} output={output} fetchOutputs={fetchOutputs} 
@@ -384,7 +455,17 @@ function OrderPage() {
             fechaInicio={fechaInicio} fechaFin={fechaFin}
             />
             <OrderReview modalReview={modalReview} setModalReview={setModalReview} outputFound={outputFound} />
-
+            
+            <PaymentForm 
+                modalPayment={modalPayment} 
+                setModalPayment={setModalPayment} 
+                paymentObj={paymentObj} 
+                setPaymentObj={setPaymentObj} 
+                fetchOutputs={fetchOutputs} 
+                startDateOfWeek={startDateOfWeek} 
+                endDateOfWeek={endDateOfWeek} 
+                getWeekDatesOfStartEnd={getWeekDatesOfStartEnd} 
+            />
         </>
     )
 }

@@ -69,19 +69,23 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
     const handleCheckboxChange = ({target: { name, checked} }: ChangeEvent<HTMLInputElement>) => {
         let igv, total;
         let documentType;
+        if(name==="hasIgv")
+        {
+            if(checked){
+                igv =  output.baseCost * 0.18;
+                total =  output.baseCost + igv;
+                documentType = "03";
+            }
+            else{
+                igv =  0;
+                total =  output.baseCost;
+                documentType = "01";
+            }
 
-        if(checked){
-            igv =  output.baseCost * 0.18;
-            total =  output.baseCost + igv;
-            documentType = "03";
+            setOutput({...output, [name]: checked, igvCost: igv, totalSale: total, documentType: documentType});
+        }else{
+            setOutput({...output, [name]: checked});
         }
-        else{
-            igv =  0;
-            total =  output.baseCost;
-            documentType = "01";
-        }
-
-        setOutput({...output, [name]: checked, igvCost: igv, totalSale: total, documentType: documentType});
     }
     
     const handleSaveSupplier = async (e: FormEvent<HTMLFormElement>) => {
@@ -112,6 +116,7 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
                         totalSale:${output.totalSale},
 
                         hasIgv:${output.hasIgv},
+                        isFictitious:${output.isFictitious},
                         observation:"${output.observation}",
                         documentType:"${output.documentType}",
                         documentNumber:"${output.documentNumber}",
@@ -163,9 +168,11 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
                     subtraction: 0,
 
                     hasIgv: false,
+                    isFictitious: false,
                     observation: "",
                     documentType: "01",
                     documentNumber: "",
+                    operationType: "13",
                 });
 
                 modal.hide();
@@ -264,18 +271,34 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
                         <form onSubmit={handleSaveSupplier}>
 
                             <div className="grid gap-4 mb-4 sm:grid-cols-4">
-                                    <div className="sm:col-span-2">
-                                    <label htmlFor="week" className="form-label">Semana:</label>
+                                
 
-                                            <input type="week" name="week" value={filterObj.week } onChange={handleInputChange} className="form-control" />
+                                    <div className="sm:col-span-2">
+                                        <label htmlFor="week" className="form-label">Semana:</label>
+
+                                        <input type="week" name="week" value={filterObj.week } onChange={handleInputChange} className="form-control" />
+                                        {fechaInicio && fechaFin && (
+                                            <p id="helper-text" className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                                {`Del ${fechaInicio.toLocaleDateString()} al ${fechaFin.toLocaleDateString()}`}
+                                            </p>
+                                        )}
+
                                      </div>
 
-                                     <div className="sm:col-span-2 flex justify-end items-end pb-2.5">
-                                        {fechaInicio && fechaFin && (
-                                            <p className=" text-2xl font-thin">{`Del ${fechaInicio.toLocaleDateString()} al ${fechaFin.toLocaleDateString()}`}</p>
-                                        )}
-                                    </div>
 
+                               
+                                <div className="">
+                                    <label htmlFor="operationDate" className="form-label">Fecha:</label>
+                                    <input type="date" name="operationDate" id="operationDate" value={output.operationDate || ""} onChange={handleInputChange} onFocus={(e) => e.target.select()} 
+                                    className="form-control" required />
+                                </div>
+
+
+
+                                <fieldset className='border p-3 sm:col-span-4 grid gap-4 mb-4 sm:grid-cols-4'>
+                                     <legend>DATOS DEL CLIENTE</legend>
+
+                                     
                                 <div>
                                     <label htmlFor="saleCenterId" className="form-label">Centro de venta:</label>
                                     <select name="saleCenterId" id="saleCenterId" onChange={handleInputChange} value={output.saleCenterId || 0} className="form-control">
@@ -286,19 +309,7 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
                                     </select>
 
                                 </div>
-
-                               
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="operationDate" className="form-label">Fecha:</label>
-                                    <input type="date" name="operationDate" id="operationDate" value={output.operationDate || ""} onChange={handleInputChange} onFocus={(e) => e.target.select()} 
-                                    className="form-control" required />
-                                </div>
-
-
-                                <fieldset className='border p-3 sm:col-span-4 grid gap-4 mb-4 sm:grid-cols-3'>
-                                     <legend>DATOS DEL CLIENTE</legend>
-
-                                     
+                                
                                      <div className="sm:col-span-2">
                                         <label htmlFor="clientId" className="form-label">Cliente:</label>
                                         <select name="clientId" id="clientId" onChange={handleInputChange} value={output.clientId} className="form-control">
@@ -482,6 +493,7 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
                                                 <div className="default-toggle peer "></div>
                                                 <span className="ms-3">{output.hasIgv?"IGV 18%":"SIN IGV"}</span>
                                             </label>
+                                            
                                         </td>
                                         <td className='px-2 py-2 border text-base font-medium text-right'>S/ {Number(output.igvCost).toFixed(2)}</td>
                                         <td className='px-2 py-2 border text-base'></td>
@@ -495,6 +507,23 @@ function OrderForm({modal, setModal, setOutput, output, fetchOutputs, setFilterO
 
                                 </tfoot>
                             </table>
+
+                            
+                            <div className="">
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        value="" 
+                                        name='isFictitious'
+                                        className="sr-only peer" 
+                                        checked={output.isFictitious} 
+                                        onChange={handleCheckboxChange}
+                                        />
+                                    <div className="default-toggle peer "></div>
+                                    <span className="ms-3">{output.isFictitious?"GENERAR VENTA FICTICIA":"GENERAR VENTA NORMAL"}</span>
+                                </label>
+
+                            </div>
 
                             <div className=" text-right">
                                 <button id="btn-save-product" type="submit" className=" btn-green w-full px-5 py-2.5 border">

@@ -118,7 +118,7 @@ function Sidebar() {
                 <ul className="space-y-2 font-medium">
                     
 
-                {u?.role && u.role!.replace('A_', '')=="01" ? (
+                {u?.role && (u.role!.replace('A_', '')=="01" || u.role!.replace('A_', '')=="04" ) ? (
 
 
 
@@ -134,55 +134,7 @@ function Sidebar() {
                                     </select>
                                 </div>
                             </li>
-                            
-
-                            <li>
-                                <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" 
-                                aria-controls="dropdown-administration" data-collapse-toggle="dropdown-administration">
-                                    
-                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                            <path d="M16 0H4a2 2 0 0 0-2 2v1H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6ZM13.929 17H7.071a.5.5 0 0 1-.5-.5 3.935 3.935 0 1 1 7.858 0 .5.5 0 0 1-.5.5Z"/>
-                                        </svg>
-                                        <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Administración</span>
-                                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
-                                        </svg>
-                                </button>
-                                <ul id="dropdown-administration" className="hidden py-2 space-y-2">
-
-
-                                    <li>
-                                        <Link 
-                                            onClick={() => seleccionarOpcion(13)}
-                                            style={{backgroundColor: 13 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
-                                            href="/dashboard/hrm/employees" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                            <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19">
-                                                <path d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"/>
-                                                <path d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z"/>
-                                            </svg>
-
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Empleados</span>
-                                        </Link>
-                                    </li>
-
-                                    <li>
-                                        <Link 
-                                            onClick={() => seleccionarOpcion(14)}
-                                            style={{backgroundColor: 14 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
-                                            href="/dashboard/hrm/attendances" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                            
-                                            <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
-                                            </svg>
-
-
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Asistencias</span>
-                                        </Link>
-                                    </li>
-
-                                </ul>
-                            </li>
-
+        
 
                             <li>
                                 <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" 
@@ -252,6 +204,49 @@ function Sidebar() {
                                         </svg>
 
                                         <span className="flex-1 ml-3 whitespace-nowrap">Producción</span>
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link 
+                                            onClick={() => seleccionarOpcion(10)}
+                                            style={{backgroundColor: 10 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/statisticalbulletins/fortnightgloriaanalysis" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v2H7V2ZM5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 4H8a1 1 0 0 1 0-2h5a1 1 0 0 1 0 2Zm0-4H8a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Z"/>
+                                        </svg>
+
+                                        <span className="flex-1 ml-3 whitespace-nowrap">Resumen de gloria</span>
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link 
+                                            onClick={() => seleccionarOpcion(11)}
+                                            style={{backgroundColor: 11 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/statisticalbulletins/fortnightproductionanalysis" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 18">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.5 3h9.563M9.5 9h9.563M9.5 15h9.563M1.5 13a2 2 0 1 1 3.321 1.5L1.5 17h5m-5-15 2-1v6m-2 0h4"/>
+                                        </svg>
+                                        <span className="flex-1 ml-3 whitespace-nowrap">Resumen de producción</span>
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link 
+                                            onClick={() => seleccionarOpcion(12)}
+                                            style={{backgroundColor: 12 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/statisticalbulletins/fortnightsupplieranalysis" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                            <path d="M7 11H5v1h2v-1Zm4 3H9v1h2v-1Zm-4 0H5v1h2v-1ZM5 5V.13a2.98 2.98 0 0 0-1.293.749L.88 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+                                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM13 16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6Zm-1-8H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Zm0-3H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Z"/>
+                                            <path d="M11 11H9v1h2v-1Z"/>
+                                        </svg>    
+
+
+                                        <span className="flex-1 ml-3 whitespace-nowrap">Boleta de proveedores</span>
                                         </Link>
                                     </li>
 
@@ -345,79 +340,15 @@ function Sidebar() {
                                 </ul>
                             </li>
 
-                            <li>
-                                <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" 
-                                aria-controls="dropdown-summaries" data-collapse-toggle="dropdown-summaries">
-                                    
-
-                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9 19V.352A3.451 3.451 0 0 0 7.5 0a3.5 3.5 0 0 0-3.261 2.238A3.5 3.5 0 0 0 2.04 6.015a3.518 3.518 0 0 0-.766 1.128c-.042.1-.064.209-.1.313a3.34 3.34 0 0 0-.106.344 3.463 3.463 0 0 0 .02 1.468A4.016 4.016 0 0 0 .3 10.5l-.015.036a3.861 3.861 0 0 0-.216.779A3.968 3.968 0 0 0 0 12a4.032 4.032 0 0 0 .107.889 4 4 0 0 0 .2.659c.006.014.015.027.021.041a3.85 3.85 0 0 0 .417.727c.105.146.219.284.342.415.072.076.148.146.225.216.1.091.205.179.315.26.11.081.2.14.308.2.02.013.039.028.059.04v.053a3.506 3.506 0 0 0 3.03 3.469 3.426 3.426 0 0 0 4.154.577A.972.972 0 0 1 9 19Zm10.934-7.68a3.956 3.956 0 0 0-.215-.779l-.017-.038a4.016 4.016 0 0 0-.79-1.235 3.417 3.417 0 0 0 .017-1.468 3.387 3.387 0 0 0-.1-.333c-.034-.108-.057-.22-.1-.324a3.517 3.517 0 0 0-.766-1.128 3.5 3.5 0 0 0-2.202-3.777A3.5 3.5 0 0 0 12.5 0a3.451 3.451 0 0 0-1.5.352V19a.972.972 0 0 1-.184.546 3.426 3.426 0 0 0 4.154-.577A3.506 3.506 0 0 0 18 15.5v-.049c.02-.012.039-.027.059-.04.106-.064.208-.13.308-.2s.214-.169.315-.26c.077-.07.153-.14.225-.216a4.007 4.007 0 0 0 .459-.588c.115-.176.215-.361.3-.554.006-.014.015-.027.021-.041.087-.213.156-.434.205-.659.013-.057.024-.115.035-.173.046-.237.07-.478.073-.72a3.948 3.948 0 0 0-.066-.68Z"/>
-                                        </svg>
-                                        <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Reportes</span>
-                                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
-                                        </svg>
-                                </button>
-                                <ul id="dropdown-summaries" className="hidden py-2 space-y-2">
-                                    <li>
-                                        <Link 
-                                            onClick={() => seleccionarOpcion(10)}
-                                            style={{backgroundColor: 10 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
-                                        href="/dashboard/statisticalbulletins/fortnightgloriaanalysis" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                        
-                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v2H7V2ZM5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 4H8a1 1 0 0 1 0-2h5a1 1 0 0 1 0 2Zm0-4H8a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Z"/>
-                                        </svg>
-
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Resumen de gloria</span>
-                                        </Link>
-                                    </li>
-
-                                    <li>
-                                        <Link 
-                                            onClick={() => seleccionarOpcion(11)}
-                                            style={{backgroundColor: 11 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
-                                        href="/dashboard/statisticalbulletins/fortnightproductionanalysis" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 18">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.5 3h9.563M9.5 9h9.563M9.5 15h9.563M1.5 13a2 2 0 1 1 3.321 1.5L1.5 17h5m-5-15 2-1v6m-2 0h4"/>
-                                        </svg>
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Resumen de producción</span>
-                                        </Link>
-                                    </li>
-
-                                    <li>
-                                        <Link 
-                                            onClick={() => seleccionarOpcion(12)}
-                                            style={{backgroundColor: 12 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
-                                        href="/dashboard/statisticalbulletins/fortnightsupplieranalysis" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                        
-                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-                                            <path d="M7 11H5v1h2v-1Zm4 3H9v1h2v-1Zm-4 0H5v1h2v-1ZM5 5V.13a2.98 2.98 0 0 0-1.293.749L.88 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
-                                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM13 16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6Zm-1-8H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Zm0-3H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Z"/>
-                                            <path d="M11 11H9v1h2v-1Z"/>
-                                        </svg>    
-
-
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Boleta de proveedores</span>
-                                        </Link>
-                                    </li>
-
-
-                                </ul>
-                            </li>
-
-                            <li>
-                                <Link href="/" onClick={()=>signOut()} className="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
-                                </svg>
-                                <span className="flex-1 ml-3 whitespace-nowrap">Cerrar sesión</span>
-                                </Link>
-                            </li>
+                          
 
                         
                         </>
-                ):(u?.role && u.role!.replace('A_', '')=="02")?(
+
+
+                ):""}
+                
+                {(u?.role && (u.role!.replace('A_', '')=="02"  || u.role!.replace('A_', '')=="04" ))?(
 
 
                         <>
@@ -583,19 +514,97 @@ function Sidebar() {
                                 </ul>
                             </li>
 
-                            <li>
-                                <Link href="#" onClick={()=>signOut()} className="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
-                                </svg>
-                                <span className="flex-1 ml-3 whitespace-nowrap">Cerrar sesión</span>
-                                </Link>
-                            </li>
                         </>
 
 
 
-                ):(
+                ):""}
+                {(u?.role && (u.role!.replace('A_', '')=="03" || u.role!.replace('A_', '')=="04"))?(
+                    <>
+                        <li>
+                            <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" 
+                            aria-controls="dropdown-administration" data-collapse-toggle="dropdown-administration">
+                                
+                                    <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                        <path d="M16 0H4a2 2 0 0 0-2 2v1H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6ZM13.929 17H7.071a.5.5 0 0 1-.5-.5 3.935 3.935 0 1 1 7.858 0 .5.5 0 0 1-.5.5Z"/>
+                                    </svg>
+                                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Administración</span>
+                                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                            </button>
+                            <ul id="dropdown-administration" className="hidden py-2 space-y-2">
+
+
+                                <li>
+                                    <Link 
+                                        onClick={() => seleccionarOpcion(13)}
+                                        style={{backgroundColor: 13 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/hrm/employees" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19">
+                                            <path d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"/>
+                                            <path d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z"/>
+                                        </svg>
+
+                                    <span className="flex-1 ml-3 whitespace-nowrap">Empleados</span>
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link 
+                                        onClick={() => seleccionarOpcion(14)}
+                                        style={{backgroundColor: 14 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/hrm/attendances" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
+                                        </svg>
+
+
+                                    <span className="flex-1 ml-3 whitespace-nowrap">Asistencias</span>
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link 
+                                        onClick={() => seleccionarOpcion(70)}
+                                        style={{backgroundColor: 70 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/hrm/reports/monthlyexpenses" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                            <path d="M7 11H5v1h2v-1Zm4 3H9v1h2v-1Zm-4 0H5v1h2v-1ZM5 5V.13a2.98 2.98 0 0 0-1.293.749L.88 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+                                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM13 16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6Zm-1-8H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Zm0-3H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Z"/>
+                                            <path d="M11 11H9v1h2v-1Z"/>
+                                        </svg> 
+
+
+                                    <span className="flex-1 ml-3 whitespace-nowrap">Egresos mensuales</span>
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link 
+                                        onClick={() => seleccionarOpcion(71)}
+                                        style={{backgroundColor: 71 === opcionSeleccionada ? 'lightskyblue' : 'white',  cursor: 'pointer',}} 
+                                        href="/dashboard/hrm/reports/invoices" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        
+                                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                            <path d="M7 11H5v1h2v-1Zm4 3H9v1h2v-1Zm-4 0H5v1h2v-1ZM5 5V.13a2.98 2.98 0 0 0-1.293.749L.88 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+                                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM13 16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6Zm-1-8H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Zm0-3H9a1 1 0 0 1 0-2h3a1 1 0 1 1 0 2Z"/>
+                                            <path d="M11 11H9v1h2v-1Z"/>
+                                        </svg> 
+
+
+                                    <span className="flex-1 ml-3 whitespace-nowrap">Resumen Facturas</span>
+                                    </Link>
+                                </li>
+
+                            </ul>
+                        </li>
+                        
+                    </>
+                ):""}
+                {u?.role==undefined?(
                                     
 
 
@@ -626,6 +635,15 @@ function Sidebar() {
                             </li>
                         </>
 
+                ):(
+                    <li>
+                        <Link href="/" onClick={()=>signOut()} className="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
+                        </svg>
+                        <span className="flex-1 ml-3 whitespace-nowrap">Cerrar sesión</span>
+                        </Link>
+                    </li>
                 )}
 
 

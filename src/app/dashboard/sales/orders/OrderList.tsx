@@ -4,7 +4,7 @@ import { IOperation, ICheeseSupplier, ISaleCenter } from '@/app/types';
 import { toast } from "react-toastify";
 import { initFlowbite} from "flowbite";
 
-function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal, setFilterObj, filterObj, salesCenter, getOutputById, annulSaleById, modalReview}: any) {
+function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal, setFilterObj, filterObj, salesCenter, getOutputById, annulSaleById, modalReview, modalPayment, paymentObj, setPaymentObj}: any) {
         
     const handleInputChangeWeek = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         
@@ -60,6 +60,87 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
 
         }).catch(e=>console.log(e));
     }
+
+    let tbodies; 
+    tbodies= outputs.map((operationData: IOperation, index: number) => {
+        const maxRows = Math.max(operationData?.cashflowSet!.length || 1);
+        const rows: JSX.Element[] = [];
+        for (let i = 0; i < maxRows; i++) {
+            const cashFlow = operationData?.cashflowSet![i];
+
+            const formattedDate = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}> {operationData.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>) : null;
+            const isFictitious = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}> {operationData.isFictitious?"FICTICIA":"NORMAL"}</td>) : null;
+            const saleCenterName = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}> {operationData.client?.saleCenter?.name}</td>) : null;
+            const clientName = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}> {operationData.client?.names}</td>) : null;
+            const documentTypeReadable = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}> {operationData.documentTypeReadable}</td>) : null;
+            const documentNumber = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}> {operationData.documentNumber}</td>) : null;
+            const baseCost = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.baseCost}</td>) : null;
+            const igvCost = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.igvCost}</td>) : null;
+            const totalSale = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.totalSale}</td>) : null;
+            const previousBalance = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.previousBalance}</td>) : null;
+            const totalNet = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.totalNet}</td>) : null;
+            const payedInCash = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.payedInCash}</td>) : null;
+            const payedInDeposit = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.payedInDeposit}</td>) : null;
+            const subtraction = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>S/  {operationData.subtraction}</td>) : null;
+            const actions = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>
+                <div className="flex gap-1">
+                                    
+                    <button 
+                        type="button" 
+                        className="btn-blue px-2 pt-1"
+                        onClick={()=>{
+                            modalReview.show();
+                            getOutputById(operationData.id);
+                        }}
+                    >Ver Detalles</button>
+                
+                    <button 
+                        type="button" 
+                        className="btn-green px-2 pt-1"
+                        onClick={()=>{
+                            modalPayment.show();
+                            setPaymentObj( (prev : any) => ({...prev, operationId: operationData?.id}))
+                        }}
+                    >Pagar</button>
+                    
+                    <button 
+                        type="button"
+                        className="btn-red px-2 pt-1"
+                        onClick={()=>{
+                            if (window.confirm("Realmente desea anular la venta?"))
+                                annulSaleById(operationData.id);
+                        }}
+                    >Anular</button>
+                    
+                </div>
+
+            </td>) : null;
+            rows.push(
+                <tr key={i}>
+                    {formattedDate}
+                    {isFictitious}
+                    {saleCenterName}
+                    {clientName}
+                    {documentTypeReadable}
+                    {documentNumber}
+                    {baseCost}
+                    {igvCost}
+                    {totalSale}
+                    {previousBalance}
+                    {totalNet}
+                    {payedInCash}
+                    {payedInDeposit}
+                    {subtraction}
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`${cashFlow?.transactionType=="E"?"EFECTIVO":"DEPOSITO"}`):null}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`${cashFlow?.transactionDate}`):null}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`S/ ${Number(cashFlow?.total).toFixed(2)}`):null}</td>
+                    {actions}
+                </tr>
+            )
+        }
+        console.log(rows)
+        return rows;
+    });
 
     return (
         <>
@@ -125,6 +206,7 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                                 subtraction: 0,
 
                                 hasIgv: false,
+                                isFictitious: false,
                                 observation: "",
                                 documentType: "01",
                                 documentNumber: "",
@@ -142,42 +224,54 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr className="text-center font-bold">
-                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300" colSpan={6}>VENTA</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300" colSpan={9}>VENTA</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" rowSpan={2}>SALDO ANTERIOR</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" rowSpan={2}>TOTAL</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" colSpan={2}>A CUENTA</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" rowSpan={2}>RESTA</td>
+                            {/* <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" colSpan={2}>PAGADO</td> */}
+                            <td scope="col" className="px-6 py-4 border border-gray-600" colSpan={3}  rowSpan={2}>DETALLE DE PAGOS</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600" rowSpan={2}>ACCIONES</td>
                         </tr>
                         <tr>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">FECHA</td>
-                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">CENTRO DE VENTA</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">TIPO<br/>VENTA</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">CENTRO DE<br/>VENTA</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">CLIENTE</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">TIP DOC</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">NUM DOC</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300 text-black font-bold">BASE</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300 text-black font-bold">IGV</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300 text-black font-bold">TOTAL VENTA</td>
 
                             
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-lime-500 w-24">EFECTIVO</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-orange-400 w-24">DEPO</td>
                             
+                            {/* <td scope="col" className="px-6 py-4 border border-gray-600 bg-lime-500 w-24">Cash</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600 bg-orange-400 w-24">Deposit</td> */}
+                            
                         </tr>
                     </thead>
                     <tbody>
-                    
-                    {outputs.map((item: IOperation) => 
+                    {tbodies}
+                    {/* {outputs.map((item: IOperation) => 
 
                         <tr key={item.id} className={Number(item.totalSale)<=Number(item.cash!)+Number(item.deposit!)?"bg-green-300":"bg-red-500 border-b dark:bg-gray-800 dark:border-gray-700"}>
 
-                            <td className="px-2 py-2 border border-gray-600 font-medium text-gray-900 whitespace-nowrap text-center dark:text-white">{item.formattedDate}</td>
+                            <td className="px-2 py-2 border border-gray-600 font-medium text-gray-900 whitespace-nowrap text-center dark:text-white">{item.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>
+                            <td className="px-2 py-2 border border-gray-600 font-medium text-gray-900 whitespace-nowrap text-center dark:text-white">{item.isFictitious?"FICTICIA":"NORMAL"}</td>
                             <td className="px-2 py-2 border border-gray-600 font-medium text-gray-900 whitespace-nowrap text-center dark:text-white">{item.client?.saleCenter?.name}</td>
                             <td className="px-2 py-2 border border-gray-600 text-black">{item.client?.names}</td>
                             <td className="px-2 py-2 border border-gray-600 text-black">{item.documentTypeReadable}</td>
                             <td className="px-2 py-2 border border-gray-600 text-black">{item.documentNumber}</td>
-                            <td className="px-2 py-2 border border-gray-600 text-right text-black font-bold">S/ {item.totalSale}</td>
+                            <td className="px-2 py-2 border border-gray-600 text-right text-black font-bold whitespace-nowrap">S/ {item.baseCost}</td>
+                            <td className="px-2 py-2 border border-gray-600 text-right text-black font-bold whitespace-nowrap">S/ {item.igvCost}</td>
+                            <td className="px-2 py-2 border border-gray-600 text-right text-black font-bold whitespace-nowrap">S/ {item.totalSale}</td>
                             <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.previousBalance}</td>
                             <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.totalNet}</td>
-                            <td className="px-2 py-2 border border-gray-600 text-black">
+                            
+                            {/* <td className="px-2 py-2 border border-gray-600 text-black">
                                 <input 
                                     type="number" 
                                     name='cash' 
@@ -196,9 +290,16 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                                     value={item.deposit}
                                     className='form-control text-base' 
                                 />
-                            </td>
-                            <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.subtraction}</td>
-                            <td className="px-2 py-2 border border-gray-600">
+                            </td> */}
+                            {/* <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.payedInCash}</td>
+                            <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.payedInDeposit}</td>
+
+                            <td className="px-2 py-2 border border-gray-600 text-right text-black font-bold">S/ {item.subtraction}</td> */}
+
+                            {/* <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.payedInCash}</td>
+                            <td className="px-2 py-2 border border-gray-600 text-right text-black">S/ {item.payedInDeposit}</td> */}
+
+                            {/* <td className="px-2 py-2 border border-gray-600">
                                 
                                 <div className="flex gap-1">
                                     
@@ -210,6 +311,15 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                                                 getOutputById(item.id);
                                             }}
                                         >Ver Detalles</button>
+                                    
+                                        <button 
+                                            type="button" 
+                                            className="btn-green px-2 pt-1"
+                                            onClick={()=>{
+                                                modalPayment.show();
+                                                setPaymentObj( (prev : any) => ({...prev, operationId: item?.id}))
+                                            }}
+                                        >Pagar</button>
                                       
                                         <button 
                                             type="button"
@@ -223,7 +333,7 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                                 </div>
                             </td>
                         </tr>
-                    )}
+                    )}*/  }
                     </tbody>
                 </table>
 

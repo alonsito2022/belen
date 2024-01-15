@@ -71,33 +71,6 @@ function EntryList({suppliers, entries, entry, setEntry, fetchEntries, initialSt
                     )}
                     </div>
 
-                    <div className="">
-                        <select name="supplierSelectedId" onChange={handleInputChangeWeek} value={filterObj.supplierSelectedId} className=" form-control mb-3">
-                            <option value={0}>ELEGIR PROVEEDOR</option>
-                            {suppliers.map((o: ICheeseSupplier,k: number)=>(
-                                <option key={k} value={o.id}>{o.name}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <button  onClick={(e)=>{
-                            modal.show();
-                            document.getElementById("modal-title")!.innerHTML = "Nueva entrada";
-                            document.getElementById("btn-save-product")!.innerHTML = "Guardar entrada";
-                            setEntry({...entry, 
-                                id: 0,
-                                dayName: "",
-                                supplierId: 0,
-                                productTariffId: 0,
-                                quantityMold: 0,
-                                quantityBox: 0,
-                                price: 0,
-                            });
-                        
-                            
-                    }} className="btn-lime border px-5 py-2.5" type="button">
-                    Crear entrada
-                    </button>
 
                 </div>
 
@@ -152,11 +125,53 @@ function EntryList({suppliers, entries, entry, setEntry, fetchEntries, initialSt
                 </div>
 
                 
+                <div className="flex items-center justify-between bg-gray-100 p-2 border gap-2 border-gray-200">
+                    
+                    <h1 className=" text-left font-bold text-2xl ">Ingresos de la semana</h1>
+
+                    <div className=" flex gap-2 ">
+                        <div>
+
+                            <select name="supplierSelectedId" onChange={handleInputChangeWeek} value={filterObj.supplierSelectedId} className=" form-control">
+                                <option value={0}>ELEGIR PROVEEDOR</option>
+                                {suppliers.map((o: ICheeseSupplier,k: number)=>(
+                                    <option key={k} value={o.id}>{o.name}</option>
+                                ))}
+                            </select>
+                        
+
+
+                        </div>
+                        <div>
+
+                            
+                            <button  onClick={(e)=>{
+                                    modal.show();
+                                    document.getElementById("modal-title")!.innerHTML = "Nueva entrada";
+                                    document.getElementById("btn-save-product")!.innerHTML = "Guardar entrada";
+                                    setEntry({...entry, 
+                                        id: 0,
+                                        dayName: "",
+                                        supplierId: 0,
+                                        productTariffId: 0,
+                                        quantityMold: 0,
+                                        quantityBox: 0,
+                                        price: 0,
+                                    });
+                                
+                                    
+                            }} className="btn-lime border px-5 py-2.5" type="button">
+                            Crear entrada
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
 
                 
 
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <caption className=" text-left font-bold text-lg">Ingresos de la semana</caption>
+                    
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-4 border">PROVEEDOR</th>

@@ -45,7 +45,7 @@ function OrderReview({modalReview, setModalReview, outputFound }: any) {
                         
                         <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                Editar proveedor
+                                VENTA REALIZADA
                             </h3>
                             <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                              onClick={()=>{modalReview.hide();}}>
@@ -58,24 +58,23 @@ function OrderReview({modalReview, setModalReview, outputFound }: any) {
 
                             <div className="grid gap-4 mb-4 sm:grid-cols-4">
 
-                                <div>
-                                    <label htmlFor="saleCenterId2" className="form-label">Centro de venta:</label>
-                                    <input type="text" id="saleCenterId2" value={outputFound.client?.saleCenter?.name} className="form-control" readOnly />
+                           
 
-
-                                </div>
 
                                
                                 <div className="sm:col-span-2">
                                     <label htmlFor="operationDate2" className="form-label">Fecha:</label>
                                     <input type="date" id="operationDate2" value={outputFound.operationDate} className="form-control" readOnly />
                                 </div>
-
-
-                                <fieldset className='border p-3 sm:col-span-4 grid gap-4 mb-4 sm:grid-cols-3'>
+                               
+                                <fieldset className='border p-3 sm:col-span-4 grid gap-4 mb-4 sm:grid-cols-4'>
                                      <legend>DATOS DEL CLIENTE</legend>
 
-                                     
+                                     <div>
+                                        <label htmlFor="saleCenterId2" className="form-label">Centro de venta:</label>
+                                        <input type="text" id="saleCenterId2" value={outputFound.client?.saleCenter?.name} className="form-control" readOnly />
+
+                                    </div>
                                      <div className="sm:col-span-2">
                                         <label htmlFor="clientId2" className="form-label">Cliente:</label>
                                         <input type="text" id="clientId2" value={outputFound.client?.names} className="form-control" readOnly />
@@ -178,7 +177,22 @@ function OrderReview({modalReview, setModalReview, outputFound }: any) {
 
                                 </tfoot>
                             </table>
+     
+                            <div className="">
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        value="" 
+                                        className="sr-only peer" 
+                                        name='isFictitious'
+                                        checked={outputFound.isFictitious} 
+                                        readOnly
+                                        />
+                                    <div className="default-toggle peer "></div>
+                                    <span className="ms-3">{outputFound.isFictitious?"GENERADO COMO VENTA FICTICIA":"GENERADO COMO VENTA NORMAL"}</span>
+                                </label>
 
+                            </div>
 <a 
                         className="btn-blue py-1 px-2.5" 
                         href={`${hostname}/manufacturing/logistic/${outputFound.id}/`} 

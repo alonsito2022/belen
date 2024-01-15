@@ -23,6 +23,13 @@ const initialStateIncidence = {
     registerDate: "",
     observation: "",
     substituteEmployeeId: 0,
+    replacementEmployeeId: 0,
+    totalDaysWorked: 0,
+    totalDaysNoWorked: 0,
+    totalReplacementDays: 0,
+    remunerationDiscounted: 0,
+    remunerationExtra: 0,
+    totalRemuneration: 0,
 }
 const initialState = {
     userId: 0,
@@ -122,10 +129,17 @@ function AttendancePage() {
                 query: `
                     {
                         attendancesOfMonth(month:${filterObj.month}, year:${filterObj.year}, subsidiaryId:${filterObj.subsidiaryId}) {
+                            totalDaysWorked
+                            totalDaysNoWorked
+                            totalReplacementDays
+                            remunerationExtra
+                            remunerationDiscounted
+                            totalRemuneration
                             employee{
                                 id
                                 firstName
                                 lastName
+                                remuneration
                             }
                             attendancedetailSet{
                                 id
@@ -136,6 +150,13 @@ function AttendancePage() {
                                     id
                                     firstName
                                     lastName
+                                    remuneration
+                                }
+                                replacementEmployee{
+                                    id
+                                    firstName
+                                    lastName
+                                    remuneration
                                 }
                             }
                         }
@@ -168,7 +189,7 @@ function AttendancePage() {
                         countNT 
                     };
                 });
-                //console.log(datos)
+                console.log(datos)
                 setAttendancesOfMonth(datos);
             }
             
@@ -264,14 +285,7 @@ function AttendancePage() {
                     <span className="bg-red-300 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">NT</span>
                     <label className="text-sm font-medium text-gray-900 dark:text-gray-300">NO TRABAJO</label>
                 </div>
-                <div className="flex items-center mr-4">
-                    <span className="bg-blue-300 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">PE</span>
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-300">PERMISO</label>
-                </div>
-                <div className="flex items-center mr-4">
-                    <span className="bg-purple-300 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">PE</span>
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-300">PERMISO POR SALUD</label>
-                </div>
+               
                 <div className="flex items-center mr-4">
                     <span className="bg-yellow-300 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">TS</span>
                     <label className="text-sm font-medium text-gray-900 dark:text-gray-300">TRABAJO DE SUPLENCIA</label>
@@ -280,7 +294,7 @@ function AttendancePage() {
             <AttendanceList filterObj={filterObj} daysOfMonth={daysOfMonth} attendancesOfMonth={attendancesOfMonth} modal={modal} 
             setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} />
             <AttendanceRegisterForm filterObj={filterObj}  modal={modal} setModal={setModal} fetchAttendancesOfMonth={fetchAttendancesOfMonth} 
-            setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} initialStateIncidence={initialStateIncidence} users={users} />
+            setAttendanceIncidence={setAttendanceIncidence} attendanceIncidence={attendanceIncidence} initialStateIncidence={initialStateIncidence} attendancesOfMonth={attendancesOfMonth}  />
             <AttendanceAddUserForm modalAddUser={modalAddUser} setModalAddUser={setModalAddUser} users={users} 
             attendanceListUser={attendanceListUser} setAttendanceListUser={setAttendanceListUser} filterObj={filterObj} fetchAttendancesOfMonth={fetchAttendancesOfMonth} initialState={initialState} />
 
