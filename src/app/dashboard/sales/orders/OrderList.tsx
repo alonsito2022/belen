@@ -3,6 +3,7 @@ import { ChangeEvent ,useState, useEffect } from "react";
 import { IOperation, ICheeseSupplier, ISaleCenter } from '@/app/types';
 import { toast } from "react-toastify";
 import { initFlowbite} from "flowbite";
+import {getWeekDayInSpanish} from '@/libs/functions'
 
 function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal, setFilterObj, filterObj, salesCenter, getOutputById, annulSaleById, modalReview, modalPayment, paymentObj, setPaymentObj}: any) {
         
@@ -33,6 +34,20 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
     
     }
 
+    function formatarFecha(fechaString:string) {
+        const meses = [
+          "ene", "feb", "mar", "abr", "may", "jun",
+          "jul", "ago", "sep", "oct", "nov", "dic"
+        ];
+      
+        const fecha = new Date(`${fechaString}T00:00:00-05:00`);
+        // fecha.setMinutes(fecha.getMinutes() - fecha.getTimezoneOffset());
+        const dia = fecha.getDate();
+        const mes = meses[fecha.getMonth()];
+      
+        return `${dia}-${mes}`;
+      }
+
     async function saveSalePayment(id:number, name:string, value:string){
         let operationObj = outputs.find((s:IOperation) => s.id === id)
         let cash:number = name=="cash"?value:operationObj.cash;
@@ -60,6 +75,31 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
 
         }).catch(e=>console.log(e));
     }
+
+    const handleRemoveItem = async (indexToRemove: number) => {
+        let queryFetch = `
+            mutation{
+                deletePayment(
+                    cashFlowId:${indexToRemove},
+                ){
+                    message
+                }
+            }
+        `;         
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({query: queryFetch})
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            toast(data.data.deletePayment.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            fetchOutputs();
+            initFlowbite();
+
+        }).catch(e=>console.log(e));
+        
+    };
 
     let tbodies; 
     tbodies= outputs.map((operationData: IOperation, index: number) => {
@@ -126,15 +166,24 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                     {baseCost}
                     {igvCost}
                     {totalSale}
+                    {actions}
                     {previousBalance}
                     {totalNet}
                     {payedInCash}
                     {payedInDeposit}
                     {subtraction}
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`${cashFlow?.transactionType=="E"?"EFECTIVO":"DEPOSITO"}`):null}</td>
-                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`${cashFlow?.transactionDate}`):null}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`${formatarFecha(cashFlow?.transactionDate!.toString())}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{cashFlow?(`S/ ${Number(cashFlow?.total).toFixed(2)}`):null}</td>
-                    {actions}
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">
+
+                        <button onClick={() => handleRemoveItem(cashFlow?.id)} className='btn-red px-2 py-2 border'>
+                        <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        </button>
+                    </td>
+                    
                 </tr>
             )
         }
@@ -225,13 +274,14 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr className="text-center font-bold">
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300" colSpan={9}>VENTA</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600" rowSpan={2}>ACCIONES</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" rowSpan={2}>SALDO ANTERIOR</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" rowSpan={2}>TOTAL</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" colSpan={2}>A CUENTA</td>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" rowSpan={2}>RESTA</td>
                             {/* <td scope="col" className="px-6 py-4 border border-gray-600 bg-yellow-300" colSpan={2}>PAGADO</td> */}
-                            <td scope="col" className="px-6 py-4 border border-gray-600" colSpan={3}  rowSpan={2}>DETALLE DE PAGOS</td>
-                            <td scope="col" className="px-6 py-4 border border-gray-600" rowSpan={2}>ACCIONES</td>
+                            <td scope="col" className="px-6 py-4 border border-gray-600" colSpan={4}  rowSpan={2}>DETALLE DE PAGOS</td>
+                            
                         </tr>
                         <tr>
                             <td scope="col" className="px-6 py-4 border border-gray-600 bg-gray-300">FECHA</td>

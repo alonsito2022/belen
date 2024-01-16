@@ -272,6 +272,7 @@ function OrderPage() {
                         names
                     }
                     cashflowSet{
+                        id
                         transactionType
                         transactionDate
                         total
