@@ -13,7 +13,9 @@ import OrderReview from "./OrderReview";
 import PaymentForm from "./PaymentForm";
 
 const initialStateFilterObj = {
-    searchDate: "",
+    startDate: "",
+    endDate: "",
+    outputType: "V",
     warehouseId: 7,
     searchSaleCenterId: 0,
     week: "",
@@ -24,6 +26,7 @@ const initialStatePaymentObj = {
     transactionDate: "",
     userId: 0,
     operationId: 0,
+    debt: 0,
     total: 0,
     description: "PAGO DE LA VENTA",
     transactionType: "E",
@@ -192,6 +195,7 @@ function OrderPage() {
                     operationDate
                     operationType
                     operationTypeReadable
+                    outputType
                     isFictitious
                     baseCost
                     igvCost
@@ -243,7 +247,7 @@ function OrderPage() {
         
         let queryfecth = `
              query {
-                outputsByDate(searchDate:"${filterObj.searchDate}", saleCenterId:${filterObj.searchSaleCenterId}) {
+                outputsByDate(startDate:"${filterObj.startDate}", endDate:"${filterObj.endDate}", saleCenterId:${filterObj.searchSaleCenterId}, outputType:"${filterObj.outputType}") {
                     id
                     formattedDate
                     dayNameResult
@@ -251,12 +255,14 @@ function OrderPage() {
                     operationType
                     operationTypeReadable
                     operationStatus
+                    outputType
                     isFictitious
                     baseCost
                     igvCost
                     totalSale
                     payedInCash
                     payedInDeposit
+                    paymentRemaining
                     previousBalance
                     totalNet
                     cash
@@ -290,17 +296,18 @@ function OrderPage() {
          })
          .then(res=>res.json())
          .then(data=>{
-            const filteredOutputsByDate = data.data.outputsByDate.filter((entry: IEntry) => {
-                const cashAndDeposit = (Number(entry.cash) || 0) + (Number(entry.deposit) || 0);
-                const totalSale = Number(entry.totalSale) || 0;
-                const subtraction = Number(entry.subtraction) || 0;
+            // const filteredOutputsByDate = data.data.outputsByDate.filter((entry: IEntry) => {
+            //     const cashAndDeposit = (Number(entry.cash) || 0) + (Number(entry.deposit) || 0);
+            //     const totalSale = Number(entry.totalSale) || 0;
+            //     const subtraction = Number(entry.subtraction) || 0;
                 
-                return ((cashAndDeposit - totalSale ) < 0) || (entry.operationDate === filterObj.searchDate);
-              });
+            //     // return ((cashAndDeposit - totalSale ) < 0) || (entry.operationDate === filterObj.endDate);
+            //     return ((cashAndDeposit - totalSale ) < 0);
+            //   });
               
-            //  setOutputs(data.data.outputsByDate);
-            //  console.log(data.data.outputsByDate)
-             setOutputs(filteredOutputsByDate);
+             setOutputs(data.data.outputsByDate);
+             console.log(data.data.outputsByDate)
+            //  setOutputs(filteredOutputsByDate);
             //  console.log("filteredOutputsByDate", filteredOutputsByDate)
              
          }).then(()=>{initFlowbite();})
@@ -408,7 +415,7 @@ function OrderPage() {
     }
 
     useEffect(() => {
-        if(filterObj.searchDate.length > 0){
+        if(filterObj.endDate.length > 0){
             fetchSuppliers();
             fetchOutputs();
             
@@ -422,7 +429,7 @@ function OrderPage() {
         const semanaActual: string = obtenerSemanaActual();
         const date = new Date();
         const defaultValue = date.toLocaleDateString('en-CA');
-        setFilterObj({...filterObj, week: semanaActual, searchDate:defaultValue});
+        setFilterObj({...filterObj, week: semanaActual, startDate:defaultValue, endDate:defaultValue});
         setOutput({...output, operationDate: defaultValue});
         setPaymentObj({...paymentObj, transactionDate: defaultValue, week: semanaActual});
         fetchProductTariffs();

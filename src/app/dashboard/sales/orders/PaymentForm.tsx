@@ -146,7 +146,12 @@ function PaymentForm({modalPayment, setModalPayment, paymentObj, setPaymentObj, 
                                 </div>
 
                                 <div className="sm:col-span-2">
-                                    <label htmlFor="total3" className="form-label">Total:</label>
+                                    <label htmlFor="debt3" className="form-label">Debe:</label>
+                                    <input type="number" id="debt3" name="debt" value={paymentObj.debt} onChange={handleInputChange} readOnly className="form-control text-red-500" />
+                                </div>
+
+                                <div className="sm:col-span-2">
+                                    <label htmlFor="total3" className="form-label">Total a pagar:</label>
                                     <input type="number" id="total3" name="total" value={paymentObj.total}  onChange={handleInputChange} onFocus={(e) => e.target.select()} className="form-control" />
                                 </div>
 

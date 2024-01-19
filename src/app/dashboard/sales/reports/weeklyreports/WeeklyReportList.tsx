@@ -108,10 +108,10 @@ function WeeklyReportList({suppliers, setFilterObj, filterObj, obtenerFechaInici
                        
         rows.push(
             <tr key={index}>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{productName}</td>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{totalEntries}</td>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{totalRemnants}</td>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-base uppercase font-semibold text-center">{productName}</td>
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap bg-lime-200 text-black text-base font-semibold text-center">{totalEntries}</td>
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap bg-lime-200 text-black text-base font-semibold text-center">{totalRemnants}</td>
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap bg-red-200 text-black text-base font-semibold text-center">
                     {(filterObj.supplierId>0)?(
                         <input 
                             type="text" 
@@ -124,7 +124,7 @@ function WeeklyReportList({suppliers, setFilterObj, filterObj, obtenerFechaInici
                     ):null}
                     
                 </td>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap bg-red-200 text-black text-base font-semibold text-center">
 
                     {(filterObj.supplierId>0)?(
                         <input 
@@ -137,8 +137,8 @@ function WeeklyReportList({suppliers, setFilterObj, filterObj, obtenerFechaInici
                         />
                     ):null}
                 </td>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{totalSales}</td>
-                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{totalGeneral}</td>
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap bg-red-200 text-black text-base font-semibold text-center">{totalSales}</td>
+                <td className="px-2 py-2 border border-gray-400 whitespace-nowrap bg-blue-200 text-black text-base font-semibold text-center">{totalGeneral}</td>
             </tr>
         )
     
@@ -175,10 +175,10 @@ function WeeklyReportList({suppliers, setFilterObj, filterObj, obtenerFechaInici
                             
                             <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg">TOTAL<br/>ENTRADAS</th>
                             <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg">TOTAL<br/>SALDO</th>
-                            <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg">TOTAL<br/>MERMA</th>
-                            <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg">TOTAL<br/>DEVOLUCION</th>
-                            <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg">TOTAL<br/>VENTAS</th>
-                            <th className="px-6 py-4 border border-gray-400 bg-lime-200 text-center font-bold text-lg">TOTAL<br/>GENERAL</th>
+                            <th className="px-6 py-4 border border-gray-400 bg-red-200 text-center font-bold text-lg">TOTAL<br/>MERMA</th>
+                            <th className="px-6 py-4 border border-gray-400 bg-red-200 text-center font-bold text-lg">TOTAL<br/>DEVOLUCION</th>
+                            <th className="px-6 py-4 border border-gray-400 bg-red-200 text-center font-bold text-lg">TOTAL<br/>VENTAS</th>
+                            <th className="px-6 py-4 border border-gray-400 bg-blue-200 text-center font-bold text-lg">TOTAL<br/>GENERAL</th>
                         </tr>
                     </thead>
                     <tbody>

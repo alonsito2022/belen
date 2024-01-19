@@ -126,7 +126,7 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
             const entry = weekData.entries![i];
             const sale = weekData.sales![i];
 
-            const weekIndex = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows +1}>DEL {getShortNameMonth(weekData.startDate!.replace(".",""))}<br/> AL {getShortNameMonth(weekData.endDate!.replace(".",""))}</td>) : null;
+            const weekIndex = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-sm uppercase" rowSpan={maxRows +1}>DEL {getShortNameMonth(weekData.startDate!.replace(".",""))}<br/> AL {getShortNameMonth(weekData.endDate!.replace(".",""))}</td>) : null;
             const revenue = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows}></td>) : null;
             const totalDiscount = i === 0 ? (<td className="px-2 py-2 border border-gray-400 text-center font-bold text-base uppercase" rowSpan={maxRows}>
                 {((weekData.entries!.length || weekData.sales!.length) && filterObj.supplierId>0)?(
@@ -146,11 +146,13 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                 <tr key={i}>
                     {weekIndex}
                     <td className="px-2 py-2 border border-gray-400">{entry?.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>
-                    <td className="px-2 py-2 border border-gray-400 text-center">{entry?.quantity}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-center uppercase font-semibold">{entry?.productName} </td>
+                    <td className="px-2 py-2 border border-gray-400 text-center">{entry?.quantity} </td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.price}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.subtotal}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400">{sale?.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>
                     <td className="px-2 py-2 border border-gray-400">{sale?.saleCenterName}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-center">{sale?.productName}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{sale?.quantity}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${sale?.price}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${sale?.subtotal}`):null}</td>
@@ -186,14 +188,16 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
         rows.push(
             <tr key={maxRows}>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base">TOTAL</td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-center">{sumTotalEntries?.totalEntriesQuantity}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
-                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">{sumTotalEntries?(`S/ ${sumTotalEntries?.totalEntriesSubtotal}`):null}</td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalEntries?(`S/ ${sumTotalEntries?.totalEntriesSubtotal}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base"></td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-center">{sumTotalSales?.totalSalesQuantity}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
-                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal}`):null}</td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">
                 {((weekData.entries!.length || weekData.sales!.length) && filterObj.supplierId>0)?( <input 
@@ -240,24 +244,26 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                     </div>
                 </div> 
 
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full text-sm text-left text-black dark:text-gray-400">
+                    <thead className="text-xs uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>SEMANA</th>
-                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" colSpan={4}>INGRESO</th>
-                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" colSpan={5}>VENTAS</th>
+                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" colSpan={5}>INGRESO</th>
+                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" colSpan={6}>VENTAS</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>GANANCIA</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>DSCTO ENVIO</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg" rowSpan={2}>GANANCIA<br/>NETA</th>
                         </tr>
                         <tr>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">FECHA</th>
+                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">PROD</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">CANT</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">PRE</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">SUB</th>
 
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">FECHA</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">CENTRO DE VENTA</th>
+                            <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">PROD</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">CANT</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">PRE</th>
                             <th className="px-3 py-2 border border-gray-400 text-center font-bold text-lg">SUB</th>

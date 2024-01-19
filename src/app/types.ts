@@ -56,6 +56,7 @@ export interface IEntry {
     operationDate?: string
     operationType?: string
     operationStatus?: string
+    outputType?: string
     clientId?: number
     previousBalance?: number
     supplierId?: number
@@ -85,6 +86,7 @@ export interface IEntry {
 
     payedInCash?: number
     payedInDeposit?: number
+    paymentRemaining?: number
 
     hasIgv?: boolean
     isFictitious?: boolean
@@ -341,6 +343,7 @@ export interface IOperation {
     operationAction?: string
     observation?: string
     documentNumber?: string
+    outputType?: string
     user?: IUser
     supplier?: IPerson
     client?: IPerson
@@ -351,6 +354,7 @@ export interface IOperation {
 
     payedInCash?: number
     payedInDeposit?: number
+    paymentRemaining?: number
 
     isFictitious?: boolean
 
@@ -428,6 +432,7 @@ export interface ISaleOfWeekDay{
     operationDetailId?: number
     clientName?: string
     supplierName?: string
+    productName?: string
     saleCenterName?: string
     day?: number
     formattedDate?: string

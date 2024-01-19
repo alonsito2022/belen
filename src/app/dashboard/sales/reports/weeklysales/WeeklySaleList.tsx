@@ -73,61 +73,61 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
             const sumTotalQuantity = salesOf0.quantity! + salesOf1.quantity! + salesOf2.quantity! + salesOf3.quantity! + salesOf4.quantity! + salesOf5.quantity! + salesOf6.quantity!;
             const sumTotalPrice = (salesOf0.price! + salesOf1.price! + salesOf2.price! + salesOf3.price! + salesOf4.price! + salesOf5.price! + salesOf6.price!)/7;
             const sumSubtotalWithDiscount = salesOf0.subtotalWithDiscount! + salesOf1.subtotalWithDiscount! + salesOf2.subtotalWithDiscount! + salesOf3.subtotalWithDiscount! + salesOf4.subtotalWithDiscount! + salesOf5.subtotalWithDiscount! + salesOf6.subtotalWithDiscount!;
-            const productName = i === 0 ? (<td className="px-2 py-2 border border-gray-400 font-bold text-lg" rowSpan={maxRows}>{weekData.productName!}</td>) : null;
+            const productName = i === 0 ? (<td className="px-2 py-2 border border-gray-400 font-bold text-black text-lg" rowSpan={maxRows}>{weekData.productName!}</td>) : null;
 
 
             rows.push(
                 <tr key={i}>
                     {productName}
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`${salesOf0?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`${salesOf0?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.subtotal}`):""}</td>
                     <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf0&&Number(salesOf0?.quantity))>0?(`S/ ${salesOf0?.subtotalWithDiscount}`):""}</td>
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`${salesOf1?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`${salesOf1?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.subtotal}`):""}</td>
                     <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf1&&Number(salesOf1?.quantity))>0?(`S/ ${salesOf1?.subtotalWithDiscount}`):""}</td>
 
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`${salesOf2?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`${salesOf2?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap  text-center font-bold text-red-500">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf2&&Number(salesOf2?.quantity))>0?(`S/ ${salesOf2?.subtotalWithDiscount}`):""}</td>
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`${salesOf3?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`${salesOf3?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap  text-center font-bold text-red-500">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf3&&Number(salesOf3?.quantity))>0?(`S/ ${salesOf3?.subtotalWithDiscount}`):""}</td>
 
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`${salesOf4?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`${salesOf4?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap  text-center font-bold text-red-500">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf4&&Number(salesOf4?.quantity))>0?(`S/ ${salesOf4?.subtotalWithDiscount}`):""}</td>
 
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`${salesOf5?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`${salesOf5?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap  text-center font-bold text-red-500">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf5&&Number(salesOf5?.quantity))>0?(`S/ ${salesOf5?.subtotalWithDiscount}`):""}</td>
 
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`${salesOf6?.quantity}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.price}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.subtotal}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold text-red-500">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.discount}`):""}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.subtotalWithDiscount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`${salesOf6?.quantity}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.price}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.subtotal}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap  text-center font-bold text-red-500">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.discount}`):""}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{(salesOf6&&Number(salesOf6?.quantity))>0?(`S/ ${salesOf6?.subtotalWithDiscount}`):""}</td>
                     
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-center font-bold">{sumTotalQuantity}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">S/ {sumTotalPrice}</td>
-                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-right font-bold">S/ {sumSubtotalWithDiscount}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-center font-bold">{sumTotalQuantity}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-right font-bold">S/ {sumTotalPrice}</td>
+                    <td className="px-2 py-2 border border-gray-400 whitespace-nowrap text-black text-right font-bold">S/ {sumSubtotalWithDiscount}</td>
 
 
 
@@ -392,46 +392,46 @@ function WeeklySaleList({suppliers, setFilterObj, filterObj, obtenerFechaInicioF
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf0}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf0}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf0}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf0}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf0}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf0}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf1}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf1}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf0}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf1}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf1}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf1}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf1}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf2}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf2}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf1}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf2}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf2}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf2}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf2}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf3}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf3}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf2}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf3}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf3}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf3}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf3}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf4}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf4}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf3}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf4}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf4}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf4}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf4}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf5}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf5}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf4}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf5}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf5}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf5}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf5}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf6}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf6}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf5}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-center">{salesSummary.salesSummaryQuantityOf6}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalOf6}</td>
                             <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap text-red-500">S/ {salesSummary.salesSummaryDiscountOf6}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf6}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-lime-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.salesSummarySubtotalWithDiscountOf6}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 font-bold text-base text-center">{salesSummary.sumQuantity}</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 font-bold text-base text-center"></td>
-                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.sumSubtotalWithDiscount}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 text-black font-bold text-base text-center">{salesSummary.sumQuantity}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 text-black font-bold text-base text-center"></td>
+                            <td className="px-2 py-2 border border-gray-400 bg-gray-200 text-black font-bold text-base text-right whitespace-nowrap">S/ {salesSummary.sumSubtotalWithDiscount}</td>
                         </tr>
                     </tfoot>
                 </table>

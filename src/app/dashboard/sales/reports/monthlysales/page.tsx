@@ -30,6 +30,7 @@ function MonthlySalePage() {
                     entries{
                         operationDetailId
                         supplierName
+                        productName
                         day
                         formattedDate
                         quantity
@@ -39,6 +40,7 @@ function MonthlySalePage() {
                     sales{
                         operationDetailId
                         clientName
+                        productName
                         saleCenterName
                         day
                         formattedDate
