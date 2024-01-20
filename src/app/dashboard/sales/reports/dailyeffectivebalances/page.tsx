@@ -25,9 +25,38 @@ function DailyEffectiveBalancePage() {
                     incomesInDeposit
                     expenses
                     total
+                    formattedDate
+                    listOfIncomesInCash{
+                        id
+                        userId
+                        userName
+                        description
+                        total
+                        transactionDate
+                        transactionType
+                    }
+                    listOfIncomesInDeposit{
+                        id
+                        userId
+                        userName
+                        description
+                        total
+                        transactionDate
+                        transactionType
+                    }
+                    listOfExpenses{
+                        id
+                        userId
+                        userName
+                        description
+                        total
+                        transactionDate
+                        transactionType
+                    }
                 }
             }
         `;
+        console.log(queryfecth)
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},

@@ -149,13 +149,13 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                     <td className="px-2 py-2 border border-gray-400 text-center uppercase font-semibold">{entry?.productName} </td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{entry?.quantity} </td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.price}`):null}</td>
-                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${entry?.subtotal}`):null}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{entry?(`S/ ${Number(entry?.subtotal).toFixed(1)}`):null}</td>
                     <td className="px-2 py-2 border border-gray-400">{sale?.formattedDate?.toString().replace("Dec", "Dic").replace("Jan", "Ene")}</td>
                     <td className="px-2 py-2 border border-gray-400">{sale?.saleCenterName}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{sale?.productName}</td>
                     <td className="px-2 py-2 border border-gray-400 text-center">{sale?.quantity}</td>
                     <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${sale?.price}`):null}</td>
-                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${sale?.subtotal}`):null}</td>
+                    <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap">{sale?(`S/ ${Number(sale?.subtotal).toFixed(1)}`):null}</td>
                     {revenue}
                     {totalDiscount}
                     {totalNetProfit}
@@ -191,14 +191,14 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-center">{sumTotalEntries?.totalEntriesQuantity}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
-                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalEntries?(`S/ ${sumTotalEntries?.totalEntriesSubtotal}`):null}</td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalEntries?(`S/ ${Number(sumTotalEntries?.totalEntriesSubtotal).toFixed(1)}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-center">{sumTotalSales?.totalSalesQuantity}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right"></td>
-                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal}`):null}</td>
-                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">{sumTotalSales?(`S/ ${sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal}`):null}</td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalSales?(`S/ ${Number(sumTotalSales?.totalSalesSubtotal).toFixed(1)}`):null}</td>
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">{sumTotalSales?(`S/ ${Number(sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal).toFixed(1)}`):null}</td>
                 <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">
                 {((weekData.entries!.length || weekData.sales!.length) && filterObj.supplierId>0)?( <input 
                         type="number"
@@ -210,8 +210,8 @@ function MonthlySaleList({filterObj, setFilterObj, suppliers, entriesAndSalesByM
                         
                     />):null}
                 </td>
-                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right">
-                {sumTotalSales?(`S/ ${(sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal) - Number(weekData.shippingCost)}`):null}
+                <td className="px-2 py-2 border border-gray-400 bg-yellow-100 font-bold text-base text-right whitespace-nowrap">
+                {sumTotalSales?(`S/ ${Number(Number(sumTotalSales?.totalSalesSubtotal - sumTotalEntries?.totalEntriesSubtotal) - Number(weekData.shippingCost)).toFixed(1)}`):null}
                 </td>
             </tr>
         )

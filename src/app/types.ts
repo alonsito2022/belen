@@ -417,6 +417,10 @@ export interface IDayInfo{
     incomesInDeposit?: number
     expenses?: number
     total?: number
+    formattedDate?: string
+    listOfIncomesInCash?: Array<IExpenseOfWeekDay>
+    listOfIncomesInDeposit?: Array<IExpenseOfWeekDay>
+    listOfExpenses?: Array<IExpenseOfWeekDay>
 }
 export interface IExpenseOfWeekDay{
     id?: number

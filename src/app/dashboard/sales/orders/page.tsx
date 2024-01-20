@@ -306,7 +306,7 @@ function OrderPage() {
             //   });
               
              setOutputs(data.data.outputsByDate);
-             console.log(data.data.outputsByDate)
+            //  console.log(data.data.outputsByDate)
             //  setOutputs(filteredOutputsByDate);
             //  console.log("filteredOutputsByDate", filteredOutputsByDate)
              

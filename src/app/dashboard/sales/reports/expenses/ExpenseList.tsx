@@ -33,7 +33,7 @@ function ExpenseList({
         let objWeekday = getWeekDayInSpanish(item.formattedWeekday!);
         let objDate = getShortNameMonth(item.formattedDate!);
         return (
-            <th key={index} className="px-6 py-4 border border-gray-400 text-center font-bold text-lg" colSpan={2}>{objWeekday}<br/>{objDate}</th>
+            <th key={index} className="px-6 py-4 border border-gray-400 bg-red-300 text-center font-bold text-lg" colSpan={2}>{objWeekday}<br/>{objDate}</th>
         );
     });
 
@@ -110,20 +110,20 @@ function ExpenseList({
                 const day6 = info.expensesOf6![i];
                 rows.push(
                     <tr key={i}>
-                        <td className="px-2 py-2 border border-gray-400">{day0?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day0)?("S/ " + day0?.total):""}</td>
-                        <td className="px-2 py-2 border border-gray-400">{day1?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day1)?("S/ " + day1?.total):""}</td>
-                        <td className="px-2 py-2 border border-gray-400">{day2?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day2)?("S/ " + day2?.total):""}</td>
-                        <td className="px-2 py-2 border border-gray-400">{day3?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day3)?("S/ " + day3?.total):""}</td>
-                        <td className="px-2 py-2 border border-gray-400">{day4?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day4)?("S/ " + day4?.total):""}</td>
-                        <td className="px-2 py-2 border border-gray-400">{day5?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day5)?("S/ " + day5?.total):""}</td>
-                        <td className="px-2 py-2 border border-gray-400">{day6?.description}</td>
-                        <td className="px-2 py-2 border border-gray-400 text-right">{(day6)?("S/ " + day6?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day0?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day0)?("S/ " + day0?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day1?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day1)?("S/ " + day1?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day2?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day2)?("S/ " + day2?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day3?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day3)?("S/ " + day3?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day4?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day4)?("S/ " + day4?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day5?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day5)?("S/ " + day5?.total):""}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200">{day6?.description}</td>
+                        <td className="px-2 py-2 border border-gray-400 bg-red-200 text-right">{(day6)?("S/ " + day6?.total):""}</td>
                     </tr>
                 )
             }
@@ -160,39 +160,39 @@ function ExpenseList({
                             });
                         
                             
-                    }} className="btn-lime border px-5 py-2.5" type="button">
+                    }} className="btn-red border px-5 py-2.5" type="button">
                     Crear egreso
                     </button>
                     
                 </div>
 
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <table className="w-full text-sm text-left text-black dark:text-gray-400">
                     <caption className="">Cuadro de Egresos</caption>
-                    <thead className="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead className="text-xs bg-gray-50">
                         <tr>
                             {theads}
                         </tr>
                         <tr>
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
-                            <td className="px-2 py-2 border border-gray-400 text-center">RAZON</td>
-                            <td className="px-2 py-2 border border-gray-400 text-right">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-center">RAZON</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 text-right">TOTAL</td>
 
 
                         </tr>
@@ -204,26 +204,26 @@ function ExpenseList({
                     <tfoot>
                         <tr>
                             
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[0].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[0].total!}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[1].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[1].total!}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[2].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[2].total!}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[3].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[3].total!}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[4].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[4].total!}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[5].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[5].total!}</td>
 
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-semibold text-lg">TOTAL</td>
-                            <td className="px-2 py-2 border border-gray-400 bg-yellow-200 font-bold text-base text-right">S/ {sumasPorDia[6].total!}</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-semibold text-lg">TOTAL</td>
+                            <td className="px-2 py-2 border border-gray-400 bg-red-300 font-bold text-base text-right">S/ {sumasPorDia[6].total!}</td>
                             
                         </tr>
                     </tfoot>

@@ -156,7 +156,7 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
             const totalNet = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>{operationData.outputType==="V"?("S/" + operationData.totalNet):null}</td>) : null;
             const payedInCash = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>{operationData.outputType==="V"?("S/" + Number(operationData.payedInCash).toFixed(2)):null}</td>) : null;
             const payedInDeposit = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>{operationData.outputType==="V"?("S/" + Number(operationData.payedInDeposit)):null}</td>) : null;
-            const subtraction = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right font-bold text-black" rowSpan={maxRows}>S/ {operationData.subtraction}</td>) : null;
+            const subtraction = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right font-bold text-black whitespace-nowrap" rowSpan={maxRows}>S/ {operationData.subtraction}</td>) : null;
             const actions = i === 0 ? (<td className="px-2 py-2 border border-gray-600 text-right text-black" rowSpan={maxRows}>
                 <div className="flex gap-1 justify-center">
                     {operationData.outputType==="V"?(
@@ -452,13 +452,13 @@ function OrderList({outputs, setOutputs, output, setOutput, fetchOutputs, modal,
                         <tr>
                             <td className="border">TOTALES</td>
                             <td className="border" colSpan={8}></td>
-                            <td className="px-2 border text-right font-bold text-black">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryTotalSale).toFixed(2)):null}</td>
+                            <td className="px-2 border text-right font-bold text-black whitespace-nowrap">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryTotalSale).toFixed(2)):null}</td>
                             <td className="border"></td>
-                            <td className="px-2 border text-right font-bold text-black">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryTotalPreviousBalance).toFixed(2)):null}</td>
-                            <td className="px-2 border text-right font-bold text-black">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryTotalNet).toFixed(2)):null}</td>
-                            <td className="px-2 border text-right font-bold text-black">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryCash).toFixed(2)):null}</td>
-                            <td className="px-2 border text-right font-bold text-black">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryDeposit).toFixed(2)):null}</td>
-                            <td className="px-2 border text-right font-bold text-black">S/ {Number(balanceSummary.summarySubtraction).toFixed(2)}</td>
+                            <td className="px-2 border text-right font-bold text-black whitespace-nowrap">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryTotalPreviousBalance).toFixed(2)):null}</td>
+                            <td className="px-2 border text-right font-bold text-black whitespace-nowrap">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryTotalNet).toFixed(2)):null}</td>
+                            <td className="px-2 border text-right font-bold text-black whitespace-nowrap">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryCash).toFixed(2)):null}</td>
+                            <td className="px-2 border text-right font-bold text-black whitespace-nowrap">{filterObj.outputType==="V"?("S/ " + Number(balanceSummary.summaryDeposit).toFixed(2)):null}</td>
+                            <td className="px-2 border text-right font-bold text-black whitespace-nowrap">S/ {Number(balanceSummary.summarySubtraction).toFixed(2)}</td>
                         </tr>
                     </tfoot>
                 </table>
