@@ -140,7 +140,7 @@ function DailyEffectiveBalanceList({setFilterObj, filterObj, obtenerFechaInicioF
                                                         </thead>
                                                         <tbody>
                                                             {item.listOfIncomesInDeposit?.map((ts: IExpenseOfWeekDay, pos: number)=>
-                                                            <tr>
+                                                            <tr key={pos}>
                                                                 
                                                                 
                                                                 <td className='px-2 py-2 border-b border-gray-200'>{ts?.description} </td>
@@ -177,7 +177,7 @@ function DailyEffectiveBalanceList({setFilterObj, filterObj, obtenerFechaInicioF
                                                         </thead>
                                                         <tbody>
                                                             {item.listOfExpenses?.map((ts: IExpenseOfWeekDay, pos: number)=>
-                                                            <tr>
+                                                            <tr key={pos}>
                                                                 
                                                                 
                                                                 <td className='px-2 py-2 border-b border-gray-200'>{ts?.description} </td>
