@@ -5,7 +5,7 @@ import { ISubsidiary, ICategory, ISubcategory } from '@/app/types';
 import { toast } from "react-toastify";
 
 
-function SubcategoryForm({subcategoryModal, setSubcategoryModal, setSubcategory, subcategory, fetchCategories, fetchSubcategories, subsidiaries, categories, subcategories, fetchAllElements}: any) {
+function SubcategoryForm({subcategoryModal, setSubcategoryModal, setSubcategory, subcategory, fetchCategoriesBySubsidiary, fetchSubcategories, subsidiaries, categories, subcategories, fetchAllElements}: any) {
 
     const handleSaveSubcategory = async (e: FormEvent<HTMLFormElement>) => {
 
@@ -49,7 +49,7 @@ function SubcategoryForm({subcategoryModal, setSubcategoryModal, setSubcategory,
         
 
         if(name=="subsidiaryId"){
-            fetchCategories(value)
+            fetchCategoriesBySubsidiary(value)
             setSubcategory({...subcategory, subsidiaryId: value});
         }
         else if(name=="categoryId"){

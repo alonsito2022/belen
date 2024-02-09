@@ -17,10 +17,11 @@ const initialStateFilterObj = {
 const initialStateExpense = {
     id: 0,
     userId: 0,
-    description: "",
+    name: "",
     total: 0,
     categoryId: 0,
     subcategoryId: 0,
+    subsidiaryId: 2,
     transactionDate: "",
     transactionType: "S",
 }

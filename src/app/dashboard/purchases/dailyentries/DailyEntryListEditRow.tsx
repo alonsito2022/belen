@@ -73,6 +73,8 @@ function DailyEntryListEditRow({item, setUpdateState, filterObj, fort, fetchDail
                 }
             }
         `;
+
+        console.log(queryFetch)
         
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',

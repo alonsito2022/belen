@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { ICategory, ISubsidiary, ISubcategory, IElement } from '@/app/types';
 import { toast } from "react-toastify";
 
-function ElementForm({setElementModal, elementModal, subsidiaries, categories, subcategories, elements, setElement, element, fetchAllElements, fetchCategories, fetchSubcategories, fetchElements}: any) {
+function ElementForm({setElementModal, elementModal, subsidiaries, categories, subcategories, elements, setElement, element, fetchAllElements, fetchCategoriesBySubsidiary, fetchSubcategories, fetchElements}: any) {
 
     const handleAddCity = async () => {
 
@@ -43,7 +43,7 @@ function ElementForm({setElementModal, elementModal, subsidiaries, categories, s
     };
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         if(name=="subsidiaryId"){
-            fetchCategories(value)
+            fetchCategoriesBySubsidiary(value)
             setElement({...element, subsidiaryId: value});
         }
         else if(name=="categoryId"){
@@ -85,7 +85,7 @@ function ElementForm({setElementModal, elementModal, subsidiaries, categories, s
                         
                         <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white" id="modal-element-title">
-                                Editar proveedor
+                                Nuevo concepto
                             </h3>
                             <button type="button" id="btn-close-supplier-modal" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                              onClick={()=>{elementModal.hide();}}>

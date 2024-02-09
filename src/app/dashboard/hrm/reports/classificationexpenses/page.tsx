@@ -6,9 +6,11 @@ import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
 import { Modal, ModalOptions } from 'flowbite'
 import {obtenerSemanaActual, getDates} from '@/libs/functions'
-import MonthlyExpenseList from "./MonthlyExpenseList"
-
 // import ExpenseForm from "./ExpenseForm"
+import ExpenseClassificationList from "./ExpenseClassificationList"
+import SubcategoryForm from "./SubcategoryForm"
+import CategoryForm from "./CategoryForm"
+import ElementForm from "./ElementForm";
 
 const initialStateFilterObj = {
     cashId: 0,
@@ -59,8 +61,7 @@ const initialStateElement = {
     }
 }
 
-
-function MonthlyExpensePage() {
+function PageExpenseClassification() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
 
     const [subcategories, setSubcategories] = useState< ISubcategory[]>([]);
@@ -182,6 +183,34 @@ function MonthlyExpensePage() {
         })
         
     }
+    
+    async function fetchCategoriesBySubsidiary(id: number){
+        let queryfecth = `
+            query {
+                categoriesBySubsidiaryId(subsidiaryId:${id}) {
+                    id
+                    name
+                    subsidiary {
+                        id
+                        name
+                    }
+                }
+            }
+        `;
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: queryfecth
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setCategories(data.data.categoriesBySubsidiaryId);
+        })
+        
+    }
+
     async function fetchSubcategories(id: number){
         let queryfecth = `
             query {
@@ -241,12 +270,11 @@ function MonthlyExpensePage() {
         fetchAllElements();
     }, []);
 
-
     return (
         <>
-            <Breadcrumb section={"Administración"} article={"Egresos mensuales"} />
+            <Breadcrumb section={"Administración"} article={"Clasificación de egresos mensuales"} />
 
-            <MonthlyExpenseList
+            <ExpenseClassificationList
                 categoryModal={categoryModal}
                 setCategory={setCategory}
                 category={category}
@@ -263,10 +291,47 @@ function MonthlyExpensePage() {
 
             />
 
+            <CategoryForm 
+                categoryModal={categoryModal}
+                setCategoryModal={setCategoryModal}
+                setCategory={setCategory}
+                category={category}
+                fetchAllElements={fetchAllElements}
+                fetchCategories={fetchCategories}
+                subsidiaries={subsidiaries}
+                categories={categories}
+            />
 
+           <SubcategoryForm 
+                subcategoryModal={subcategoryModal} 
+                setSubcategoryModal={setSubcategoryModal} 
+                setSubcategory={setSubcategory} 
+                subcategory={subcategory} 
+                fetchCategoriesBySubsidiary={fetchCategoriesBySubsidiary}
+                fetchSubcategories={fetchSubcategories} 
+                subsidiaries={subsidiaries}
+                categories={categories}
+                subcategories={subcategories}
+                fetchAllElements={fetchAllElements}
+            />
+
+            <ElementForm
+                setElementModal={setElementModal}
+                elementModal={elementModal}
+                subsidiaries={subsidiaries}
+                categories={categories}
+                subcategories={subcategories}
+                elements={elements}
+                setElement={setElement}
+                element={element}
+                fetchAllElements={fetchAllElements}
+                fetchCategoriesBySubsidiary={fetchCategoriesBySubsidiary}
+                fetchSubcategories={fetchSubcategories}
+                fetchElements={fetchElements}
+            />
 
         </>
     )
 }
 
-export default MonthlyExpensePage
+export default PageExpenseClassification

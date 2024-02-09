@@ -1,11 +1,14 @@
 "use client";
 import { Modal, ModalOptions } from 'flowbite'
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { ICategory, IElement, IPerson, IProductTariff, ISubcategory, ISupplierTariff, IUser } from '@/app/types';
+import { ICategory, IElement, IPerson, IProductTariff, ISubcategory, ISubsidiary, IUser } from '@/app/types';
 import { toast } from "react-toastify";
 
 function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek, filterObj}: any) {
-
+    const [subsidiaries, setSubsidiaries] = useState< ISubsidiary[]>([]);
+    const [categories, setCategories] = useState< ICategory[]>([]);
+    const [subcategories, setSubcategories] = useState< ISubcategory[]>([]);
+    const [elements, setElements] = useState< IElement[]>([]);
 
     const handleSaveSupplier = async (e: FormEvent<HTMLFormElement>) => {
 
@@ -17,10 +20,11 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                     createExpense(
                         userId: ${expense.userId}, 
                         weekValue:${Number(filterObj.week.toString().replace("-W", ""))},
-                        description: "${expense.description}",
+                        description: "${expense.name}",
                         total: ${expense.total}, 
                         transactionDate: "${expense.transactionDate}",
-                        transactionType: "${expense.transactionType}"
+                        transactionType: "${expense.transactionType}",
+                        subcategoryId: ${expense.subcategoryId}
                     ){
                         message
                     }
@@ -38,7 +42,7 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                 setExpense({
                     ...expense, 
                     id: 0,
-                    description: "",
+                    name: "",
                     total: 0,
                 });
                 modal.hide();
@@ -51,14 +55,141 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
 
-        setExpense({...expense, [name]: value});
+        // setExpense({...expense, [name]: value});
+
+
+        if(name=="subsidiaryId"){
+            fetchCategoriesBySubsidiary(Number(value))
+            setExpense({...expense, subsidiaryId: value, name: "", categoryId: 0, subcategoryId: 0});
+        }
+        else if(name=="categoryId"){
+            fetchSubcategoriesByCategory(Number(value))
+            setExpense({...expense, categoryId: value, name: "", subcategoryId: 0});
+        }
+        else if(name=="subcategoryId"){
+            fetchElementsBySubcategory(Number(value))
+            setExpense({...expense, subcategoryId: value, name: ""});
+        }
+        else if(name=="name"){
+            setExpense({...expense, name: value});
+        }
+        else if(name=="total"){
+            setExpense({...expense, total: value});
+        }
+        else{
+            setExpense({...expense, [name]: value});
+        }
         
     }
 
+    async function fetchSubsidiaries(){
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                    query {
+                        subsidiaries {
+                            id
+                            name
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setSubsidiaries(data.data.subsidiaries);
+        })
+    }
 
+    async function fetchCategoriesBySubsidiary(id: number){
+        let queryfecth = `
+            query {
+                categoriesBySubsidiaryId(subsidiaryId:${id}) {
+                    id
+                    name
+                    subsidiary {
+                        id
+                        name
+                    }
+                }
+            }
+        `;
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: queryfecth
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setCategories(data.data.categoriesBySubsidiaryId);
+        })
+        
+    }
+
+    async function fetchSubcategoriesByCategory(id: number){
+        let queryfecth = `
+            query {
+                subcategoriesByCategoryId(categoryId:${id}) {
+                    id
+                    name
+                    category {
+                        id
+                        name
+                    }
+                }
+            }
+        `;
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: queryfecth
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setSubcategories(data.data.subcategoriesByCategoryId);
+        })
+        
+    }
+
+    async function fetchElementsBySubcategory(id: number){
+        let queryfecth = `
+            query {
+                elementsBySubcategoryId(subcategoryId:${id}) {
+                    id
+                    name
+                    subcategory {
+                        id
+                        name
+                    }
+                }
+            }
+        `;
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: queryfecth
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setElements(data.data.elementsBySubcategoryId);
+        })
+        
+    }
+
+    
     useEffect(() => {
         
         if(modal == null){
+            fetchSubsidiaries();
+            fetchCategoriesBySubsidiary(expense.subsidiaryId)
             const $targetEl = document.getElementById('expenseFormModal');
             const options: ModalOptions = {
                 placement: 'bottom-right',
@@ -106,6 +237,36 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                                 </div>
 
                                 <div>
+                                    <label htmlFor="subsidiaryId3" className="form-label">Sede:</label>
+                                    <select name="subsidiaryId" id="subsidiaryId3" onChange={handleInputChange} value={expense.subsidiaryId} className="form-control">
+                                        <option value={0}>{"ELEGIR"}</option>
+                                        {subsidiaries.map((o: ISubsidiary,k: number)=>(
+                                                <option key={k} value={o.id}>{o.name}</option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="categoryId3" className="form-label">Categoria:</label>
+                                    <select name="categoryId" id="categoryId3" onChange={handleInputChange} value={expense.categoryId} className="form-control">
+                                        <option value={0}>{"ELEGIR"}</option>
+                                        {categories.map((o: ICategory,k: number)=>(
+                                                <option key={k} value={o.id}>{o.name}</option>
+                                            ))}
+                                    </select>
+                                </div>
+          
+                                <div>
+                                    <label htmlFor="subcategoryId3" className="form-label">Subcategoria:</label>
+                                    <select name="subcategoryId" id="subcategoryId3" onChange={handleInputChange} value={expense.subcategoryId} className="form-control" required>
+                                        <option value={0}>{"ELEGIR"}</option>
+                                        {subcategories?.map((o: ISubcategory,k: number)=>(
+                                                <option key={k} value={o.id}>{o.name}</option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                {/* <div>
                                     <label htmlFor="description" className="form-label">Razon:</label>
                                     <textarea 
                                         id="description" 
@@ -119,6 +280,29 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                                         placeholder="Escribe una descripcion aquí..."
                                     ></textarea>
 
+                                </div> */}
+
+                                <div>
+                                    <label htmlFor="description3" className="form-label">Razon:</label>
+                                    <input
+                                        type="search"
+                                        value={expense.name || ''}
+                                        onChange={handleInputChange}
+                                        list="listOfElements"
+                                        name="name"
+                                        id="description3"
+                                        className='form-control uppercase'
+                                        placeholder="Escribe una razon"
+                                        autoComplete='off'
+                                    />
+
+                                    <datalist id="listOfElements">
+                                        {elements.map((c: IElement, index: number) => (
+                                            <option key={index} value={c.name} />
+                                        ))}
+                                    </datalist>
+
+                                    
                                 </div>
                                 
                                 
