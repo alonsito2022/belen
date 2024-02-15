@@ -93,7 +93,7 @@ function GloriaShipmentList({suppliers, suppliersWithGloriaShipments, filterObj,
                 </tr>
                 </tfoot>
             </table>
-            <GloriaPriceForm selectedSupplier={selectedSupplier} setSelectedSupplier={setSelectedSupplier} fort={fort} getGloriaShipments={getGloriaShipments} />
+            <GloriaPriceForm filterObj={filterObj} selectedSupplier={selectedSupplier} setSelectedSupplier={setSelectedSupplier} fort={fort} getGloriaShipments={getGloriaShipments} />
         </div>
         </>
     )

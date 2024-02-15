@@ -246,3 +246,19 @@ body {
     rgb(var(--background-start-rgb));
 }
 */
+.text-sideways{text-orientation: sideways;}
+.text-upright{text-orientation: upright;}
+.text-sideways-right{text-orientation: sideways-right;}
+.text-glyph{text-orientation: use-glyph-orientation;}
+
+.writing-vertical-lr{writing-mode: vertical-lr;}
+.writing-vertical-rl{writing-mode: vertical-rl;}
+.writing-horizontal-tb{writing-mode: horizontal-tb;}
+.text-rotated-90{
+  transform: rotate(180deg);
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  padding: 0;
+  line-height: 16px;
+  letter-spacing: 1px;
+}

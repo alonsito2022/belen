@@ -1,10 +1,11 @@
 "use client";
 import { Modal, ModalOptions } from 'flowbite'
+import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { IMonthElementData, IMonthExpenseData } from '@/app/types';
 import { toast } from "react-toastify";
 
-function MonthlyExpenseList({categories}:any) {
 
+function FinalFinalFrameList({categories}:any) {
     return (
         <>
             <div className="relative overflow-x-auto mt-2">
@@ -36,7 +37,7 @@ function MonthlyExpenseList({categories}:any) {
                         <tr key={c} className={expense.type==="Category"?"bg-blue-200 border-b font-bold":expense.type==="Subcategory"?"bg-green-200 border-b text-base font-semibold":"bg-white border-b text-right"}>
                             <td className="px-4 py-2 border border-gray-400">{expense.name}</td>
                             {expense.months?.map((m: IMonthElementData, s: number) => 
-                                <td key={s} className="px-4 py-2 border border-gray-400 text-right whitespace-nowrap">S/ {Number(m.amount).toFixed(2)}</td>
+                                <td className="px-4 py-2 border border-gray-400 text-right whitespace-nowrap">S/ {Number(m.amount).toFixed(2)}</td>
                             )}
                         </tr>
                     
@@ -49,4 +50,4 @@ function MonthlyExpenseList({categories}:any) {
     )
 }
 
-export default MonthlyExpenseList
+export default FinalFinalFrameList

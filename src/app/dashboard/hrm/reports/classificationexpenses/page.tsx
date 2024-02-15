@@ -166,6 +166,7 @@ function PageExpenseClassification() {
                             name
                         }
                     }
+                    totalUsed
                 }
             }
         `;
@@ -288,6 +289,7 @@ function PageExpenseClassification() {
                 elements={elements}
 
                 allElements={allElements}
+                fetchAllElements={fetchAllElements}
 
             />
 

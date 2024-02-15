@@ -198,7 +198,7 @@ function WarehousePage() {
                             document.getElementById("btn-save-product")!.innerHTML = "Guardar almacen";
                             setWarehouse(initialState);
 
-                }} className="btn-cyan" type="button">
+                }} className="btn-cyan px-2 py-2" type="button">
                 Crear almacen
                 </button>
 
@@ -232,7 +232,7 @@ function WarehousePage() {
                                 document.getElementById("btn-save-product")!.innerHTML = "Actualizar almacen";
                                 
                             }}
-                            className="btn-green">Editar</button>
+                            className="btn-green px-2 py-2">Editar</button>
                         
                         </td>
                     </tr>

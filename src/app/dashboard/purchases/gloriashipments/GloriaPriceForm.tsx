@@ -1,7 +1,7 @@
 import { ChangeEvent ,useState, useEffect, KeyboardEvent, MouseEvent } from "react";
 import { toast } from "react-toastify";
 
-function GloriaPriceForm({selectedSupplier, setSelectedSupplier, fort, getGloriaShipments}: any) {
+function GloriaPriceForm({filterObj, selectedSupplier, setSelectedSupplier, fort, getGloriaShipments}: any) {
 
     async function getGloriaPrice(){
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
@@ -10,7 +10,7 @@ function GloriaPriceForm({selectedSupplier, setSelectedSupplier, fort, getGloria
             body: JSON.stringify({
                 query: `
                     {
-                        clientTariffById(clientId:${528}, fortnightValue:${fort}) {
+                        gloriaPriceByFortnight(clientId:${528}, fortnightValue:${fort}, collectDate:"${filterObj.collectDate}") {
                             id
                             clientName
                             salePrice1
@@ -21,7 +21,7 @@ function GloriaPriceForm({selectedSupplier, setSelectedSupplier, fort, getGloria
         })
         .then(res=>res.json())
         .then(data=>{
-            setSelectedSupplier({...selectedSupplier, priceGloria: data.data.clientTariffById.salePrice1});
+            setSelectedSupplier({...selectedSupplier, priceGloria: data.data.gloriaPriceByFortnight.salePrice1});
         })
     }
 
@@ -33,7 +33,8 @@ function GloriaPriceForm({selectedSupplier, setSelectedSupplier, fort, getGloria
                 saveGloriaPrice(
                     clientId:${528},
                     salePrice1:${Number(selectedSupplier.priceGloria)!==0?selectedSupplier.priceGloria:0},
-                    fortnightValue:${fort}
+                    fortnightValue:${fort}, 
+                    collectDate:"${filterObj.collectDate}"
                 ){
                     message
                 }
@@ -56,9 +57,9 @@ function GloriaPriceForm({selectedSupplier, setSelectedSupplier, fort, getGloria
 
     useEffect(() => {
 
-        if(fort>0 )
+        if(filterObj.collectDate !="" )
             getGloriaPrice();
-    }, [fort]);
+    }, [filterObj]);
 
     const handleInputChange = ({target: {name, value} }: ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
 

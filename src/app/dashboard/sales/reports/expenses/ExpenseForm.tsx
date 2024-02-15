@@ -4,8 +4,8 @@ import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { ICategory, IElement, IPerson, IProductTariff, ISubcategory, ISubsidiary, IUser } from '@/app/types';
 import { toast } from "react-toastify";
 
-function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek, filterObj}: any) {
-    const [subsidiaries, setSubsidiaries] = useState< ISubsidiary[]>([]);
+function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek, filterObj, subsidiaries}: any) {
+    
     const [categories, setCategories] = useState< ICategory[]>([]);
     const [subcategories, setSubcategories] = useState< ISubcategory[]>([]);
     const [elements, setElements] = useState< IElement[]>([]);
@@ -24,7 +24,8 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
                         total: ${expense.total}, 
                         transactionDate: "${expense.transactionDate}",
                         transactionType: "${expense.transactionType}",
-                        subcategoryId: ${expense.subcategoryId}
+                        subcategoryId: ${expense.subcategoryId},
+                        subsidiaryId: ${expense.subsidiaryId},
                     ){
                         message
                     }
@@ -82,26 +83,7 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
         
     }
 
-    async function fetchSubsidiaries(){
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify({
-                query: `
-                    query {
-                        subsidiaries {
-                            id
-                            name
-                        }
-                    }
-                `
-            })
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            setSubsidiaries(data.data.subsidiaries);
-        })
-    }
+    
 
     async function fetchCategoriesBySubsidiary(id: number){
         let queryfecth = `
@@ -188,7 +170,7 @@ function ExpenseForm({modal, setModal, setExpense, expense, fetchExpensesByWeek,
     useEffect(() => {
         
         if(modal == null){
-            fetchSubsidiaries();
+            
             fetchCategoriesBySubsidiary(expense.subsidiaryId)
             const $targetEl = document.getElementById('expenseFormModal');
             const options: ModalOptions = {

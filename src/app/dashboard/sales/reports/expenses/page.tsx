@@ -11,7 +11,8 @@ import ExpenseForm from "./ExpenseForm"
 
 const initialStateFilterObj = {
     cashId: 0,
-    week: ""
+    week: "",
+    subsidiaryId: 2,
 }
 
 const initialStateExpense = {
@@ -40,9 +41,28 @@ function ExpensePage() {
     const { data: session } = useSession();
     const u = session?.user as IUser;
 
- 
+    const [subsidiaries, setSubsidiaries] = useState< ISubsidiary[]>([]);
 
-
+    async function fetchSubsidiaries(){
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                    query {
+                        subsidiaries {
+                            id
+                            name
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setSubsidiaries(data.data.subsidiaries);
+        })
+    }
 
     async function fetchDaysBetweenDates(){
         let queryfecth = `
@@ -71,7 +91,7 @@ function ExpensePage() {
     async function fetchExpensesByWeek(){
         let queryfecth = `
             query {
-                expensesByWeek(weekValue:${Number(filterObj.week.toString().replace("-W", ""))}) {
+                expensesByWeek(weekValue:${Number(filterObj.week.toString().replace("-W", ""))}, subsidiaryId:${filterObj.subsidiaryId} ) {
                     
                     expensesOf0 {
                         description
@@ -135,7 +155,7 @@ function ExpensePage() {
     
         setFechaInicio(inicioSemana);
         setFechaFin(finSemana);
-        fetchDaysBetweenDates()
+        
     }
 
     useEffect(() => {
@@ -145,16 +165,25 @@ function ExpensePage() {
         const date = new Date();
         const defaultValue = date.toLocaleDateString('en-CA');
         setExpense({...expense, transactionDate: defaultValue});
+        fetchSubsidiaries();
     }, []);
 
 
     useEffect(() => {
         if(filterObj.week.length > 0){
             fetchExpensesByWeek();
+            fetchDaysBetweenDates();
             obtenerFechaInicioFin(filterObj.week);
         }
 
-    }, [filterObj.week]);
+    }, [filterObj]);
+
+    // useEffect(() => {
+    //     if(fechaInicio != null){
+    //         fetchDaysBetweenDates()
+    //     }
+
+    // }, [fechaInicio]);
 
     useEffect(() => {
         if(u!==undefined){
@@ -176,7 +205,7 @@ function ExpensePage() {
                 modal={modal}
                 setExpense={setExpense}
                 expense={expense}
-
+                subsidiaries={subsidiaries}
                 
             />
 
@@ -187,6 +216,7 @@ function ExpensePage() {
                 expense={expense}
                 fetchExpensesByWeek={fetchExpensesByWeek}
                 filterObj={filterObj}
+                subsidiaries={subsidiaries}
 
             />
 

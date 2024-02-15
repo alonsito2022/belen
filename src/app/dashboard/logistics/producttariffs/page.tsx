@@ -13,7 +13,8 @@ const initialState = {
     salePrice2: 0,
     quantityMinimum: 0,
     productName: "",
-    unitName: ""
+    unitName: "",
+    totalUsed: 0,
 }
 
 function ProductTariffPage() {
@@ -108,6 +109,7 @@ function ProductTariffPage() {
                             productName
                             unitName
                             quantityMinimum
+                            totalUsed
                         }
                     }
                 `
@@ -181,6 +183,7 @@ function ProductTariffPage() {
                             productName
                             unitName
                             quantityMinimum
+                            totalUsed
                         }
                     }
                 `
@@ -192,6 +195,30 @@ function ProductTariffPage() {
             setProductTariff(data.data.productTariffById);
         })
     }
+
+    async function deleteProductTariffByID(pk: number){
+        
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                mutation {
+                        deleteProductTariff(id: ${pk}) {
+                            message
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            toast(data.data.deleteProductTariff.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            fetchProductTariffs()
+        })
+        
+    }
+
 
     useEffect(() => {
         fetchProductTariffs();
@@ -230,7 +257,7 @@ function ProductTariffPage() {
                         document.getElementById("btn-save-product")!.innerHTML = "Guardar";
                         setProductTariff(initialState);
                         
-                }} className="btn-cyan" type="button">
+                }} className="btn-cyan px-2 py-2" type="button">
                 Nuevo
                 </button>
             </div>
@@ -240,10 +267,11 @@ function ProductTariffPage() {
                     <tr>
                         <th scope="col" className="px-3 py-3 text-center">#</th>
                         <th scope="col" className="px-3 py-3 text-center">NOMBRE</th>
-                        <th scope="col" className="px-3 py-3 text-center">Unidad</th>
-                        <th scope="col" className="px-3 py-3 text-center">Precio de venta 1</th>
-                        <th scope="col" className="px-3 py-3 text-center">Precio de venta 2</th>
-                        <th scope="col" className="px-3 py-3 text-center">Cantidad minima</th>
+                        <th scope="col" className="px-3 py-3 text-center text-rotated-90">Unidad</th>
+                        <th scope="col" className="px-3 py-3 text-center text-rotated-90">Precio de venta 1</th>
+                        <th scope="col" className="px-3 py-3 text-center text-rotated-90">Precio de venta 2</th>
+                        <th scope="col" className="px-3 py-3 text-center text-rotated-90">Cantidad minima</th>
+                        <th scope="col" className="px-3 py-3 text-center">USADO</th>
                         <th scope="col" className="px-3 py-3 text-center">AcCion</th>
                     </tr>
                 </thead>
@@ -256,6 +284,7 @@ function ProductTariffPage() {
                         <td className="px-4 py-2">{item.salePrice1}</td>
                         <td className="px-4 py-2 bg-gray-50 dark:bg-gray-800">{item.salePrice2}</td>
                         <td className="px-4 py-2">{item.quantityMinimum}</td>
+                        <td className="px-4 py-2">{item.totalUsed}</td>
                         <td className="px-4 py-2 bg-gray-50 dark:bg-gray-800">
                             <button type="button" onClick={ async ()=>{
 
@@ -264,7 +293,14 @@ function ProductTariffPage() {
                                 document.getElementById("modal-title")!.innerHTML = "Editar presentacion";
                                 document.getElementById("btn-save-product")!.innerHTML = "Actualizar";
                             }}
-                            className="btn-green">Editar</button>
+                            className="btn-green px-2 py-2 mr-2">Editar</button>
+                            {item.totalUsed==0?
+                            <button type="button" onClick={ ()=>{deleteProductTariffByID(item.id)}} 
+                                className="btn-red px-2 py-2">
+                                   Quitar
+                            </button>
+                            
+                            :""}
                         </td>
                     </tr>
                     )}

@@ -160,7 +160,7 @@ function UnitPage() {
                         document.getElementById("modal-title")!.innerHTML = "Nuevo unidad";
                         document.getElementById("btn-save-product")!.innerHTML = "Guardar unidad";
                         setUnit(initialState);
-                    }} className="btn-cyan border" type="button">
+                    }} className="btn-cyan px-2 py-2 border" type="button">
                     Crear unidad
                     </button>
 
@@ -188,7 +188,7 @@ function UnitPage() {
                                     document.getElementById("modal-title")!.innerHTML = "Editar unidad";
                                     document.getElementById("btn-save-product")!.innerHTML = "Actualizar unidad";
                                 }}
-                                className="btn-green">Editar</button>
+                                className="btn-green px-2 py-2">Editar</button>
                             
                             </td>
                         </tr>

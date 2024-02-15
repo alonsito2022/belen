@@ -165,21 +165,21 @@ function FortnightSupplierList({suppliers, filterObj, setFilterObj, totalSupplie
                             <td className="px-1 py-1 border border-black bg-yellow-300 text-center">{item.date}</td>
 
                             <td className="px-1 py-1 border border-black text-center">{Number(item.productionQuantityTomorrow)>0?item.productionQuantityTomorrow:""}</td>
-                            <td className="px-1 py-1 border border-black text-right">{Number(item.productionPriceTomorrow)>0?"S/ " + Number(item.productionPriceTomorrow).toFixed(1):""}</td>
-                            <td className="px-1 py-1 border border-black text-right">{Number(item.productionTotalTomorrow)>0?"S/ " + Number(item.productionTotalTomorrow).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap">{Number(item.productionPriceTomorrow)>0?"S/ " + Number(item.productionPriceTomorrow).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap">{Number(item.productionTotalTomorrow)>0?"S/ " + Number(item.productionTotalTomorrow).toFixed(1):""}</td>
 
                             <td className="px-1 py-1 border border-black text-center text-red-600">{Number(item.gloriaShipmentQuantityTomorrow)>0?item.gloriaShipmentQuantityTomorrow:""}</td>
-                            <td className="px-1 py-1 border border-black text-right text-red-600">{Number(item.gloriaShipmentPriceTomorrow)>0?"S/ " + Number(item.gloriaShipmentPriceTomorrow).toFixed(1):""}</td>
-                            <td className="px-1 py-1 border border-black text-right text-red-600">{Number(item.gloriaShipmentTotalTomorrow)>0?"S/ " + Number(item.gloriaShipmentTotalTomorrow).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap text-red-600">{Number(item.gloriaShipmentPriceTomorrow)>0?"S/ " + Number(item.gloriaShipmentPriceTomorrow).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap text-red-600">{Number(item.gloriaShipmentTotalTomorrow)>0?"S/ " + Number(item.gloriaShipmentTotalTomorrow).toFixed(1):""}</td>
 
                             <td className="px-1 py-1 border border-black text-center ">{Number(item.productionQuantityAfternoon)>0?item.productionQuantityAfternoon:""}</td>
-                            <td className="px-1 py-1 border border-black text-right ">{Number(item.productionPriceAfternoon)>0?"S/ " + Number(item.productionPriceAfternoon).toFixed(1):""}</td>
-                            <td className="px-1 py-1 border border-black text-right ">{Number(item.productionTotalAfternoon)>0?"S/ " + Number(item.productionTotalAfternoon).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap ">{Number(item.productionPriceAfternoon)>0?"S/ " + Number(item.productionPriceAfternoon).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap ">{Number(item.productionTotalAfternoon)>0?"S/ " + Number(item.productionTotalAfternoon).toFixed(1):""}</td>
 
 
                             <td className="px-1 py-1 border border-black text-center  text-red-600">{Number(item.gloriaShipmentQuantityAfternoon)>0?item.gloriaShipmentQuantityAfternoon:""}</td>
-                            <td className="px-1 py-1 border border-black text-right  text-red-600">{Number(item.gloriaShipmentPriceAfternoon)>0?"S/ " + Number(item.gloriaShipmentPriceAfternoon).toFixed(1):""}</td>
-                            <td className="px-1 py-1 border border-black text-right  text-red-600">{Number(item.gloriaShipmentTotalAfternoon)>0?"S/ " + Number(item.gloriaShipmentTotalAfternoon).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap  text-red-600">{Number(item.gloriaShipmentPriceAfternoon)>0?"S/ " + Number(item.gloriaShipmentPriceAfternoon).toFixed(1):""}</td>
+                            <td className="px-1 py-1 border border-black text-right whitespace-nowrap  text-red-600">{Number(item.gloriaShipmentTotalAfternoon)>0?"S/ " + Number(item.gloriaShipmentTotalAfternoon).toFixed(1):""}</td>
                         </tr>
                         )}
                        
@@ -192,28 +192,28 @@ function FortnightSupplierList({suppliers, filterObj, setFilterObj, totalSupplie
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityTomorrow!), 0))}
                             </td>
                             <td className="px-1 py-1 border border-black bg-yellow-300"></td>
-                            <td className="px-1 py-1 border border-black bg-yellow-300 text-right">
+                            <td className="px-1 py-1 border border-black bg-yellow-300 text-right whitespace-nowrap">
                             S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalTomorrow!), 0)).toFixed(1)}
                             </td>
                             <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentQuantityTomorrow!), 0))}
                             </td>
                             <td className="px-1 py-1 border border-black bg-red-300 text-red-800"></td>
-                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-right">
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-right whitespace-nowrap">
                             S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentTotalTomorrow!), 0)).toFixed(1)}
                             </td>
                             <td className="px-1 py-1 border border-black bg-sky-300 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionQuantityAfternoon!), 0))}
                             </td>
                             <td className="px-1 py-1 border border-black bg-sky-300"></td>
-                            <td className="px-1 py-1 border border-black bg-sky-300 text-right">
+                            <td className="px-1 py-1 border border-black bg-sky-300 text-right whitespace-nowrap">
                             S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.productionTotalAfternoon!), 0)).toFixed(1)}
                             </td>
                             <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-center">
                             {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentQuantityAfternoon!), 0))}
                             </td>
                             <td className="px-1 py-1 border border-black bg-red-300 text-red-800"></td>
-                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-right">
+                            <td className="px-1 py-1 border border-black bg-red-300 text-red-800 text-right whitespace-nowrap">
                             S/ {Number(supplierWithData.reduce((previousValue:any, currentValue:any) => previousValue + Number(currentValue.gloriaShipmentTotalAfternoon!), 0)).toFixed(1)}
                             </td>
                         </tr>

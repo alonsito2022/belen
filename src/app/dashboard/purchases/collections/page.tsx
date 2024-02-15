@@ -150,7 +150,7 @@ function CollectionPage() {
     }
 
     async function getSuppliersWithDailyEntries(){
-
+        
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},

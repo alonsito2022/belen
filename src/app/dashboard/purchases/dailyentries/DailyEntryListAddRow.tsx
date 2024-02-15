@@ -117,9 +117,9 @@ function DailyEntryListAddRow({filterObj, fort, fetchDailyEntries, suppliers}:an
     }
     return (
 
-        <section className="dark:bg-gray-900 bg-sky-400 my-4 border border-gray-300">
+        <section className="dark:bg-gray-900 bg-sky-200 my-4 border border-gray-300">
             <div className="py-4 px-4 ">
-            <h2 className="mb-3 text-xl font-medium text-white dark:text-white">Añadir nuevo registro diario</h2>
+            <h2 className="mb-3 text-xl font-medium text-black dark:text-white">Añadir nuevo registro diario</h2>
 
                 <div className='grid gap-4 sm:grid-cols-2 sm:gap-6'>
 
@@ -167,7 +167,7 @@ function DailyEntryListAddRow({filterObj, fort, fetchDailyEntries, suppliers}:an
 
                     <div className="w-full">
                         <label htmlFor="quantityTomorrow" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Cantidad mañana <span className=" text-blue-300 text-sm font-normal"> * S/ {selectedSupplier.priceMilkTomorrowByFortnight}</span>
+                        Cantidad mañana <span className=" text-gray-500 text-sm font-normal"> * S/ {selectedSupplier.priceMilkTomorrowByFortnight}</span>
                         </label>
                         <input type='number' name='quantityTomorrow' placeholder='C. M.' onWheel={(e)=> e.currentTarget.blur()} value={selectedSupplier.quantityTomorrow} onChange={e=>handleInputChangeSelectedSupplier(e)} onFocus={(e) => e.target.select()} 
                         className='w-full px-2 py-3 border border-gray-300 rounded-md font-normal text-center' />
@@ -175,7 +175,7 @@ function DailyEntryListAddRow({filterObj, fort, fetchDailyEntries, suppliers}:an
                     </div>
                     <div className="w-full">
                         <label htmlFor="quantityAfternoon" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Cantidad tarde <span className=" text-blue-300 text-sm font-normal text-center"> * S/ {selectedSupplier.priceMilkAfternoonByFortnight}</span>
+                        Cantidad tarde <span className=" text-gray-500 text-sm font-normal text-center"> * S/ {selectedSupplier.priceMilkAfternoonByFortnight}</span>
                         </label>
                         <input type='number' name='quantityAfternoon' placeholder='C. T.' onWheel={(e)=> e.currentTarget.blur()} value={selectedSupplier.quantityAfternoon} onChange={e=>handleInputChangeSelectedSupplier(e)} onFocus={(e) => e.target.select()} 
                         className='w-full px-2 py-3 border border-gray-300 rounded-md font-normal text-center' />

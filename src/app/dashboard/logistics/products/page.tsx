@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { IProduct } from '@/app/types';
+import { IProduct, ISubcategory } from '@/app/types';
 import { toast } from "react-toastify";
 import { Modal, ModalOptions } from 'flowbite'
 import Breadcrumb from "@/components/Breadcrumb"
@@ -19,6 +19,8 @@ const initialState = {
     isPurchased: false,
     isManufactured: false,
     available: true,
+    subcategoryCashFlowId: 0,
+    subcategoryCashFlowName: "",
 }
 
 const initialStateQualification = {
@@ -56,6 +58,7 @@ function ProductPage() {
     const [product, setProduct] = useState(initialState);
     const [qualifications, setQualifications] = useState(initialStateQualification);
     const [modal, setModal] = useState< Modal | any>(null);
+    const [allSubcategories, setAllSubcategories] = useState< ISubcategory[]>([]);
 
     const filterProducts = ({target: { name, checked} }: ChangeEvent<HTMLInputElement>) => {
         setQualifications({...qualifications, [name]: checked});
@@ -69,6 +72,34 @@ function ProductPage() {
         setProduct({...product, [name]: checked});
     }
 
+    async function fetchAllSubcategories(){
+        let queryfecth = `
+            query {
+                allSubcategories {
+                    id
+                    name
+                    category {
+                        id
+                        name
+                    }
+                }
+            }
+        `;
+
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: queryfecth
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setAllSubcategories(data.data.allSubcategories);
+        })
+        
+    }
+
     const handleSaveProduct = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -79,7 +110,7 @@ function ProductPage() {
                 mutation{
                     updateProduct(
                         id:${product.id}, code:${product.code}, name: "${product.name}", stockMin:${product.stockMin}, stockMax:${product.stockMax}, classification: "${product.classification}", typeDairy: "${product.typeDairy}", 
-                        isCollected: ${product.isCollected}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}
+                        isCollected: ${product.isCollected}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}, subcategoryCashFlowId: ${product.subcategoryCashFlowId}
                     ){
                         product {
                             id
@@ -94,6 +125,7 @@ function ProductPage() {
                             isPurchased
                             isManufactured
                             available
+                            subcategoryCashFlowId
                         }
                         message
                     }
@@ -119,7 +151,7 @@ function ProductPage() {
                 mutation{
                     createProduct(
                         code:${product.code}, name: "${product.name}", stockMin:${product.stockMin}, stockMax:${product.stockMax}, classification: "${product.classification}", typeDairy: "${product.typeDairy}", 
-                        isCollected: ${product.isCollected}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}
+                        isCollected: ${product.isCollected}, isPurchased: ${product.isPurchased}, isManufactured: ${product.isManufactured}, available: ${product.available}, subcategoryCashFlowId: ${product.subcategoryCashFlowId}
                     ){
                         product {
                             id
@@ -134,6 +166,7 @@ function ProductPage() {
                             isPurchased
                             isManufactured
                             available
+                            subcategoryCashFlowId
                         }
                         message
                     }
@@ -160,7 +193,7 @@ function ProductPage() {
     }
 
     async function fetchProducts(){
-
+        
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -183,6 +216,8 @@ function ProductPage() {
                             isManufactured
                             available
                             totalProductTariff
+                            subcategoryCashFlowId
+                            subcategoryCashFlowName
                         }
                     }
                 `
@@ -196,7 +231,7 @@ function ProductPage() {
     }
 
     async function fetchProductByID(pk: number){
-
+        
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -216,6 +251,7 @@ function ProductPage() {
                             isPurchased
                             isManufactured
                             available
+                            subcategoryCashFlowId
                         }
                     }
                 `
@@ -267,6 +303,7 @@ function ProductPage() {
         }
 
         fetchProducts();
+        fetchAllSubcategories();
     }, []);
 
 
@@ -298,6 +335,8 @@ function ProductPage() {
                             isManufactured
                             available
                             totalProductTariff
+                            subcategoryCashFlowId
+                            subcategoryCashFlowName
                         }
                     }
                 `
@@ -392,10 +431,11 @@ function ProductPage() {
                         <th scope="col" className="px-2 py-2 text-center">NOMBRE</th>
                         <th scope="col" className="px-2 py-2 text-center">Tipo de lácteo</th>
                         <th scope="col" className="px-2 py-2 text-center">Clasificacion</th>
-                        <th scope="col" className="px-2 py-2 text-center">ES elaborado?</th>
-                        <th scope="col" className="px-2 py-2 text-center">Es comprado?</th>
-                        <th scope="col" className="px-2 py-2 text-center">Es elaborado?</th>
-                        <th scope="col" className="px-2 py-2 text-center">Disponible</th>
+                        <th scope="col" className="px-2 py-2 text-center text-rotated-90">ES elaborado?</th>
+                        <th scope="col" className="px-2 py-2 text-center text-rotated-90">Es comprado?</th>
+                        <th scope="col" className="px-2 py-2 text-center text-rotated-90">Es elaborado?</th>
+                        <th scope="col" className="px-2 py-2 text-center text-rotated-90">Disponible</th>
+                        <th scope="col" className="px-2 py-2 text-center">Subcategoria egreso</th>
                         <th scope="col" className="px-2 py-2 text-center">AcCion</th>
                     </tr>
                 </thead>
@@ -410,19 +450,20 @@ function ProductPage() {
                         <td className="px-2 py-2 text-center bg-gray-50 dark:bg-gray-800">{item.isPurchased?"SI":"NO"}</td>
                         <td className="px-2 py-2 text-center">{item.isManufactured?"SI":"NO"}</td>
                         <td className="px-2 py-2 text-center bg-gray-50 dark:bg-gray-800">{item.available?"SI":"NO"}</td>
-                        <td className="px-2 py-2 text-center">
+                        <td className="px-2 py-2">{item.subcategoryCashFlowName}</td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
                             <button type="button" onClick={ async ()=>{
                                     await fetchProductByID(item.id);
                                     modal.show();
                                     document.getElementById("modal-title")!.innerHTML = "Editar producto";
                                     document.getElementById("btn-save-product")!.innerHTML = "Actualizar producto";
                                 }}
-                                className="btn-green">
+                                className="btn-green px-2 py-2 mr-2">
                                 Editar
                             </button>
                             {item.totalProductTariff==0?
                             <button type="button" onClick={ ()=>{deleteProductByID(item.id)}} 
-                                className="btn-blue">
+                                className="btn-red px-2 py-2">
                                    Quitar
                             </button>
                             
@@ -493,6 +534,16 @@ className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z
                         </select>
                     </div>
 
+                    <div className="sm:col-span-4">
+                        <label htmlFor="subcategoryCashFlowId" className="form-label">Subcategoria de egreso</label>
+                        <select name="subcategoryCashFlowId" id="subcategoryCashFlowId" onChange={handleInputChange} value={product.subcategoryCashFlowId} className="form-control">
+                            <option value={0}>{"NO APLICA"}</option>
+                            {allSubcategories.map((o: ISubcategory,k: number)=>(
+                                <option key={k} value={o.id}>{o.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
 
                     <div className="sm:col-span-4 flex">
 
@@ -522,7 +573,7 @@ className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z
                  
 
 
-                <button id="btn-save-product" type="submit" className="btn-green">
+                <button id="btn-save-product" type="submit" className="btn-green px-4 py-2">
                     Actualizar producto
                 </button>
             </form>

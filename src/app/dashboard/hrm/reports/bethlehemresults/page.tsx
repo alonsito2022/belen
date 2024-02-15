@@ -1,19 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
-import { IPerson, IProductTariff, ISupplierTariff, IWarehouse } from '@/app/types';
+import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
+import { IMonthElementData, IMonthExpenseCostData, IUser, IDateAndWeekday, ISubcategory, IElement } from '@/app/types';
+import { useSession} from 'next-auth/react';
+import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
-import { useAppSelector } from "@/redux/hooks"
-import FortnightProductionSummary from "./FortnightProductionSummary"
-import FortnightProductionFilter from "./FortnightProductionFilter"
+import { Modal, ModalOptions } from 'flowbite'
+import {obtenerSemanaActual, getDates} from '@/libs/functions'
+import BethlehemResultList from "./BethlehemResultList"
+import BethlehemResultFilter from "./BethlehemResultFilter"
 
 const initialStateFilterObj = {
-  collectDate: "",
-  collectCycle: "03",
-  collectType: "06",
-  productTariffId: 5,
-  warehouseId: 6,
-  supplierId: 527,
+    collectCycle: "03",
+    productTariffId: 5,
+    warehouseId: 6,
+    subsidiaryId: 1,
+    year: new Date().getFullYear(),
+    month: new Date().getMonth()
 }
+
 const initialStateSummaryDailyEntries = {
 
     quantityLiter: -1,
@@ -38,12 +42,40 @@ const initialStateSummaryDailyEntries = {
     paymentDifference: -1,
 
 }
-function FortnightProductionAnalysisPage() {
-    const [suppliers, setSuppliers] = useState< IPerson[]>([]);
+
+function BethlehemResultPage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
-    const fort = useAppSelector(state=>state.fortnitghtReducer.fortnightValue);
+
+    const [categories, setCategories] = useState< IMonthElementData[]>([]);
     const [summaryDailyEntries, setSummaryDailyEntries] = useState(initialStateSummaryDailyEntries);
-    
+
+    async function fetchCategories(){
+        let queryfecth = `
+            query {
+                expensesByYearAndMonthAndSubsidiary(year:${filterObj.year}, month:${Number(Number(filterObj.month) + 1)}, subsidiaryId:${filterObj.subsidiaryId}) {
+                    sequence
+                    name
+                    type
+                    stock
+                    total
+                }
+            }
+        `;
+
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: queryfecth
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            setCategories(data.data.expensesByYearAndMonthAndSubsidiary);
+        })
+        
+    }
+
     async function getFortnightProductionAnalysis(){
 
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
@@ -52,7 +84,7 @@ function FortnightProductionAnalysisPage() {
             body: JSON.stringify({
                 query: `
                     {
-                        fortnightProductionAnalysis(warehouseId:${filterObj.warehouseId}, productTariffId:${filterObj.productTariffId}, fortnightValue:${fort}, collectCycle:"${filterObj.collectCycle}", month:${0}, year:${0}) {
+                        fortnightProductionAnalysis(warehouseId:${filterObj.warehouseId}, productTariffId:${filterObj.productTariffId}, fortnightValue:${0}, collectCycle:"${filterObj.collectCycle}", month:${Number(Number(filterObj.month) + 1)}, year:${filterObj.year}) {
                             id
                             supplierName
                             sumQuantityMolds
@@ -112,39 +144,24 @@ function FortnightProductionAnalysisPage() {
         })
         
     }
+    
+
     useEffect(() => {
-        if(fort>0){
-            getFortnightProductionAnalysis();
-            
-        }
-
-    }, [fort, filterObj.collectCycle]);
-
-    function obtenerNombreMes (numero : number) {
-        let miFecha = new Date();
-        if (0 < numero && numero <= 12) {
-          miFecha.setMonth(numero - 1);
-          return new Intl.DateTimeFormat('es-ES', { month: 'long'}).format(miFecha);
-        } else {
-          return null;
-        }
-    }
+        if(filterObj.year>0 && filterObj.month>=0)
+            getFortnightProductionAnalysis()
+            fetchCategories()
+    }, [filterObj]);
 
     return (
         <>
-            
-            <Breadcrumb section={"Reportes"} article={`Resumen de produccion ${obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}`} />
+            <Breadcrumb section={"Administración"} article={"Resultados Belen"} />
 
-            <div className="bg-white mt-2">
+            <BethlehemResultFilter filterObj={filterObj} setFilterObj={setFilterObj}  />
 
-                <FortnightProductionFilter filterObj={filterObj} setFilterObj={setFilterObj} />
-                <FortnightProductionSummary suppliers={suppliers} filterObj={filterObj}
-                setSummaryDailyEntries={setSummaryDailyEntries} summaryDailyEntries={summaryDailyEntries} fort={fort}/>
-            </div>
-            
-        
+            <BethlehemResultList categories={categories} summaryDailyEntries={summaryDailyEntries} />
+
         </>
     )
 }
 
-export default FortnightProductionAnalysisPage
+export default BethlehemResultPage

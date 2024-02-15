@@ -43,12 +43,12 @@ function CollectionList({suppliers, summaryDailyEntries, fort, filterObj, getSup
                         <td className="px-4 py-0 border text-base uppercase">{item.names}</td>
                         <td className="border-0"></td>
                         <td className="px-4 py-0 border bg-gray-50 text-lg uppercase text-right">{item.quantityTomorrow}</td>
-                        <td className="px-4 py-0 border text-lg uppercase text-right">S/ {Number(item.priceTomorrow).toFixed(2)}</td>
-                        <td className="px-4 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.quantityTomorrow!*item.priceTomorrow!)* 100) / 100).toFixed(2)}</td>
+                        <td className="px-4 py-0 border text-lg uppercase text-right whitespace-nowrap">S/ {Number(item.priceTomorrow).toFixed(2)}</td>
+                        <td className="px-4 py-0 border text-lg uppercase text-right whitespace-nowrap">S/ {Number(Math.round(Number(item.quantityTomorrow!*item.priceTomorrow!)* 100) / 100).toFixed(2)}</td>
                         <td className="border-0"></td>
                         <td className="px-4 py-0 border bg-gray-50 text-lg uppercase text-right">{item.quantityAfternoon}</td>
-                        <td className="px-4 py-0 border text-lg uppercase text-right">S/ {Number(item.priceAfternoon).toFixed(2)}</td>
-                        <td className="px-4 py-0 border text-lg uppercase text-right">S/ {Number(Math.round(Number(item.quantityAfternoon!*item.priceAfternoon!)* 100) / 100).toFixed(2)}</td>
+                        <td className="px-4 py-0 border text-lg uppercase text-right whitespace-nowrap">S/ {Number(item.priceAfternoon).toFixed(2)}</td>
+                        <td className="px-4 py-0 border text-lg uppercase text-right whitespace-nowrap">S/ {Number(Math.round(Number(item.quantityAfternoon!*item.priceAfternoon!)* 100) / 100).toFixed(2)}</td>
                         <td className="px-4 py-0 border border-gray-200 text-center">
                             <button type="button" onClick={ async ()=>{
                                 setUpdateState(item.id)
@@ -70,11 +70,11 @@ function CollectionList({suppliers, summaryDailyEntries, fort, filterObj, getSup
 
                     <td className="px-4 py-3 border text-white bg-lime-500 text-right text-lg">{summaryDailyEntries.quantityTotalTomorrow}</td>
                     <td className="px-4 py-3 border text-white bg-lime-500 text-right text-lg" colSpan={1}></td>
-                    <td className="px-4 py-3 border text-white bg-lime-500 text-right text-lg">S/ {summaryDailyEntries.costTotalTomorrow}</td>
+                    <td className="px-4 py-3 border text-white bg-lime-500 text-right text-lg whitespace-nowrap">S/ {summaryDailyEntries.costTotalTomorrow}</td>
                     <td className="border-0"></td>
                     <td className="px-4 py-3 border text-white bg-black text-right text-lg" colSpan={1}>{summaryDailyEntries.quantityTotalAfternoon}</td>
                     <td className="px-4 py-3 border text-white bg-black text-right text-lg" colSpan={1}></td>
-                    <td className="px-4 py-3 border text-white bg-black text-right text-lg">S/ {summaryDailyEntries.costTotalAfternoon}</td>
+                    <td className="px-4 py-3 border text-white bg-black text-right text-lg whitespace-nowrap">S/ {summaryDailyEntries.costTotalAfternoon}</td>
                     <td className="px-6 py-3 border text-base bg-gray-100"></td>
                     
                 </tr>

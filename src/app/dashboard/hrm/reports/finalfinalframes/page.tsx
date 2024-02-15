@@ -6,24 +6,17 @@ import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
 import { Modal, ModalOptions } from 'flowbite'
 import {obtenerSemanaActual, getDates} from '@/libs/functions'
-import MonthlyExpenseList from "./MonthlyExpenseList"
-import MonthlyExpenseFilter from "./MonthlyExpenseFilter"
-
-// import ExpenseForm from "./ExpenseForm"
+import FinalFinalFrameList from "./FinalFinalFrameList"
+import FinalFinalFrameFilter from "./FinalFinalFrameFilter"
 
 const initialStateFilterObj = {
     subsidiaryId: 2,
     year: new Date().getFullYear()
 }
 
-function MonthlyExpensePage() {
+function FinalFinalFramePage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
-    
     const [categories, setCategories] = useState< IMonthElementData[]>([]);
-
-    const { data: session } = useSession();
-    const u = session?.user as IUser;
-
 
     async function fetchCategories(){
         let queryfecth = `
@@ -49,27 +42,26 @@ function MonthlyExpensePage() {
         })
         .then(res=>res.json())
         .then(data=>{
-            setCategories(data.data.expensesByYearAndSubsidiary);
+            // setCategories(data.data.expensesByYearAndSubsidiary);
         })
         
     }
     
 
     useEffect(() => {
-        fetchCategories();
+        // fetchCategories();
     }, []);
-
 
     return (
         <>
-            <Breadcrumb section={"Administración"} article={"Egresos mensuales de almacen AQP"} />
+            <Breadcrumb section={"Administración"} article={"Cuadro Final Final Restructurado"} />
 
-            <MonthlyExpenseFilter filterObj={filterObj} setFilterObj={setFilterObj}  />
+            <FinalFinalFrameFilter filterObj={filterObj} setFilterObj={setFilterObj}  />
 
-            <MonthlyExpenseList categories={categories} />
+            <FinalFinalFrameList categories={categories} />
 
         </>
     )
 }
 
-export default MonthlyExpensePage
+export default FinalFinalFramePage

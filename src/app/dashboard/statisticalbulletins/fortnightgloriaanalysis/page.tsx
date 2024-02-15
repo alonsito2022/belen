@@ -86,7 +86,9 @@ function FortnightGloriaAnalysisPage() {
                     igvCost: 0,
                     paymentUncleMichael: 0,
                     totalNetIncome: 0,
-                    documentNumber: ""
+                    documentNumber: "",
+
+                    
                 }))
         })
     }
@@ -176,8 +178,17 @@ function FortnightGloriaAnalysisPage() {
                 sumCostTotalTomorrowAndAfternoon: Math.round(valSumCostTotalTomorrowAndAfternoon * 100) / 100,
                 sumCostTotalGloriaPerFortnitght: Math.round(valueSumCostTotalGloriaPerFortnitght * 100) / 100
             });
+        }else{
+            setSummaryDailyEntries({...summaryDailyEntries, 
+                sumQuantityTotalTomorrow: 0,
+                sumQuantityTotalAfternoon: 0,
+                sumQuantityTotalTomorrowAndAfternoon: 0,
+                sumCostTotalTomorrowAndAfternoon: 0,
+                sumCostTotalGloriaPerFortnitght: 0
+            });
         }
     }, [suppliers, summaryDailyEntries.paymentCostOfGloriaPerLiter]);
+
     function obtenerNombreMes (numero : number) {
         let miFecha = new Date();
         if (0 < numero && numero <= 12) {
@@ -187,11 +198,12 @@ function FortnightGloriaAnalysisPage() {
           return null;
         }
     }
+
     return (
         <>
         
 
-            <Breadcrumb section={"Reportes"} article={`Resumen de gloria ${obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}`} />
+            <Breadcrumb section={"Reportes"} article={`Resumen Quincenal gloria ${obtenerNombreMes(Number(fort.toString().substring(4, fort.toString().length - 1))) + " " + fort.toString().substring(0, 4)}`} />
 
             <div className="bg-white mt-2">
 

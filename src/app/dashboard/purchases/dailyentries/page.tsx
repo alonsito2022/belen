@@ -45,7 +45,7 @@ function DailyEntryPage() {
         
     }
     async function fetchDailyEntries(){
-
+        
         await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},

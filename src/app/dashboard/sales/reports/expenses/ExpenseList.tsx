@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ChangeEvent ,useState, FormEvent, useEffect } from "react";
-import { IExpensesByWeek, IDateAndWeekday, IExpenseOfWeekDay, ISubcategory, IElement } from '@/app/types';
+import { IExpensesByWeek, IDateAndWeekday, IExpenseOfWeekDay, ISubsidiary, IElement } from '@/app/types';
 import {getShortNameMonth, getWeekDayInSpanish} from '@/libs/functions'
 
 const initialStateExpensesSummary = {
@@ -16,7 +16,7 @@ const initialStateExpensesSummary = {
 }
 
 function ExpenseList({
-    setFilterObj, filterObj, obtenerFechaInicioFin, fechaInicio, fechaFin, datesAndWeekdays, expensesByWeek, modal, setExpense, expense
+    setFilterObj, filterObj, obtenerFechaInicioFin, fechaInicio, fechaFin, datesAndWeekdays, expensesByWeek, modal, setExpense, expense, subsidiaries
 
 } : any) {
 
@@ -143,10 +143,24 @@ function ExpenseList({
                         <input type="week" name="week" value={filterObj.week } onChange={handleInputChangeWeek} className="form-control" />
                     </div>
 
+
+
                     <div className="">
                         {fechaInicio && fechaFin && (
                             <p className=" text-2xl font-thin">{`Del ${fechaInicio.toLocaleDateString()} al ${fechaFin.toLocaleDateString()}`}</p>
                         )}
+                    </div>
+
+                    <div className="">
+
+                        
+                        <select name="subsidiaryId" id="subsidiaryId4" onChange={handleInputChangeWeek} value={filterObj.subsidiaryId} className="form-control">
+                            
+                            {subsidiaries.map((o: ISubsidiary,k: number)=>(
+                                    <option key={k} value={o.id}>{o.name}</option>
+                                ))}
+                        </select>
+
                     </div>
 
                     <button  onClick={(e)=>{

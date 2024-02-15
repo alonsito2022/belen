@@ -4,7 +4,32 @@ import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
 import { IElement } from '@/app/types';
 import { toast } from "react-toastify";
 
-function ExpenseClassificationList({categoryModal,setCategory,category,subcategoryModal,setSubcategory,subcategory, elementModal, setElement, element, allElements}:any) {
+function ExpenseClassificationList({categoryModal,setCategory,category,subcategoryModal,setSubcategory,subcategory, elementModal, setElement, element, allElements, fetchAllElements}:any) {
+    
+    async function deleteElementByID(pk: number){
+        
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                query: `
+                mutation {
+                        deleteElement(id: ${pk}) {
+                            message
+                        }
+                    }
+                `
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            toast(data.data.deleteElement.message, { hideProgressBar: true, autoClose: 2000, type: 'success' })
+            fetchAllElements()
+        })
+        
+    }
+
+    
     return (
         <>
             <div className="relative overflow-x-auto mt-2">
@@ -65,6 +90,7 @@ function ExpenseClassificationList({categoryModal,setCategory,category,subcatego
                             <th scope="col" className="px-6 py-3 border border-gray-400">CATEGORIA</th>
                             <th scope="col" className="px-6 py-3 border border-gray-400">SUBCATEGORIA</th>
                             <th scope="col" className="px-6 py-3 border border-gray-400">CONCEPTO</th>
+                            <th scope="col" className="px-6 py-3 border border-gray-400"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,6 +100,17 @@ function ExpenseClassificationList({categoryModal,setCategory,category,subcatego
                             <td className="px-4 py-2 border border-gray-400">{item.subcategory?.category?.name}</td>
                             <td className="px-4 py-2 border border-gray-400">{item.subcategory?.name}</td>
                             <td className="px-4 py-2 border border-gray-400">{item.name}</td>
+                            <td className="px-4 py-2 border border-gray-400">
+                                
+                                {item.totalUsed==0?
+                                <button type="button" onClick={ ()=>{deleteElementByID(item.id)}} 
+                                    className="btn-red px-2 py-2">
+                                    Quitar
+                                </button>
+                                
+                                :""}
+
+                            </td>
                             
                         </tr>
                         )}

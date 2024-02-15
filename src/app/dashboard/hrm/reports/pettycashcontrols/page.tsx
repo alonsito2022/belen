@@ -6,25 +6,18 @@ import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
 import { Modal, ModalOptions } from 'flowbite'
 import {obtenerSemanaActual, getDates} from '@/libs/functions'
-import MonthlyExpenseList from "./MonthlyExpenseList"
-import MonthlyExpenseFilter from "./MonthlyExpenseFilter"
-
-// import ExpenseForm from "./ExpenseForm"
+import PettyCashControlFilter from "./PettyCashControlFilter"
+import PettyCashControlList from "./PettyCashControlList"
 
 const initialStateFilterObj = {
     subsidiaryId: 2,
     year: new Date().getFullYear()
 }
 
-function MonthlyExpensePage() {
+function PettyCashControlPage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
-    
     const [categories, setCategories] = useState< IMonthElementData[]>([]);
-
-    const { data: session } = useSession();
-    const u = session?.user as IUser;
-
-
+    
     async function fetchCategories(){
         let queryfecth = `
             query {
@@ -49,27 +42,26 @@ function MonthlyExpensePage() {
         })
         .then(res=>res.json())
         .then(data=>{
-            setCategories(data.data.expensesByYearAndSubsidiary);
+            // setCategories(data.data.expensesByYearAndSubsidiary);
         })
         
     }
     
 
     useEffect(() => {
-        fetchCategories();
+        // fetchCategories();
     }, []);
-
 
     return (
         <>
-            <Breadcrumb section={"Administración"} article={"Egresos mensuales de almacen AQP"} />
+        <Breadcrumb section={"Administración"} article={"Control de Caja"} />
 
-            <MonthlyExpenseFilter filterObj={filterObj} setFilterObj={setFilterObj}  />
+        <PettyCashControlFilter filterObj={filterObj} setFilterObj={setFilterObj}  />
 
-            <MonthlyExpenseList categories={categories} />
+        <PettyCashControlList categories={categories} />
 
-        </>
+    </>
     )
 }
 
-export default MonthlyExpensePage
+export default PettyCashControlPage

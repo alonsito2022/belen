@@ -22,6 +22,7 @@ export interface IElement {
     name?: string
     subcategory?: ISubcategory
     isEnabled: boolean
+    totalUsed: number
 }
 
 export interface ICheeseSupplier {
@@ -199,6 +200,8 @@ export interface IProduct {
     available: boolean
     producttariffSet?: IProductTariff
     totalProductTariff?: number
+    subcategoryCashFlowId?: number
+    subcategoryCashFlowName?: string
 }
 
 export interface IProductTariff {
@@ -211,6 +214,7 @@ export interface IProductTariff {
     productName?: string
     unitName?: string
     purchasePrice1?: number 
+    totalUsed?: number 
 }
 
 export interface ISupplierTariff {
@@ -422,6 +426,27 @@ export interface IDayInfo{
     listOfIncomesInDeposit?: Array<IExpenseOfWeekDay>
     listOfExpenses?: Array<IExpenseOfWeekDay>
 }
+
+export interface IMonthElementData{
+    monthIndex?: number
+    amount?: number
+}
+
+export interface IMonthExpenseData{
+    sequence?: number
+    name?: string
+    type?: string
+    months?: Array<IMonthElementData>
+}
+
+export interface IMonthExpenseCostData{
+    sequence?: number
+    name?: string
+    type?: string
+    stock?: number
+    total?: number
+}
+
 export interface IExpenseOfWeekDay{
     id?: number
     userId?: number
