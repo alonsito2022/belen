@@ -30,7 +30,7 @@ function PettyCashControlList({categories}:any) {
                     </thead>
                     <tbody>
                     {/* {tbodies} */}
-                    {categories.map((expense: IMonthExpenseData, c: number) => 
+                    {/* {categories.map((expense: IMonthExpenseData, c: number) => 
                     
                     
                         <tr key={c} className={expense.type==="Category"?"bg-blue-200 border-b font-bold":expense.type==="Subcategory"?"bg-green-200 border-b text-base font-semibold":"bg-white border-b text-right"}>
@@ -41,7 +41,7 @@ function PettyCashControlList({categories}:any) {
                         </tr>
                     
                     
-                    )}
+                    )} */}
                     </tbody>
                 </table>
             </div>
