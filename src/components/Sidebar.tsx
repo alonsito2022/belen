@@ -62,7 +62,7 @@ function Sidebar() {
     useEffect(() => {
 
         const date = new Date();
-        const currentYear = date.getFullYear();
+        const currentYear = date.getFullYear() - 1;
         const currentMonth = date.getMonth() + 1;
         const currentPeriod = date.getDate() < 16 ? "01" : "02";
         
@@ -73,7 +73,7 @@ function Sidebar() {
 
         const arrayFortnights = [];
 
-        for (let year = currentYear; year < currentYear + 1; year++) {
+        for (let year = currentYear; year < currentYear + 2; year++) {
             for (let month = 0; month < 12; month++) {
                 for (let fortnight = 1; fortnight <= 2; fortnight++) {
                 const monthName = months[month].toUpperCase().slice(0, 3);
@@ -87,7 +87,7 @@ function Sidebar() {
             }
         }
 
-
+        // console.log(arrayFortnights)
         setFortnights(arrayFortnights);
 
     }, []);

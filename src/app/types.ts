@@ -432,6 +432,46 @@ export interface IMonthElementData{
     amount?: number
 }
 
+export interface IAmountMonthData{
+    id?: number
+    total?: number
+}
+
+export interface IBethlehemData{
+    sumQuantityMolds?: Array<IAmountMonthData>
+    costAveragePerformancePerLiter?: Array<IAmountMonthData>
+    totalInvestment?: Array<IAmountMonthData>
+    totalSales?: Array<IAmountMonthData>
+    finalUtility?: Array<IAmountMonthData>
+}
+
+export interface ICheeseSupplierData{
+    id?: number
+    name?: string
+    totalSales?: Array<IAmountMonthData>
+}
+
+export interface IOtherCheeseSupplierData{
+    suppliers?: Array<ICheeseSupplierData>
+    finalUtility?: Array<IAmountMonthData>
+}
+
+export interface IGloryData{
+    firstFortnight?: Array<IAmountMonthData>
+    secondFortnight?: Array<IAmountMonthData>
+}
+
+export interface IProfitData{
+    bethlehem?: IBethlehemData
+    otherCheeseSuppliers?: IOtherCheeseSupplierData
+    invoices?: Array<IAmountMonthData>
+    glory?: IGloryData
+    monthlyIncome?: Array<IAmountMonthData>
+    profitDeductibles?: Array<IAmountMonthData>
+    deductibleGlory?: Array<IAmountMonthData>
+    netProfit?: Array<IAmountMonthData>
+}
+
 export interface IMonthExpenseData{
     sequence?: number
     name?: string
@@ -453,8 +493,10 @@ export interface IExpenseOfWeekDay{
     userName?: string
     description?: string
     total?: number
+    remainingTotal?: number
     transactionDate?: string
     transactionType?: string
+    formattedDate?: string
 }
 
 export interface ISaleOfWeekDay{

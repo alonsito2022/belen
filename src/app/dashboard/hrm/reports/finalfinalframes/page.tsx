@@ -1,6 +1,6 @@
 "use client";
 import { ChangeEvent, FormEvent ,useState, useEffect } from "react";
-import { IMonthElementData, IMonthExpenseData, IUser, IDateAndWeekday, ISubcategory, IElement } from '@/app/types';
+import { IProfitData, IBethlehemData, IUser, IDateAndWeekday, ISubcategory, IElement } from '@/app/types';
 import { useSession} from 'next-auth/react';
 import { toast } from "react-toastify";
 import Breadcrumb from "@/components/Breadcrumb"
@@ -16,18 +16,78 @@ const initialStateFilterObj = {
 
 function FinalFinalFramePage() {
     const [filterObj, setFilterObj] = useState(initialStateFilterObj);
-    const [categories, setCategories] = useState< IMonthElementData[]>([]);
+    const [profitObject, setProfitObject] = useState<any|IProfitData>(null);
 
-    async function fetchCategories(){
+    async function fetchProfitObject(){
         let queryfecth = `
             query {
-                expensesByYearAndSubsidiary(year:${filterObj.year}, subsidiaryId:${filterObj.subsidiaryId}) {
-                    sequence
-                    name
-                    type
-                    months{
-                        monthIndex
-                        amount
+                profitByYear(year:${filterObj.year}) {
+                    bethlehem{
+                        sumQuantityMolds{
+                            id
+                            total
+                        }
+                        costAveragePerformancePerLiter{
+                            id
+                            total
+                        }
+                        totalInvestment{
+                            id
+                            total
+                        }
+                        totalSales{
+                            id
+                            total
+                        }
+                        finalUtility{
+                            id
+                            total
+                        }
+                    }
+                        
+                    otherCheeseSuppliers{
+                        suppliers{
+                            id
+                            name
+                            totalSales{
+                            id
+                            total
+                            }
+                        }
+                        finalUtility{
+                            id
+                            total
+                        }
+                    }
+                    invoices{
+                        id
+                        total
+                    }
+                    glory{
+                        firstFortnight{
+                            id
+                            total
+                        }
+                        secondFortnight{
+                            id
+                            total
+                        }
+                    }
+                    monthlyIncome{
+                        id
+                        total
+                    }
+                    profitDeductibles{
+                        id
+                        total
+                    }
+                    deductibleGlory{
+                        id
+                        total
+                    }
+                    netProfit{
+                        id
+                        total
                     }
                 }
             }
@@ -42,14 +102,14 @@ function FinalFinalFramePage() {
         })
         .then(res=>res.json())
         .then(data=>{
-            // setCategories(data.data.expensesByYearAndSubsidiary);
+            setProfitObject(data.data.profitByYear);
         })
         
     }
     
 
     useEffect(() => {
-        // fetchCategories();
+        fetchProfitObject();
     }, []);
 
     return (
@@ -58,7 +118,7 @@ function FinalFinalFramePage() {
 
             <FinalFinalFrameFilter filterObj={filterObj} setFilterObj={setFilterObj}  />
 
-            <FinalFinalFrameList categories={categories} />
+            <FinalFinalFrameList profitObject={profitObject} />
 
         </>
     )

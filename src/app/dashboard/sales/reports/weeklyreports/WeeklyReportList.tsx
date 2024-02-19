@@ -54,7 +54,7 @@ function WeeklyReportList({suppliers, setFilterObj, filterObj, obtenerFechaInici
         if(filterObj.supplierId > 0){
             
 
-            let updatedList = balancesByWeek.map((item:IBalanceByWeek) => {
+            let updatedList = balancesByWeek?.map((item:IBalanceByWeek) => {
                 if (item.productTariffId === weekItem.productTariffId){
                     let totalLosses = 0;
                     let totalReturns = 0;
@@ -95,7 +95,7 @@ function WeeklyReportList({suppliers, setFilterObj, filterObj, obtenerFechaInici
     let tbodies; 
     const rows: JSX.Element[] = [];
 
-    tbodies= balancesByWeek.map((weekData: IBalanceByWeek, index: number) => {
+    tbodies= balancesByWeek?.map((weekData: IBalanceByWeek, index: number) => {
 
         
         const productName = weekData.productName;

@@ -45,20 +45,20 @@ function InventoryList({operationDetails}:any) {
                 <td className="px-2 py-1 font-normal bg-gray-100 text-black whitespace-nowrap border dark:text-white">{item.operation?.user?.firstName + " " + item.operation?.user?.lastName}</td>
                 
                 <td className="px-2 py-1 font-normal bg-lime-400 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="E"?item.batchCode:""}</td>
-                <td className="px-2 py-1 font-normal bg-lime-400 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="E"?Number(item.quantity):""}</td>
+                <td className="px-2 py-1 font-normal bg-lime-400 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="E"?Number(item.quantity).toFixed(2):""}</td>
                 <td className="px-2 py-1 font-normal bg-lime-400 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="E"?"S/ " +  Number(item.price).toFixed(2):""}</td>
                 <td className="px-2 py-1 font-normal bg-lime-400 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="E"?"S/ " +  Number(item.subtotal).toFixed(2):""}</td>
                 
                 <td className="px-2 py-1 font-normal bg-yellow-300 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="S"?item.batchCode:""}</td>
-                <td className="px-2 py-1 font-normal bg-yellow-300 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="S"?Number(item.quantity):""}</td>
+                <td className="px-2 py-1 font-normal bg-yellow-300 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="S"?Number(item.quantity).toFixed(2):""}</td>
                 <td className="px-2 py-1 font-normal bg-yellow-300 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="S"?"S/ " +  Number(item.price).toFixed(2):""}</td>
                 <td className="px-2 py-1 font-normal bg-yellow-300 whitespace-nowrap border dark:text-white">{item.operation?.operationAction=="S"?"S/ " +  Number(item.subtotal).toFixed(2):""}</td>
 
                 <td className="px-2 py-1 font-normal bg-gray-100 whitespace-nowrap border dark:text-white">{item.batchCode}</td>
-                <td className="px-2 py-1 font-normal bg-gray-100 whitespace-nowrap border dark:text-white">{item.batchStock}</td>
+                <td className="px-2 py-1 font-normal bg-gray-100 whitespace-nowrap border dark:text-white">{Number(item.batchStock).toFixed(2)}</td>
                 <td className="px-2 py-1 font-normal bg-gray-100 whitespace-nowrap border dark:text-white">{"S/ " +  Number(item.batchPrice).toFixed(2)}</td>
                 <td className="px-2 py-1 font-normal bg-gray-100 whitespace-nowrap border dark:text-white">{"S/ " +  Number(item.batchPriceTotal).toFixed(2)}</td>
-                <td className="px-2 py-1 font-normal bg-red-300 whitespace-nowrap border dark:text-white">{item.remainingQuantity}</td>
+                <td className="px-2 py-1 font-normal bg-red-300 whitespace-nowrap border dark:text-white">{Number(item.remainingQuantity).toFixed(2)}</td>
             </tr>
             )}
 

@@ -159,7 +159,7 @@ function InventoryPage() {
             body: JSON.stringify({
                 query: `
                     query {
-                        productTariffs{
+                        productTariffsWithSubcategory{
                             id
                             productName
                             unitName
@@ -170,7 +170,7 @@ function InventoryPage() {
         })
         .then(res=>res.json())
         .then(data=>{
-            setProductTariffs(data.data.productTariffs.filter(function(dev: IProductTariff) {
+            setProductTariffs(data.data.productTariffsWithSubcategory.filter(function(dev: IProductTariff) {
                 return (dev.id != 5 && dev.id != 6);
             }));
         })
