@@ -1,11 +1,15 @@
 import { ChangeEvent, MouseEvent, FormEvent ,useState, useEffect } from "react";
 import { IPerson, IProductTariff, ISupplierTariff } from '@/app/types';
-import { toast } from "react-toastify";
+
+
 function FortnightProductionSummary({filterObj, setSummaryDailyEntries, summaryDailyEntries, fort}: any) {
     return (
         <>
             <div className="relative overflow-x-auto p-4 mx-auto max-w-5xl bg-white">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+
+
+
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" id="table-to-xls">
 
                 <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                     CUADRO RESUMEN
