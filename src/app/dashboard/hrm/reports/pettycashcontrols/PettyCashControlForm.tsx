@@ -284,7 +284,7 @@ function PettyCashControlForm({ modal, setModal, setCashFlow, cashFlow, cashFlow
                                 
                                 <div>
                                     <label htmlFor="balance" className="form-label">Saldo actual:</label>
-                                    <input type="text" name="balance" id="balance" value={Number(cashFlowCurrent.remainingTotal || '').toFixed(2)} readOnly
+                                    <input type="text" name="balance" id="balance" value={Number(cashFlowCurrent?.remainingTotal || '').toFixed(2)} readOnly
                                     className="form-control"   />
                                 </div>
                                 

@@ -56,17 +56,19 @@ function PettyCashControlList({
                     </thead>
                     <tbody>
                     {/* {tbodies} */}
-
+                    {cashFlowPrevious !== null && cashFlowPrevious != undefined ?
                     <tr className='text-gray-500'>
-                        <td className="px-2 py-2 border border-gray-400 whitespace-nowrap"> VIENE DEL {cashFlowPrevious.formattedDate?.replace("Dec", "Dic").replace("Jan", "Ene")}</td>
+                        <td className="px-2 py-2 border border-gray-400 whitespace-nowrap"> VIENE DEL {cashFlowPrevious?.formattedDate?.replace("Dec", "Dic").replace("Jan", "Ene")}</td>
                         <td className="px-2 py-2 border border-gray-400"></td>
                         <td className="px-2 py-2 border border-gray-400"></td>
                         <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap bg-blue-200"></td>
                         <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap bg-red-200"></td>
-                        <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap bg-gray-200 font-bold">{"S/ " + Number(cashFlowPrevious.remainingTotal).toFixed(2)}</td>
+                        <td className="px-2 py-2 border border-gray-400 text-right whitespace-nowrap bg-gray-200 font-bold">{"S/ " + Number(cashFlowPrevious?.remainingTotal).toFixed(2)}</td>
                         <td className="px-2 py-2 border border-gray-400"></td>
                     </tr>
 
+                    : null }
+                    
                     {cashFlows.map((cf: IExpenseOfWeekDay, c: number) => 
                     
                     
